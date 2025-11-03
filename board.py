@@ -47,3 +47,4 @@ class Board:
                 self.block_size
             )
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
+
