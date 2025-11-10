@@ -15,3 +15,4 @@ All squares along the length of the ship are then marked with a thicker red cros
 The aim of the game is to sink all the ships arranged by the computer before the computer sinks the ships we have arranged.
 
 
+- we should use classes for example for every ship
