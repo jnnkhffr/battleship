@@ -1,7 +1,7 @@
 import pygame
 from itertools import product
 
-#from snake_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, COLOR_BG, COLOR_GRID
+from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, COLOR_BG, COLOR_GRID
 
 
 class Board:

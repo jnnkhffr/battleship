@@ -15,3 +15,19 @@ All squares along the length of the ship are then marked with a thicker red cros
 The aim of the game is to sink all the ships arranged by the computer before the computer sinks the ships we have arranged.
 
 
+- we should use classes for example for every ship
+
+
+
+
+
+# Gameplan
+
+- define ships
+- place ships on board
+  - check function that ships dont overlap and have at least on grid cell space
+  - first step is to place them on board via hard-code
+- hit logic
+- opponent (computer)
+  - set of that computer creates a board an places his ships as well
+  - computer should also run the hit logic
