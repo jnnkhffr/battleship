@@ -5,5 +5,7 @@ class ship:
         self.postion = postion
         self.orientation = orientation
 
+# All ships in different classes
+submarine = ship(1, 'sub', (1,1), 'horizontal')
+frigate = ship(2,'fri', (,),  )
 
-submarine = ship(1, 'sub', (1,1))
