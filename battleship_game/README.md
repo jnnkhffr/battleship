@@ -26,9 +26,9 @@ The aim of the game is to sink all the ships arranged by the computer before the
 
 - define ships
 - place ships on board
-  - check function that ships dont overlap and have at least on grid cell space
+  - check function that ships don't overlap and have at least on grid cell space
   - first step is to place them on board via hard-code
 - hit logic
 - opponent (computer)
-  - set of that computer creates a board an places his ships as well
+  - set of that computer creates a board and places his ships as well
   - computer should also run the hit logic
