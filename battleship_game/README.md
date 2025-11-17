@@ -17,7 +17,11 @@ The aim of the game is to sink all the ships arranged by the computer before the
 
 - we should use classes for example for every ship
 
+*Folder structure:*
 
+battleship_game in a source folder (src)
+
+test in a differnt folder -> Folder structure
 
 
 
