@@ -19,9 +19,6 @@ The aim of the game is to sink all the ships arranged by the computer before the
 
 *Folder structure:*
 
-battleship_game in a source folder (src)
-
-test in a differnt folder -> Folder structure
 
 
 
