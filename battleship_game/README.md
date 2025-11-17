@@ -25,6 +25,7 @@ The aim of the game is to sink all the ships arranged by the computer before the
 # Gameplan
 
 - define ships
+- open second game field 
 - place ships on board
   - check function that ships don't overlap and have at least on grid cell space
   - first step is to place them on board via hard-code
