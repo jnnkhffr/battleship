@@ -29,7 +29,7 @@ class Board:
         self.bgcolor = bgcolor
         self.gridcolor = gridcolor
 
-    def draw(self, surface: pygame.Surface) -> None:
+    def draw(self, surface: pygame.Surface, offset_x: int = 0) -> None:
         """
         Draws the grid on a given Pygame surface.
 
@@ -48,3 +48,4 @@ class Board:
             )
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
+        surface.blit(surface, (offset_x, 0))
