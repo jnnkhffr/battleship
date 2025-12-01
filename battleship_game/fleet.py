@@ -1,29 +1,39 @@
-from battleship_game.config import SUB_SIZE, FRIG_SIZE, DEST_SIZE, ACC_SIZE
+from typing import List, Optional, Tuple
+from battleship_game.ship import Ship
+from battleship_game.config import FLEET_DATA, SHIP_DATA
+import pygame
+from battleship_game.config import BLOCK_SIZE
 
 
-class ship:
-    def __init__(self, size: int, position: tuple, orientation: str):
-        self.size = size
-        self.position = position
-        self.orientation = orientation
+class Fleet:
+    def __init__(self):
+        self.ships: List[Ship] = []  # empty list
+        self.ships_to_place: List[str] = list(FLEET_DATA)  # copy of config fleet list
 
-# All ships in different classes
+    def try_place_ship(self, start_row: int, start_col: int):
+        if not self.ships_to_place:
+            return
 
-class submarine(ship):
-    def __init__(self, size: int, position: tuple, orientation: str):
-        super().__init__(size, position, orientation)
-        self.size = SUB_SIZE
+        name = self.ships_to_place[0]  # Starts from top item of list
+        size = SHIP_DATA[name]  # Use the config to get real size
 
-class frigate(ship):
-    def __init__(self, size: int, position: tuple, orientation: str):
-        super().__init__(size, position, orientation)
-        self.size = FRIG_SIZE
+        # Calculate coordinates
+        coords = []
+        for i in range(size):
+            coords.append((start_row, start_col + i))  # horizontal placement
 
-class destroyer(ship):
-    def __init__(self, size: int, position: tuple, orientation: str):
-        super().__init__(size, position, orientation)
-        self.size = DEST_SIZE
-class aircraft_carrier(ship):
-    def __init__(self, size: int, position: tuple, orientation: str):
-        super().__init__(size, position, orientation)
-        self.size = ACC_SIZE
+        # Create and Save
+        new_ship = Ship(name, coords)
+        self.ships.append(new_ship)
+
+        # 5. Remove from List
+        self.ships_to_place.pop(0)
+        print(f"Placed {name} at {coords}")
+
+    def draw(self, surface):
+        for ship in self.ships:
+            for r, c in ship.position:
+                rect = pygame.Rect(
+                    c * BLOCK_SIZE, r * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE
+                )
+                pygame.draw.rect(surface, (255, 0, 0), rect)

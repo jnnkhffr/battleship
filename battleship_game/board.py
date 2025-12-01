@@ -1,7 +1,12 @@
 import pygame
 from itertools import product
-
-from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, COLOR_BG, COLOR_GRID
+from battleship_game.config import (
+    GRID_COLS,
+    GRID_ROWS,
+    BLOCK_SIZE,
+    COLOR_BG,
+    COLOR_GRID,
+)
 
 
 class Board:
@@ -44,7 +49,6 @@ class Board:
                 x * self.block_size,
                 y * self.block_size,
                 self.block_size,
-                self.block_size
+                self.block_size,
             )
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
-
