@@ -29,7 +29,24 @@ def main() -> None:
 
 #in construction
 
-def place_ship_on_board(board, ship):
+def draw_ship_cell(surface, x: int, y: int):
+    pos_x = BLOCK_SIZE * x
+    pos_y = BLOCK_SIZE * y
+
+    # draw cell
+    pygame.draw.rect(surface, GRAY, (pos_x, pos_y, BLOCK_SIZE, BLOCK_SIZE))
+
+    # draw border around the cell
+    pygame.draw.rect(surface, COLOR_GRID, (pos_x, pos_y, BLOCK_SIZE, BLOCK_SIZE), width=2)
+
+def draw_ship(size: int, orientation: str, surface, x: int, y: int) -> None:
+    if orientation == "hor":
+        for l in range(1, size + 1):
+            draw_ship_cell(surface, x + l, y)
+    else:
+        for l in range(1, size + 1):
+            draw_ship_cell(surface, x, y + l)
+
     ...
 
 if __name__ == "__main__":
