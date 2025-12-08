@@ -2,7 +2,7 @@ import pygame
 from pygame.examples.go_over_there import screen
 
 from battleship_game.board import Board
-from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, GRAY, COLOR_BG, COLOR_GRID
+from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, COLOR_SHIP, COLOR_BG, COLOR_GRID, COLOR_SHIP
 
 
 def main() -> None:
@@ -40,7 +40,7 @@ def draw_ship_cell(surface, x: int, y: int):
     pos_y = BLOCK_SIZE * y
 
     # draw cell
-    pygame.draw.rect(surface, GRAY, (pos_x, pos_y, BLOCK_SIZE, BLOCK_SIZE))
+    pygame.draw.rect(surface, COLOR_SHIP, (pos_x, pos_y, BLOCK_SIZE, BLOCK_SIZE))
 
     # draw border around the cell
     pygame.draw.rect(surface, COLOR_GRID, (pos_x, pos_y, BLOCK_SIZE, BLOCK_SIZE), width=2)
