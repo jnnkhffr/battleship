@@ -3,6 +3,7 @@ from pygame.examples.go_over_there import screen
 
 from battleship_game.board import Board
 from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, COLOR_SHIP, COLOR_BG, COLOR_GRID, COLOR_SHIP
+from battleship_game.ui import draw_miss, draw_hit, draw_sunk
 
 
 def main() -> None:
@@ -27,7 +28,10 @@ def main() -> None:
         screen.fill((0, 0, 0))
         left_board.draw(screen, offset_x=0)
         right_board.draw(screen, offset_x=(GRID_COLS + 2)  * BLOCK_SIZE) # move right board to the right edge with the + 2
-        draw_ship(3, "hor", screen, 3, 3)
+        #draw_ship(3, "hor", screen, 3, 3)
+        draw_miss(0,0, screen)
+        draw_hit(4,4, screen)
+        draw_sunk(9,4, screen)
         pygame.display.flip()
 
     pygame.quit()

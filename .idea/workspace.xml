@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="93d82216-10ba-48b1-ac3b-eff5663ce492" name="Changes" comment="Basic function to draw ship. Next step is to move it to a smart position in our files">
+      <change afterPath="$PROJECT_DIR$/battleship_game/ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/battleship_game/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/battleship_game/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/battleship_game/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/battleship_game/main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="trail" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Fischerbude&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jnnkhffr/battleship&quot;,
+    &quot;accountId&quot;: &quot;2fd95f40-3c44-49f7-abc3-032a1dd36a78&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="34nJpoeX3pU16Je1tdSKsvkOjB9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.main.executor": "Run",
+    "Python.scratch.executor": "Run",
+    "Python.ui.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "hard__coded__2__screen",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/herrd/PycharmProjects/battleship",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.scopes",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Python"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\herrd\PycharmProjects\battleship" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\herrd\PycharmProjects\battleship\battleship_game" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="93d82216-10ba-48b1-ac3b-eff5663ce492" name="Changes" comment="" />
+      <created>1761843587740</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761843587740</updated>
+      <workItem from="1761843589043" duration="583000" />
+      <workItem from="1761844235607" duration="89000" />
+      <workItem from="1762089318182" duration="1066000" />
+      <workItem from="1762185700518" duration="4383000" />
+      <workItem from="1762192257289" duration="132000" />
+      <workItem from="1762243232504" duration="25000" />
+      <workItem from="1762790507402" duration="3983000" />
+      <workItem from="1762873978310" duration="19000" />
+      <workItem from="1763399759500" duration="3187000" />
+      <workItem from="1763543347355" duration="51000" />
+      <workItem from="1763999138144" duration="4495000" />
+      <workItem from="1764326229095" duration="16000" />
+      <workItem from="1764611004944" duration="1208000" />
+      <workItem from="1765205989535" duration="5888000" />
+      <workItem from="1765804513942" duration="2319000" />
+    </task>
+    <task id="LOCAL-00001" summary="added config file">
+      <option name="closed" value="true" />
+      <created>1762190357058</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762190357058</updated>
+    </task>
+    <task id="LOCAL-00002" summary="created config file">
+      <option name="closed" value="true" />
+      <created>1762190667616</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762190667616</updated>
+    </task>
+    <task id="LOCAL-00003" summary="created config file push">
+      <option name="closed" value="true" />
+      <created>1762191120336</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762191120336</updated>
+    </task>
+    <task id="LOCAL-00004" summary="created config file">
+      <option name="closed" value="true" />
+      <created>1762191151952</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762191151952</updated>
+    </task>
+    <task id="LOCAL-00005" summary="new folder structure and starting with board from snake game">
+      <option name="closed" value="true" />
+      <created>1762191575811</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762191575811</updated>
+    </task>
+    <task id="LOCAL-00006" summary="remove .idea from git">
+      <option name="closed" value="true" />
+      <created>1762192346336</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762192346336</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Basic file for creating ships using classes">
+      <option name="closed" value="true" />
+      <created>1762797176571</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1762797176571</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added orientation attribut for ship class">
+      <option name="closed" value="true" />
+      <created>1763399986909</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763399986909</updated>
+    </task>
+    <task id="LOCAL-00009" summary="own sub classes for each ship type. Size is in config">
+      <option name="closed" value="true" />
+      <created>1763401111105</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1763401111105</updated>
+    </task>
+    <task id="LOCAL-00010" summary="added 2nd screen by using an offset. It's hard coded so we need to change that later">
+      <option name="closed" value="true" />
+      <created>1764007051059</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1764007051059</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added color gray for the ships">
+      <option name="closed" value="true" />
+      <created>1765214959438</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1765214959438</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added a basic function to draw ship on board. Takes in position x and y as well as orientation (&quot;hor&quot; and &quot;vert&quot;)">
+      <option name="closed" value="true" />
+      <created>1765215054408</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1765215054408</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Basic function to draw ship. Next step is to move it to a smart position in our files">
+      <option name="closed" value="true" />
+      <created>1765215111158</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1765215111161</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Basic function to draw ship. Next step is to move it to a smart position in our files">
+      <option name="closed" value="true" />
+      <created>1765215215039</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1765215215039</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added config file" />
+    <MESSAGE value="created config file push" />
+    <MESSAGE value="created config file" />
+    <MESSAGE value="new folder structure and starting with board from snake game" />
+    <MESSAGE value="remove .idea from git" />
+    <MESSAGE value="Basic file for creating ships using classes" />
+    <MESSAGE value="added orientation attribut for ship class" />
+    <MESSAGE value="own sub classes for each ship type. Size is in config" />
+    <MESSAGE value="added 2nd screen by using an offset. It's hard coded so we need to change that later" />
+    <MESSAGE value="added color gray for the ships" />
+    <MESSAGE value="Added a basic function to draw ship on board. Takes in position x and y as well as orientation (&quot;hor&quot; and &quot;vert&quot;)" />
+    <MESSAGE value="Basic function to draw ship. Next step is to move it to a smart position in our files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic function to draw ship. Next step is to move it to a smart position in our files" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/battleship$main.coverage" NAME="main Coverage Results" MODIFIED="1765806851540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/battleship_game" />
+    <SUITE FILE_PATH="coverage/battleship$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1761843716783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/battleship$ui.coverage" NAME="ui Coverage Results" MODIFIED="1765806410299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/battleship_game" />
+  </component>
+</project>
