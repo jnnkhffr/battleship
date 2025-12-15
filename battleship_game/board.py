@@ -12,6 +12,7 @@ class Board:
         block_size: int = BLOCK_SIZE,
         bgcolor: tuple[int, int, int] = COLOR_BG,
         gridcolor: tuple[int, int, int] = COLOR_GRID,
+        #offset_x: int
     ) -> None:
         """
         Initializes a grid playing field.
