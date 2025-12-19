@@ -2,12 +2,17 @@ import pygame
 from battleship_game.board import Board
 from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE
 
-def main() -> None:
+def main():
     pygame.init()
-    screen = pygame.display.set_mode((GRID_COLS * BLOCK_SIZE, GRID_ROWS * BLOCK_SIZE))
+
+    screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BLOCK_SIZE * 2
+    screen_height = GRID_ROWS * BLOCK_SIZE
+    screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Battleship")
 
-    board = Board(GRID_COLS, GRID_ROWS, BLOCK_SIZE)
+    # make two Boards
+    left_board = Board(GRID_COLS, GRID_ROWS, BLOCK_SIZE)
+    right_board = Board(GRID_COLS, GRID_ROWS, BLOCK_SIZE)
 
     running = True
     while running:
@@ -16,11 +21,19 @@ def main() -> None:
                 running = False
 
         screen.fill((0, 0, 0))
-        board.draw(screen)
+
+        # Left Board (Gamer)
+        left_board.draw(screen, offset_x=0)
+
+        # Right Board (Computer) -> move to the right
+        offset_right = GRID_COLS * BLOCK_SIZE + BLOCK_SIZE * 2
+        right_board.draw(screen, offset_x=offset_right)
+
         pygame.display.flip()
 
     pygame.quit()
 
 if __name__ == "__main__":
     main()
+
 

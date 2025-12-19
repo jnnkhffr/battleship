@@ -29,7 +29,7 @@ class Board:
         self.bgcolor = bgcolor
         self.gridcolor = gridcolor
 
-    def draw(self, surface: pygame.Surface) -> None:
+    def draw(self, surface: pygame.Surface, offset_x: int = 0) -> None:
         """
         Draws the grid on a given Pygame surface.
 
@@ -38,9 +38,12 @@ class Board:
         Args:
             surface: Target surface to draw on.
         """
-        surface.fill(self.bgcolor)
+        rect = pygame.Rect(offset_x, 0, self.cols * self.block_size, self.rows * self.block_size)
+        pygame.draw.rect(surface, self.bgcolor, rect)
+
         for x, y in product(range(self.cols), range(self.rows)):
             rect = pygame.Rect(
+                offset_x +
                 x * self.block_size,
                 y * self.block_size,
                 self.block_size,
