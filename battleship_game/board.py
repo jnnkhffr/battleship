@@ -71,14 +71,24 @@ class Board:
                     if not (0 <= nx < self.cols and 0 <= ny < self.rows):
                         return False
 
-                # 2) Checks the distance
-                for i in range(-1, size + 1):
+                # 2) Check surrounding area (only 1 block around the ship)
+                for i in range(size):
+                    nx = x + dx * i
+                    ny = y + dy * i
+
+                    # Check all 8 neighbors around each ship segment
                     for ox in (-1, 0, 1):
                         for oy in (-1, 0, 1):
-                            nx = x + dx * i + ox
-                            ny = y + dy * i + oy
-                            if 0 <= nx < self.cols and 0 <= ny < self.rows:
-                                if self.grid[ny][nx] == 1:
+                            cx = nx + ox
+                            cy = ny + oy
+
+                            # Skip the ship's own cell
+                            if ox == 0 and oy == 0:
+                                continue
+
+                            # Check bounds
+                            if 0 <= cx < self.cols and 0 <= cy < self.rows:
+                                if self.grid[cy][cx] == 1:
                                     return False
 
                 return True
