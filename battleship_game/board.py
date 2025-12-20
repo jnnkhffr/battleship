@@ -59,37 +59,60 @@ class Board:
 
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
-                """Checks if you can place a ship with one grid between ships)."""
+                """
+                Check if a ship can be placed at (x, y) with given size and orientation.
 
+                Conditions:
+                - Ship must be fully inside the board
+                - Ship cells must be empty
+                - All surrounding cells (1-cell margin) must be empty
+                """
                 dx = 1 if orientation == "hor" else 0
                 dy = 1 if orientation == "ver" else 0
 
-                # 1) Ship hast to be within the gamefield
+                # Ship hast to be within the gamefield
                 for i in range(size):
                     nx = x + dx * i
                     ny = y + dy * i
                     if not (0 <= nx < self.cols and 0 <= ny < self.rows):
                         return False
 
-                # 2) Check surrounding area (only 1 block around the ship)
+                # Check that ship cells themselves are empty
                 for i in range(size):
                     nx = x + dx * i
                     ny = y + dy * i
+                    if self.grid[ny][nx] == 1:
+                        return False
 
-                    # Check all 8 neighbors around each ship segment
-                    for ox in (-1, 0, 1):
-                        for oy in (-1, 0, 1):
-                            cx = nx + ox
-                            cy = ny + oy
+                # Check 1-cell margin around the whole ship
+                # Define bounding box for ship + 1-cell margin
+                min_x = x - 1
+                max_x = x + dx * (size - 1) + 1
+                min_y = y - 1
+                max_y = y + dy * (size - 1) + 1
 
-                            # Skip the ship's own cell
-                            if ox == 0 and oy == 0:
-                                continue
+                # Clamp to board bounds
+                min_x = max(0, min_x)
+                min_y = max(0, min_y)
+                max_x = min(self.cols - 1, max_x)
+                max_y = min(self.rows - 1, max_y)
 
-                            # Check bounds
-                            if 0 <= cx < self.cols and 0 <= cy < self.rows:
-                                if self.grid[cy][cx] == 1:
-                                    return False
+                for cy in range(min_y, max_y + 1):
+                    for cx in range(min_x, max_x + 1):
+                        # Skip cells that will be occupied by this ship
+                        is_ship_cell = False
+                        for i in range(size):
+                            sx = x + dx * i
+                            sy = y + dy * i
+                            if cx == sx and cy == sy:
+                                is_ship_cell = True
+                                break
+                        if is_ship_cell:
+                            continue
+
+                        # Any existing ship in the margin -> not allowed
+                        if self.grid[cy][cx] == 1:
+                            return False
 
                 return True
 
