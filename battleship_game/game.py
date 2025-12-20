@@ -1,7 +1,14 @@
 import pygame
 from battleship_game.board import Board
 from battleship_game.fleet_commander import FleetManager
-from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE
+from battleship_game.config import (
+    GRID_COLS,
+    GRID_ROWS,
+    BLOCK_SIZE,
+    BOARD_SPACING,
+    DEFAULT_ORIENTATION,
+    COLOR_BG,
+)
 
 
 class Game:
@@ -23,7 +30,7 @@ class Game:
         pygame.init()
 
         # Calculate window size
-        self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BLOCK_SIZE * 2
+        self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
         self.screen_height = GRID_ROWS * BLOCK_SIZE
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
@@ -40,10 +47,10 @@ class Game:
         self.current_ship_index = 0
 
         # Default orientation for placement
-        self.current_orientation = "hor"
+        self.current_orientation = DEFAULT_ORIENTATION
 
         # Offset for drawing the enemy board
-        self.enemy_offset_x = GRID_COLS * BLOCK_SIZE + BLOCK_SIZE * 2
+        self.enemy_offset_x = GRID_COLS * BLOCK_SIZE + BOARD_SPACING
 
         # True once all ships have been placed
         self.placement_done = False
@@ -124,7 +131,7 @@ class Game:
         """
         Render both boards onto the screen.
         """
-        self.screen.fill((0, 0, 0))
+        self.screen.fill(COLOR_BG)
 
         # Draw player's board on the left
         self.player_board.draw(self.screen, offset_x=0)

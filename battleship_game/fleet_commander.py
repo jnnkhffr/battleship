@@ -1,42 +1,77 @@
-from battleship_game.fleet import submarine, frigate, destroyer, aircraft_carrier
-from battleship_game.config import SUB_SIZE, FRIG_SIZE, DEST_SIZE, ACC_SIZE
+from battleship_game.fleet import (
+    Submarine,
+    Frigate,
+    Destroyer,
+    AircraftCarrier,
+)
+from battleship_game.config import (
+    NUM_SUBS,
+    NUM_FRIGS,
+    NUM_DESTS,
+    NUM_ACCS,
+)
 
 
 class FleetManager:
     """
-    The fleet commander or manager manages the player's fleet.
-    It is the shipyard and produces the ships and determines the formation
-    in which they must be arranged on the sea (board).
+    Manages the player's fleet.
+
+    Responsibilities:
+    - Create all ships according to configuration
+    - Store ship objects
+    - Handle placement attempts on the board
     """
 
     def __init__(self, board):
+        """
+        Initialize the fleet manager.
+
+        Args:
+            board: The player's Board instance where ships will be placed.
+        """
         self.board = board
         self.ships = []
 
-        # create fleet
         self.create_fleet()
 
+
     def create_fleet(self):
-        """Produces the ships of the fleet."""
+        """
+        Create the player's fleet based on configuration values.
 
-        # 1 aircraft carrier
-        self.ships.append(aircraft_carrier(ACC_SIZE, None, None))
+        Ships are created in recommended placement order:
+        largest → smallest.
+        """
 
-        # 1 destroyer
-        self.ships.append(destroyer(DEST_SIZE, None, None))
+        # Aircraft carriers
+        for _ in range(NUM_ACCS):
+            self.ships.append(AircraftCarrier())
 
-        # 1 frigate
-        self.ships.append(frigate(FRIG_SIZE, None, None))
+        # Destroyers
+        for _ in range(NUM_DESTS):
+            self.ships.append(Destroyer())
 
-        # 4 Subs
-        for _ in range(4):
-            self.ships.append(submarine(SUB_SIZE, None, None))
+        # Frigates
+        for _ in range(NUM_FRIGS):
+            self.ships.append(Frigate())
+
+        # Submarines
+        for _ in range(NUM_SUBS):
+            self.ships.append(Submarine())
 
 
     def place_ship(self, ship, x, y, orientation):
         """
-        Tries to places ships on board.
-        If it was successful it gives True back.
+        Attempt to place a ship on the board.
+
+        Args:
+            ship: Ship object to place.
+            x: Column index.
+            y: Row index.
+            orientation: "hor" or "ver".
+
+        Returns:
+            True if placement succeeded, False otherwise.
         """
         if self.board.can_place_ship(x, y, ship.size, orientation):
             ship.position = (x, y)
@@ -45,6 +80,12 @@ class FleetManager:
             return True
         return False
 
+
     def all_ships_placed(self):
-        """Checks if all ships have a position."""
+        """
+        Check whether all ships have been assigned a position.
+
+        Returns:
+            True if all ships are placed, False otherwise.
+        """
         return all(ship.position is not None for ship in self.ships)

@@ -1,10 +1,26 @@
 import pygame
 from itertools import product
 
-from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, COLOR_BG, COLOR_GRID
+from battleship_game.config import (
+    GRID_COLS,
+    GRID_ROWS,
+    BLOCK_SIZE,
+    COLOR_BG,
+    COLOR_GRID,
+    COLOR_SHIP,
+    SHIP_MARGIN,
+)
 
 
 class Board:
+    """
+    Represents a Battleship game board.
+
+    Responsibilities:
+    - Store grid state (0 = empty, 1 = ship)
+    - Draw the board and ships
+    - Validate ship placement with correct spacing rules
+    """
     def __init__(
         self,
         cols: int = GRID_COLS,
@@ -39,6 +55,7 @@ class Board:
 
         Args:
             surface: Target surface to draw on.
+            offset_x: horizontal offset for drawing (used for enemy board)
         """
         rect = pygame.Rect(offset_x, 0, self.cols * self.block_size, self.rows * self.block_size)
         pygame.draw.rect(surface, self.bgcolor, rect)
@@ -55,7 +72,7 @@ class Board:
 
             # draw ship
             if self.grid[y][x] == 1:
-                pygame.draw.rect(surface, (169, 169, 169), rect)
+                pygame.draw.rect(surface, COLOR_SHIP, rect)
 
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
@@ -86,14 +103,13 @@ class Board:
 
                 # Check 1-cell margin around the whole ship
                 # Define bounding box for ship + 1-cell margin
-                min_x = x - 1
-                max_x = x + dx * (size - 1) + 1
-                min_y = y - 1
-                max_y = y + dy * (size - 1) + 1
+
+                max_x = x + dx * (size - 1) + SHIP_MARGIN
+                max_y = y + dy * (size - 1) + SHIP_MARGIN
 
                 # Clamp to board bounds
-                min_x = max(0, min_x)
-                min_y = max(0, min_y)
+                min_x = max(0, x - SHIP_MARGIN)
+                min_y = max(0, y - SHIP_MARGIN)
                 max_x = min(self.cols - 1, max_x)
                 max_y = min(self.rows - 1, max_y)
 
@@ -117,7 +133,15 @@ class Board:
                 return True
 
     def place_ship(self, x: int, y: int, size: int, orientation: str) -> None:
-                """Enters the ship into the grid"""
+                """
+                Place a ship on the board by marking its cells as occupied.
+
+                Args:
+                    x: Starting column.
+                    y: Starting row.
+                    size: Ship length.
+                    orientation: "hor" or "ver".
+                """
                 dx = 1 if orientation == "hor" else 0
                 dy = 1 if orientation == "ver" else 0
 
