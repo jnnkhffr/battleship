@@ -26,3 +26,4 @@ NUM_ACCS = 1
 #GAmeplay Settings
 DEFAULT_ORIENTATION = "hor"
 SHIP_MARGIN = 1 #distance between ships
+DEBUG_SHOW_ENEMY_SHIPS = True # or False

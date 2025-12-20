@@ -8,7 +8,10 @@ from battleship_game.config import (
     BOARD_SPACING,
     DEFAULT_ORIENTATION,
     COLOR_BG,
+    COLOR_GRID,
+    DEBUG_SHOW_ENEMY_SHIPS
 )
+from battleship_game.computer_fleet import ComputerFleetManager
 
 
 class Game:
@@ -54,6 +57,10 @@ class Game:
 
         # True once all ships have been placed
         self.placement_done = False
+
+        # Enemy fleet
+        self.enemy_fleet = ComputerFleetManager(self.enemy_board)
+        self.enemy_fleet.auto_place_fleet()
 
     def run(self):
         """
@@ -138,3 +145,24 @@ class Game:
 
         # Draw enemy's board on the right
         self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x)
+
+        # Draw enemy board
+        if DEBUG_SHOW_ENEMY_SHIPS:
+            # Draw ships normally
+            self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x)
+        else:
+            # Draw only the grid, without ships
+            self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x)
+            # Overpaint ships with background color
+            for y in range(self.enemy_board.rows):
+                for x in range(self.enemy_board.cols):
+                    if self.enemy_board.grid[y][x] == 1:
+                        rect = pygame.Rect(
+                            self.enemy_offset_x + x * BLOCK_SIZE,
+                            y * BLOCK_SIZE,
+                            BLOCK_SIZE,
+                            BLOCK_SIZE
+                        )
+                        pygame.draw.rect(self.screen, COLOR_BG, rect)
+                        pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
+
