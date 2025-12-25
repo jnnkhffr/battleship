@@ -9,7 +9,7 @@ from battleship_game.config import (
     DEFAULT_ORIENTATION,
     COLOR_BG,
     COLOR_GRID,
-    DEBUG_SHOW_ENEMY_SHIPS
+    DEBUG_SHOW_ENEMY_SHIPS,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -161,8 +161,7 @@ class Game:
                             self.enemy_offset_x + x * BLOCK_SIZE,
                             y * BLOCK_SIZE,
                             BLOCK_SIZE,
-                            BLOCK_SIZE
+                            BLOCK_SIZE,
                         )
                         pygame.draw.rect(self.screen, COLOR_BG, rect)
                         pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
-

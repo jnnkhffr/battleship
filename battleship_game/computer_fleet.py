@@ -14,7 +14,6 @@ class ComputerFleetManager(FleetManager):
         Ensures valid placement according to Board rules.
         """
         for ship in self.ships:
-
             placed = False
             attempts = 0
 
@@ -34,4 +33,6 @@ class ComputerFleetManager(FleetManager):
 
                 # Safety fallback (should never happen)
                 if attempts > 500:
-                    raise RuntimeError("Computer could not place a ship after many attempts.")
+                    raise RuntimeError(
+                        "Computer could not place a ship after many attempts."
+                    )

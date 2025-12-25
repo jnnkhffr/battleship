@@ -34,7 +34,6 @@ class FleetManager:
 
         self.create_fleet()
 
-
     def create_fleet(self):
         """
         Create the player's fleet based on configuration values.
@@ -59,7 +58,6 @@ class FleetManager:
         for _ in range(NUM_SUBS):
             self.ships.append(Submarine())
 
-
     def place_ship(self, ship, x, y, orientation):
         """
         Attempt to place a ship on the board.
@@ -79,7 +77,6 @@ class FleetManager:
             self.board.place_ship(x, y, ship.size, orientation)
             return True
         return False
-
 
     def all_ships_placed(self):
         """
