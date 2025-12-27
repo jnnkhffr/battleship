@@ -112,7 +112,7 @@ class Board:
                     return False
         return True
 
-    def place_ship(self, x: int, y: int, orientation: str) -> None:
+    def place_ship(self, ship, x: int, y: int) -> None:
         """
         Place a ship on the board by marking its cells as occupied.
 
@@ -122,11 +122,13 @@ class Board:
             size: Ship length.
             orientation: "hor" or "ver".
         """
-        dx = 1 if orientation == "hor" else 0
-        dy = 1 if orientation == "ver" else 0
+        dx = 1 if ship.orientation == "hor" else 0
+        dy = 1 if ship.orientation == "ver" else 0
 
         for i in range(ship.size):
-            self.grid[y + dy * i][x + dx * i] = 1
+            cx = x + dx * i
+            cy = y + dy * i
+            self.grid[cy][cx] = 1
 
     def hit(self, x: int, y: int) -> None:
         """Marks the cell as a HIT"""

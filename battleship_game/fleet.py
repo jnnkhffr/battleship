@@ -84,7 +84,7 @@ class Fleet:
             ship.orientation = orientation
 
             # Update the board
-            self.board.place_ship(ship, x, y, orientation)
+            self.board.place_ship(ship, x, y)
             return True
 
         return False
