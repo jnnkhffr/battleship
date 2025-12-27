@@ -105,6 +105,7 @@ class Fleet:
             # Check if coordinates match any ship segment
             for i in range(ship.size):
                 if x == (sx + dx * i) and y == (sy + dy * i):
+                    ship.hit()
                     return ship
         return None
 

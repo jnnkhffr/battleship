@@ -91,12 +91,14 @@ class Battleship:
             - Attempt to place the next ship on the player's board
 
         Shooting phase:
-            - (Future) Handle firing shots at the enemy board
+            - Handle firing shots at the enemy board
         """
         x_pixel, y_pixel = pos
 
         # If placement is finished, switch to shooting mode
+        # placement inside own space wouldn't do anything only placement in enemy will be forwarded
         if self.placement_done:
+            # Ignore clicks on the player board after the full placement
             if x_pixel < self.enemy_offset_x:
                 return
 
@@ -104,18 +106,21 @@ class Battleship:
             x = (x_pixel - self.enemy_offset_x) // BLOCK_SIZE
             y = y_pixel // BLOCK_SIZE
 
-            # Validate the shots fired
+            # Validate the shots fired whether its inside the enemy grids or not
             if 0 <= x < GRID_COLS and 0 <= y < GRID_ROWS:
+
                 # Prevent shooting the same space twice
+                # ( 2 = miss, 3 = hit and 4 = sunk )
                 if self.enemy_board.grid[y][x] in [2, 3, 4]:
                     print("You already shot here")
                     return
                 # Player shoots
-                ship_hit = self.enemy_fleet.shot(x, y)
+                ship_hit = self.enemy_fleet.shot(x,y)
                 if ship_hit:
                     self.enemy_board.hit(x, y)
-                    ship_hit.hits += 1
                     print("Hit")
+
+                    # Check for if the ship sunk or not
                     if ship_hit.is_sunk():
                         self.enemy_board.sunk(ship_hit)
                         print(f"You sunk the enemy {ship_hit.name}")

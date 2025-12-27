@@ -33,6 +33,6 @@ NUM_ACCS = 1
 
 # Gameplay Settings
 DEFAULT_ORIENTATION = "hor"
-SHIP_MARGIN = 1  # distance between ships
+SHIP_MARGIN = 0  # distance between ships
 DEBUG_SHOW_ENEMY_SHIPS = True  # or False
 # WINDOW_TITLE = "BATTLESHIP"
