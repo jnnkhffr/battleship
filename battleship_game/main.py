@@ -1,4 +1,4 @@
-import sys
+import random
 import pygame
 from battleship_game.config import (
     GRID_COLS,
@@ -54,6 +54,9 @@ class Battleship:
         self.enemy_fleet = Fleet(self.enemy_board)
         self.enemy_fleet.auto_place_fleet()
 
+        # Track the turn for the game
+        self.player_turn = True
+
     def run(self):
         """
         Main game loop.
@@ -102,6 +105,11 @@ class Battleship:
             if x_pixel < self.enemy_offset_x:
                 return
 
+            # For enemy attack
+            if not self.player_turn:
+                print("Enemy's turn")
+                return
+
             # Convert to grid
             x = (x_pixel - self.enemy_offset_x) // BLOCK_SIZE
             y = y_pixel // BLOCK_SIZE
@@ -128,6 +136,10 @@ class Battleship:
                 else:
                     self.enemy_board.miss(x, y)
                     print("Miss")
+
+                # Enemy turn to attack
+                self.player_turn = False
+                self.enemy_turn()
             return
 
         # Only allow placement on the left board (gamers sea)
@@ -156,7 +168,35 @@ class Battleship:
             if self.current_ship_index >= len(self.fleet_manager.ships):
                 self.placement_done = True
                 print("All ships placed! Shooting mode active.")
+    def enemy_turn(self):
+        """
+        Simple randomizer to attack the player
+        """
+        while True:
+            x = random.randint(0, GRID_COLS - 1)
+            y = random.randint(0, GRID_ROWS - 1)
 
+            # same logic for skipping double shots
+            if self.player_board.grid[y][x] in [2, 3, 4]:
+                continue
+            break
+
+        # Enemy attack
+        ship_hit = self.fleet_manager.shot(x,y)
+
+        if ship_hit:
+            self.player_board.hit(x, y)
+            print("Enemy hit")
+            if ship_hit.is_sunk():
+                self.player_board.sunk(ship_hit)
+                print(f"Enemy sunk your {ship_hit.name}")
+
+        else:
+            self.player_board.miss(x,y)
+            print("Enemy Miss")
+
+        # Player turn again
+        self.player_turn = True
     def draw(self):
         """
         Render both boards onto the screen.
