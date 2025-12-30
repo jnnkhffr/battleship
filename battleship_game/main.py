@@ -133,6 +133,13 @@ class Battleship:
                         self.enemy_board.sunk(ship_hit)
                         print(f"You sunk the enemy {ship_hit.name}")
 
+                        # Victory check
+                        if self.enemy_fleet.is_defeated():
+                            print("You win")
+                            self.player_turn = False
+                            return
+
+
                 else:
                     self.enemy_board.miss(x, y)
                     print("Miss")
@@ -190,13 +197,21 @@ class Battleship:
             if ship_hit.is_sunk():
                 self.player_board.sunk(ship_hit)
                 print(f"Enemy sunk your {ship_hit.name}")
+                if self.fleet_manager.is_defeated():
+                    print("Computer wins")
+                    self.player_turn = False
+                    return
+
+
 
         else:
             self.player_board.miss(x,y)
             print("Enemy Miss")
 
+
         # Player turn again
         self.player_turn = True
+
     def draw(self):
         """
         Render both boards onto the screen.

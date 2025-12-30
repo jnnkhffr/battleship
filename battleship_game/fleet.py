@@ -111,7 +111,7 @@ class Fleet:
 
     def is_defeated(self) -> bool:
         """True if all ships are sunk."""
-        return all(ship.is_sunk for ship in self.ships)
+        return all(ship.is_sunk() for ship in self.ships)
 
     def __iter__(self):
         return iter(self.ships)
