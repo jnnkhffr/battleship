@@ -8,6 +8,7 @@ from battleship_game.config import (
     DEFAULT_ORIENTATION,
     COLOR_BG,
     COLOR_GRID,
+    COLOR_TEXT,
     DEBUG_SHOW_ENEMY_SHIPS,
 )
 from battleship_game.board import Board
@@ -57,6 +58,10 @@ class Battleship:
         # Track the turn for the game
         self.player_turn = True
 
+        # Game over state
+        self.game_over = False
+        self.winner_text = ""
+
     def run(self):
         """
         Main game loop.
@@ -98,6 +103,10 @@ class Battleship:
         """
         x_pixel, y_pixel = pos
 
+        # if Game over then stop all the inputs
+        if self.game_over:
+            return
+
         # If placement is finished, switch to shooting mode
         # placement inside own space wouldn't do anything only placement in enemy will be forwarded
         if self.placement_done:
@@ -137,6 +146,8 @@ class Battleship:
                         if self.enemy_fleet.is_defeated():
                             print("You win")
                             self.player_turn = False
+                            self.game_over = True
+                            self.winner_text = "YOU WIN"
                             return
 
 
@@ -200,6 +211,8 @@ class Battleship:
                 if self.fleet_manager.is_defeated():
                     print("Computer wins")
                     self.player_turn = False
+                    self.game_over = True
+                    self.winner_text = "COMPUTER WINS"
                     return
 
 
@@ -211,6 +224,9 @@ class Battleship:
 
         # Player turn again
         self.player_turn = True
+
+
+
 
     def draw(self):
         """
@@ -243,6 +259,15 @@ class Battleship:
                         )
                         pygame.draw.rect(self.screen, COLOR_BG, rect)
                         pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
+
+        # Game over message
+        if self.game_over:
+            font = pygame.font.SysFont("Arial", 50)
+            text = font.render(self.winner_text, True, COLOR_TEXT)
+            rect = text.get_rect(
+                center = (self.screen.get_width() / 2, self.screen.get_height() / 2)
+            )
+            self.screen.blit(text, rect)
 
 
 if __name__ == "__main__":
