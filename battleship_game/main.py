@@ -125,14 +125,13 @@ class Battleship:
 
             # Validate the shots fired whether its inside the enemy grids or not
             if 0 <= x < GRID_COLS and 0 <= y < GRID_ROWS:
-
                 # Prevent shooting the same space twice
                 # ( 2 = miss, 3 = hit and 4 = sunk )
                 if self.enemy_board.grid[y][x] in [2, 3, 4]:
                     print("You already shot here")
                     return
                 # Player shoots
-                ship_hit = self.enemy_fleet.shot(x,y)
+                ship_hit = self.enemy_fleet.shot(x, y)
                 if ship_hit:
                     self.enemy_board.hit(x, y)
                     print("Hit")
@@ -149,7 +148,6 @@ class Battleship:
                             self.game_over = True
                             self.winner_text = "YOU WIN"
                             return
-
 
                 else:
                     self.enemy_board.miss(x, y)
@@ -186,6 +184,7 @@ class Battleship:
             if self.current_ship_index >= len(self.fleet_manager.ships):
                 self.placement_done = True
                 print("All ships placed! Shooting mode active.")
+
     def enemy_turn(self):
         """
         Simple randomizer to attack the player
@@ -200,7 +199,7 @@ class Battleship:
             break
 
         # Enemy attack
-        ship_hit = self.fleet_manager.shot(x,y)
+        ship_hit = self.fleet_manager.shot(x, y)
 
         if ship_hit:
             self.player_board.hit(x, y)
@@ -215,18 +214,12 @@ class Battleship:
                     self.winner_text = "COMPUTER WINS"
                     return
 
-
-
         else:
-            self.player_board.miss(x,y)
+            self.player_board.miss(x, y)
             print("Enemy Miss")
-
 
         # Player turn again
         self.player_turn = True
-
-
-
 
     def draw(self):
         """
@@ -265,7 +258,7 @@ class Battleship:
             font = pygame.font.SysFont("Arial", 50)
             text = font.render(self.winner_text, True, COLOR_TEXT)
             rect = text.get_rect(
-                center = (self.screen.get_width() / 2, self.screen.get_height() / 2)
+                center=(self.screen.get_width() / 2, self.screen.get_height() / 2)
             )
             self.screen.blit(text, rect)
 
