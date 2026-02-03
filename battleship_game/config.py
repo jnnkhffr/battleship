@@ -14,6 +14,7 @@ COLOR_SHIP: tuple[int, int, int] = (169, 169, 169)
 COLOR_MISS = (0, 150, 255)  # Blue for Miss
 COLOR_HIT = (255, 165, 0)  # Orange for Hit
 COLOR_SUNK = (200, 0, 0)  # Red for sunk
+COLOR_MESSAGE = (255, 0, 0)
 
 #Ship config.
 SUB_SIZE = 1

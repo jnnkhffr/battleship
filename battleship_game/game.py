@@ -10,6 +10,7 @@ from battleship_game.config import (
     DEFAULT_ORIENTATION,
     COLOR_BG,
     COLOR_GRID,
+    COLOR_MESSAGE,
     DEBUG_SHOW_ENEMY_SHIPS
 )
 from battleship_game.computer_fleet import ComputerFleetManager
@@ -105,6 +106,9 @@ class Game:
         Shooting phase:
             - (Future) Handle firing shots at the enemy board
         """
+        if self.game_over:
+            return
+
         x_pixel, y_pixel = pos
 
         # SHOOTING PHASE
@@ -139,6 +143,9 @@ class Game:
 
                     if self.enemy_fleet.is_defeated():
                         print("You win!")
+                        self.game_over = True
+                        self.game_over_message = "You win!"
+                        self.placement_done = True
                         return
             else:
                 self.enemy_board.miss(x, y)
@@ -204,13 +211,17 @@ class Game:
                         pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
 
             # first part/idea for the game over screen
-            if self.game_over:
+            if self.game_over and self.game_over_message:
                 font = pygame.font.SysFont(None, 90)
-                text_surface = font.render(self.game_over_message, True, (255, 0, 0))
+                text_surface = font.render(self.game_over_message, True, COLOR_MESSAGE)
                 text_rect = text_surface.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
                 self.screen.blit(text_surface, text_rect)
 
     def enemy_turn(self):
+
+        if self.game_over:
+            return
+
         while True:
             x = random.randint(0, GRID_COLS - 1)
             y = random.randint(0, GRID_ROWS - 1)
@@ -232,6 +243,8 @@ class Game:
 
                 if self.fleet_manager.is_defeated():
                     print("Computer wins!")
+                    self.game_over = True
+                    self.game_over_message = "You lost!"
                     return
         else:
             self.player_board.miss(x, y)
