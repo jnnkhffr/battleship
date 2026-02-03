@@ -74,7 +74,7 @@ class Board:
             )
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
-            # draw ship
+            # draw ship (darshan)
             val = self.grid[y][x]
 
             if val == 1:
@@ -162,7 +162,7 @@ class Board:
                     ny = y + dy * i
                     self.grid[ny][nx] = 1
 
-
+    #part from darshan
     def hit(self, x: int, y: int) -> None:
         self.grid[y][x] = 3
 
