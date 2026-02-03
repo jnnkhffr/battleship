@@ -11,11 +11,13 @@ BOARD_SPACING = BLOCK_SIZE * 2 #distance between two boards
 COLOR_BG: tuple[int, int, int] = (0, 0, 0)
 COLOR_GRID: tuple[int, int, int] = (40, 40, 40)
 COLOR_SHIP: tuple[int, int, int] = (169, 169, 169)
-COLOR_MISS = (0, 150, 255)  # Blue for Miss
-COLOR_HIT = (255, 165, 0)  # Orange for Hit
-COLOR_SUNK = (200, 0, 0)  # Red for sunk
-COLOR_MESSAGE = (0, 255, 0)
-COLOR_PREVIEW = (255, 80, 80)
+COLOR_MISS: tuple[int, int, int] = (0, 150, 255)  # Blue for Miss
+COLOR_HIT: tuple[int, int, int] = (255, 165, 0)  # Orange for Hit
+COLOR_SUNK: tuple[int, int, int] = (255, 0, 0)  # Red for sunk
+COLOR_MESSAGE: tuple[int, int, int] = (0, 255, 0)
+COLOR_PREVIEW: tuple[int, int, int] = (255, 80, 80)
+COLOR_TEXT:tuple[int, int, int] = (255, 255, 255)
+
 
 #Ship PLacement
 ALPHA_PREVIEW = 128
