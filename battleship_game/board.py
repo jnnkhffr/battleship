@@ -9,6 +9,10 @@ from battleship_game.config import (
     COLOR_GRID,
     COLOR_SHIP,
     SHIP_MARGIN,
+    COLOR_MISS,
+    COLOR_HIT,
+    COLOR_SUNK,
+
 )
 
 
@@ -71,8 +75,16 @@ class Board:
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
             # draw ship
-            if self.grid[y][x] == 1:
+            val = self.grid[y][x]
+
+            if val == 1:
                 pygame.draw.rect(surface, COLOR_SHIP, rect)
+            elif val == 2:
+                pygame.draw.rect(surface, COLOR_MISS, rect)
+            elif val == 3:
+                pygame.draw.rect(surface, COLOR_HIT, rect)
+            elif val == 4:
+                pygame.draw.rect(surface, COLOR_SUNK, rect)
 
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
@@ -149,3 +161,18 @@ class Board:
                     nx = x + dx * i
                     ny = y + dy * i
                     self.grid[ny][nx] = 1
+
+
+    def hit(self, x: int, y: int) -> None:
+        self.grid[y][x] = 3
+
+    def miss(self, x: int, y: int) -> None:
+        self.grid[y][x] = 2
+
+    def sunk(self, ship) -> None:
+        sx, sy = ship.position
+        dx = 1 if ship.orientation == "hor" else 0
+        dy = 1 if ship.orientation == "ver" else 0
+
+        for i in range(ship.size):
+            self.grid[sy + dy * i][sx + dx * i] = 4
