@@ -12,6 +12,8 @@ from battleship_game.config import (
     COLOR_MISS,
     COLOR_HIT,
     COLOR_SUNK,
+    COLOR_PREVIEW,
+    ALPHA_PREVIEW,
 
 )
 
@@ -51,7 +53,7 @@ class Board:
 
         self.grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
-    def draw(self, surface: pygame.Surface, offset_x: int = 0) -> None:
+    def draw(self, surface: pygame.Surface, offset_x: int = 0, offset_y: int = 0, preview: dict | None = None) -> None:
         """
         Draws the grid on a given Pygame surface.
 
@@ -86,6 +88,38 @@ class Board:
             elif val == 4:
                 pygame.draw.rect(surface, COLOR_SUNK, rect)
 
+
+        # Draw preview on top if provided
+        if preview is not None:
+            px = preview.get("x")
+            py = preview.get("y")
+            size = preview.get("size", 1)
+            orientation = preview.get("orientation", "hor")
+            alpha = preview.get("alpha", ALPHA_PREVIEW)
+            valid = preview.get("valid", True)
+
+            # choose color: ship color if valid else red-ish
+            preview_color = COLOR_SHIP if valid else COLOR_PREVIEW
+
+            dx = 1 if orientation == "hor" else 0
+            dy = 1 if orientation == "ver" else 0
+
+            # create a small surface for a single cell with alpha
+            cell_surf = pygame.Surface((self.block_size, self.block_size), pygame.SRCALPHA)
+            r, g, b = preview_color
+            cell_surf.fill((r, g, b, alpha))
+
+            for i in range(size):
+                cx = px + dx * i
+                cy = py + dy * i
+                if 0 <= cx < self.cols and 0 <= cy < self.rows:
+                    # only draw preview if cell is empty (optional: still draw over non-empty to show invalid)
+                    # we draw regardless to show overlap/invalidity visually
+                    dest = (offset_x + cx * self.block_size, offset_y + cy * self.block_size)
+                    surface.blit(cell_surf, dest)
+                    # redraw grid border so lines stay visible
+                    cell_rect = pygame.Rect(dest[0], dest[1], self.block_size, self.block_size)
+                    pygame.draw.rect(surface, self.gridcolor, cell_rect, 1)
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
                 """
