@@ -179,7 +179,7 @@ class Game:
         ship = self.fleet_manager.ships[self.current_ship_index]
 
         if self.fleet_manager.place_ship(ship, x, y, self.current_orientation):
-            print(f"Placed ship {self.current_ship_index} at {x},{y}")
+            print(f"Placed {ship.name} at {x},{y}")
             self.current_ship_index += 1
 
             if self.current_ship_index >= len(self.fleet_manager.ships):
@@ -265,3 +265,8 @@ class Game:
         else:
             self.player_board.miss(x, y)
             print("Enemy miss")
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.run()
