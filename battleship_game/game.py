@@ -1,0 +1,267 @@
+import pygame
+import random
+from battleship_game.board import Board
+from battleship_game.fleet_commander import FleetManager
+from battleship_game.config import (
+    GRID_COLS,
+    GRID_ROWS,
+    BLOCK_SIZE,
+    BOARD_SPACING,
+    DEFAULT_ORIENTATION,
+    COLOR_BG,
+    COLOR_GRID,
+    COLOR_MESSAGE,
+    DEBUG_SHOW_ENEMY_SHIPS
+)
+from battleship_game.computer_fleet import ComputerFleetManager
+
+
+class Game:
+    """
+    Main game controller class.
+
+    Responsibilities:
+    - Initialize window and rendering
+    - Manage player and enemy boards
+    - Handle ship placement phase
+    - Transition into shooting phase once placement is complete
+    """
+
+    def __init__(self):
+        """
+        Initialize the game environment, create boards, fleet manager,
+        and prepare the placement phase.
+        """
+        pygame.init()
+
+        # Calculate window size
+        self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
+        self.screen_height = GRID_ROWS * BLOCK_SIZE
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+
+        pygame.display.set_caption("Battleship")
+
+        # Boards
+        self.player_board = Board()
+        self.enemy_board = Board()
+
+        # Player fleet
+        self.fleet_manager = FleetManager(self.player_board)
+
+        # Index of the ship currently being placed
+        self.current_ship_index = 0
+
+        # Default orientation for placement
+        self.current_orientation = DEFAULT_ORIENTATION
+
+        # Offset for drawing the enemy board
+        self.enemy_offset_x = GRID_COLS * BLOCK_SIZE + BOARD_SPACING
+
+        # True once all ships have been placed
+        self.placement_done = False
+
+        # Enemy fleet
+        self.enemy_fleet = ComputerFleetManager(self.enemy_board)
+        self.enemy_fleet.auto_place_fleet()
+
+        #Game over
+        self.game_over = False
+        self.game_over_message = ""
+
+        # preview tracking
+        self.mouse_grid_pos = (0, 0)
+        pygame.font.init()
+        self.font = pygame.font.SysFont(None, 64)
+        #self.top_margin = 0
+
+    def run(self):
+        """
+        Main game loop.
+        Handles events, updates the game state, and renders the Boards.
+        """
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+                # Rotate ship during placement phase
+                if not self.placement_done and event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.current_orientation = (
+                            "ver" if self.current_orientation == "hor" else "hor"
+                        )
+
+                # Handle mouse clicks
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.handle_mouse_click(event.pos)
+
+                if event.type == pygame.MOUSEMOTION:
+                    self.mouse_grid_pos = event.pos
+
+            self.draw()
+            pygame.display.flip()
+
+        pygame.quit()
+
+    def handle_mouse_click(self, pos):
+        """
+        Handle mouse clicks depending on the current game phase.
+
+        Placement phase:
+            - Convert mouse position to grid coordinates
+            - Attempt to place the next ship on the player's board
+
+        Shooting phase:
+            - (Future) Handle firing shots at the enemy board
+        """
+        if self.game_over:
+            return
+
+        x_pixel, y_pixel = pos
+
+        # SHOOTING PHASE
+        if self.placement_done:
+            # Ignore clicks on player board
+            if x_pixel < self.enemy_offset_x:
+                return
+
+            # Convert to grid
+            x = (x_pixel - self.enemy_offset_x) // BLOCK_SIZE
+            y = y_pixel // BLOCK_SIZE
+
+            # Validate grid bounds
+            if not (0 <= x < GRID_COLS and 0 <= y < GRID_ROWS):
+                return
+
+            # Prevent double shots
+            if self.enemy_board.grid[y][x] in [2, 3, 4]:
+                print("You already shot here")
+                return
+
+            # Player shoots
+            ship_hit = self.enemy_fleet.receive_shot(x, y)
+
+            if ship_hit:
+                self.enemy_board.hit(x, y)
+                print("Hit!")
+
+                if ship_hit.is_sunk():
+                    self.enemy_board.sunk(ship_hit)
+                    print(f"You sunk the enemy {ship_hit.name}")
+
+                    if self.enemy_fleet.is_defeated():
+                        print("You win!")
+                        self.game_over = True
+                        self.game_over_message = "You win!"
+                        self.placement_done = True
+                        return
+            else:
+                self.enemy_board.miss(x, y)
+                print("Miss")
+
+            # Enemy turn
+            self.enemy_turn()
+            return
+
+        # PLACEMENT PHASE
+        if x_pixel > GRID_COLS * BLOCK_SIZE:
+            return
+
+        x = x_pixel // BLOCK_SIZE
+        y = y_pixel // BLOCK_SIZE
+
+        if self.current_ship_index >= len(self.fleet_manager.ships):
+            self.placement_done = True
+            print("All ships placed. Shooting mode enabled.")
+            return
+
+        ship = self.fleet_manager.ships[self.current_ship_index]
+
+        if self.fleet_manager.place_ship(ship, x, y, self.current_orientation):
+            print(f"Placed ship {self.current_ship_index} at {x},{y}")
+            self.current_ship_index += 1
+
+            if self.current_ship_index >= len(self.fleet_manager.ships):
+                self.placement_done = True
+                print("All ships placed! Shooting mode active.")
+
+    def draw(self):
+        """ Render both screens on the board."""
+        self.screen.fill(COLOR_BG)
+
+        preview = None
+        if not self.placement_done and self.current_ship_index < len(self.fleet_manager.ships) and not self.game_over:
+            mx, my = getattr(self, "mouse_grid_pos", (0, 0))
+            if mx < GRID_COLS * BLOCK_SIZE:
+                gx = mx // BLOCK_SIZE
+                gy = my // BLOCK_SIZE
+                ship = self.fleet_manager.ships[self.current_ship_index]
+                valid = self.player_board.can_place_ship(gx, gy, ship.size, self.current_orientation)
+                preview = {
+                    "x": gx,
+                    "y": gy,
+                    "size": ship.size,
+                    "orientation": self.current_orientation,
+                    "alpha": 128,  # 50% Transparency
+                    "valid": valid
+                }
+
+        # Draw player's board with preview
+        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview)
+
+        # Draw enemy's board once
+        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0)
+
+        # If DEBUG off: overpaint enemy ships
+        if not DEBUG_SHOW_ENEMY_SHIPS:
+            for y in range(self.enemy_board.rows):
+                for x in range(self.enemy_board.cols):
+                    if self.enemy_board.grid[y][x] == 1:
+                        rect = pygame.Rect(
+                            self.enemy_offset_x + x * BLOCK_SIZE,
+                            y * BLOCK_SIZE,
+                            BLOCK_SIZE,
+                            BLOCK_SIZE
+                        )
+                        pygame.draw.rect(self.screen, COLOR_BG, rect)
+                        pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
+
+        # Game over message
+        if self.game_over and self.game_over_message:
+            text_surface = self.font.render(self.game_over_message, True, COLOR_MESSAGE)
+            text_rect = text_surface.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
+            self.screen.blit(text_surface, text_rect)
+
+    def enemy_turn(self):
+
+        if self.game_over:
+            return
+
+        while True:
+            x = random.randint(0, GRID_COLS - 1)
+            y = random.randint(0, GRID_ROWS - 1)
+
+            # Skip already shot cells
+            if self.player_board.grid[y][x] in [2, 3, 4]:
+                continue
+            break
+
+        ship_hit = self.fleet_manager.receive_shot(x, y)
+
+        if ship_hit:
+            self.player_board.hit(x, y)
+            print("Enemy hit!")
+
+            if ship_hit.is_sunk():
+                self.player_board.sunk(ship_hit)
+                print(f"Enemy sunk your {ship_hit.name}")
+
+                if self.fleet_manager.is_defeated():
+                    print("Computer wins!")
+                    self.game_over = True
+                    self.game_over_message = "You lost!"
+                    return
+        else:
+            self.player_board.miss(x, y)
+            print("Enemy miss")

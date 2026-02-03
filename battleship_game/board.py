@@ -1,5 +1,6 @@
 import pygame
 from itertools import product
+
 from battleship_game.config import (
     GRID_COLS,
     GRID_ROWS,
@@ -7,33 +8,52 @@ from battleship_game.config import (
     COLOR_BG,
     COLOR_GRID,
     COLOR_SHIP,
+    SHIP_MARGIN,
     COLOR_MISS,
     COLOR_HIT,
     COLOR_SUNK,
-    SHIP_MARGIN,
+    COLOR_PREVIEW,
+    ALPHA_PREVIEW,
+
 )
 
 
 class Board:
     """
-    Represents a Battleship game board with 10*10 grid,
-    handles ship placement and track shots
+    Represents a Battleship game board.
 
     Responsibilities:
-    - Stores the map state (Integers: 0=Water, 1=Ship, 2=Miss, 3=Hit, 4=Sunk).
-    - Validates ship placement (Checking bounds and margins).
-    - Draws the grid to the screen.
+    - Store grid state (0 = empty, 1 = ship)
+    - Draw the board and ships
+    - Validate ship placement with correct spacing rules
     """
+    def __init__(
+        self,
+        cols: int = GRID_COLS,
+        rows: int = GRID_ROWS,
+        block_size: int = BLOCK_SIZE,
+        bgcolor: tuple[int, int, int] = COLOR_BG,
+        gridcolor: tuple[int, int, int] = COLOR_GRID,
+    ) -> None:
+        """
+        Initializes a grid playing field.
 
-    def __init__(self):
-        self.cols = GRID_COLS
-        self.rows = GRID_ROWS
-        self.block_size = BLOCK_SIZE
+        Args:
+            cols: Number of columns in the grid.
+            rows: Number of rows in the grid.
+            block_size: Pixel size of a single block.
+            bgcolor: Background color as RGB tuple.
+            gridcolor: Line color of the grid as RGB tuple.
+        """
+        self.cols = cols
+        self.rows = rows
+        self.block_size = block_size
+        self.bgcolor = bgcolor
+        self.gridcolor = gridcolor
 
-        # Grid: 0=background(water), 1=Ship, 2=Miss, 3=Hit, 4=Sunk
-        self.grid = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+        self.grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
-    def draw(self, surface: pygame.Surface, offset_x: int = 0) -> None:
+    def draw(self, surface: pygame.Surface, offset_x: int = 0, offset_y: int = 0, preview: dict | None = None) -> None:
         """
         Draws the grid on a given Pygame surface.
 
@@ -42,104 +62,148 @@ class Board:
         Args:
             surface: Target surface to draw on.
             offset_x: horizontal offset for drawing (used for enemy board)
-
         """
-        # Background
-        rect = pygame.Rect(
-            offset_x, 0, self.cols * self.block_size, self.rows * self.block_size
-        )
-        pygame.draw.rect(surface, COLOR_BG, rect)
-        # Draw cells using product like a list
+        rect = pygame.Rect(offset_x, 0, self.cols * self.block_size, self.rows * self.block_size)
+        pygame.draw.rect(surface, self.bgcolor, rect)
+
         for x, y in product(range(self.cols), range(self.rows)):
             rect = pygame.Rect(
-                offset_x + x * self.block_size,
+                offset_x +
+                x * self.block_size,
                 y * self.block_size,
                 self.block_size,
-                self.block_size,
+                self.block_size
             )
+            pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
+            # draw ship (darshan)
             val = self.grid[y][x]
-            cell_color = COLOR_BG  # Default water
 
-            # grid value check to determine the cell-color
             if val == 1:
-                cell_color = COLOR_SHIP
+                pygame.draw.rect(surface, COLOR_SHIP, rect)
             elif val == 2:
-                cell_color = COLOR_MISS
+                pygame.draw.rect(surface, COLOR_MISS, rect)
             elif val == 3:
-                cell_color = COLOR_HIT
+                pygame.draw.rect(surface, COLOR_HIT, rect)
             elif val == 4:
-                cell_color = COLOR_SUNK
+                pygame.draw.rect(surface, COLOR_SUNK, rect)
 
-            # Draw fill if ship has been placed
-            if cell_color != COLOR_BG:
-                pygame.draw.rect(surface, cell_color, rect)
 
-            # Draw outline now so grid stay on top of the fill
-            pygame.draw.rect(surface, COLOR_GRID, rect, 1)
+        # Draw preview on top if provided
+        if preview is not None:
+            px = preview.get("x")
+            py = preview.get("y")
+            size = preview.get("size", 1)
+            orientation = preview.get("orientation", "hor")
+            alpha = preview.get("alpha", ALPHA_PREVIEW)
+            valid = preview.get("valid", True)
 
-    def can_place_ship(self, ship, x: int, y: int, orientation: str) -> bool:
-        """
-        Check if a ship can be placed at (x, y) with given size and orientation.
+            # choose color: ship color if valid else red-ish
+            preview_color = COLOR_SHIP if valid else COLOR_PREVIEW
 
-        Conditions:
-        - Ship must be fully inside the board
-        - Ship cells must be empty
-        - All surrounding cells (1-cell margin) must be empty
-        """
-        dx = 1 if orientation == "hor" else 0
-        dy = 1 if orientation == "ver" else 0
+            dx = 1 if orientation == "hor" else 0
+            dy = 1 if orientation == "ver" else 0
 
-        # Boundary Checks
-        # Calculate the tail of the ship
-        tail_x = x + dx * (ship.size - 1)
-        tail_y = y + dy * (ship.size - 1)
+            # create a small surface for a single cell with alpha
+            cell_surf = pygame.Surface((self.block_size, self.block_size), pygame.SRCALPHA)
+            r, g, b = preview_color
+            cell_surf.fill((r, g, b, alpha))
 
-        # Fit check
-        if tail_x >= self.cols or tail_y >= self.rows:
-            return False
+            for i in range(size):
+                cx = px + dx * i
+                cy = py + dy * i
+                if 0 <= cx < self.cols and 0 <= cy < self.rows:
+                    # only draw preview if cell is empty (optional: still draw over non-empty to show invalid)
+                    # we draw regardless to show overlap/invalidity visually
+                    dest = (offset_x + cx * self.block_size, offset_y + cy * self.block_size)
+                    surface.blit(cell_surf, dest)
+                    # redraw grid border so lines stay visible
+                    cell_rect = pygame.Rect(dest[0], dest[1], self.block_size, self.block_size)
+                    pygame.draw.rect(surface, self.gridcolor, cell_rect, 1)
 
-        # Collision check
-        x_start = max(0, x - SHIP_MARGIN)
-        y_start = max(0, y - SHIP_MARGIN)
-        x_end = min(self.cols, tail_x + SHIP_MARGIN + 1)
-        y_end = min(self.rows, tail_y + SHIP_MARGIN + 1)
+    def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
+                """
+                Check if a ship can be placed at (x, y) with given size and orientation.
 
-        # Scan the box
-        for check_y in range(y_start, y_end):
-            for check_x in range(x_start, x_end):
-                if self.grid[check_y][check_x] != 0:
-                    return False
-        return True
+                Conditions:
+                - Ship must be fully inside the board
+                - Ship cells must be empty
+                - All surrounding cells (1-cell margin) must be empty
+                """
+                dx = 1 if orientation == "hor" else 0
+                dy = 1 if orientation == "ver" else 0
 
-    def place_ship(self, ship, x: int, y: int) -> None:
-        """
-        Place a ship on the board by marking its cells as occupied.
+                # Ship hast to be within the gamefield
+                for i in range(size):
+                    nx = x + dx * i
+                    ny = y + dy * i
+                    if not (0 <= nx < self.cols and 0 <= ny < self.rows):
+                        return False
 
-        Args:
-            x: Starting column.
-            y: Starting row.
-            size: Ship length.
-            orientation: "hor" or "ver".
-        """
-        dx = 1 if ship.orientation == "hor" else 0
-        dy = 1 if ship.orientation == "ver" else 0
+                # Check that ship cells themselves are empty
+                for i in range(size):
+                    nx = x + dx * i
+                    ny = y + dy * i
+                    if self.grid[ny][nx] == 1:
+                        return False
 
-        for i in range(ship.size):
-            cx = x + dx * i
-            cy = y + dy * i
-            self.grid[cy][cx] = 1
+                # Check 1-cell margin around the whole ship
+                # Define bounding box for ship + 1-cell margin
 
+                max_x = x + dx * (size - 1) + SHIP_MARGIN
+                max_y = y + dy * (size - 1) + SHIP_MARGIN
+
+                # Clamp to board bounds
+                min_x = max(0, x - SHIP_MARGIN)
+                min_y = max(0, y - SHIP_MARGIN)
+                max_x = min(self.cols - 1, max_x)
+                max_y = min(self.rows - 1, max_y)
+
+                for cy in range(min_y, max_y + 1):
+                    for cx in range(min_x, max_x + 1):
+                        # Skip cells that will be occupied by this ship
+                        is_ship_cell = False
+                        for i in range(size):
+                            sx = x + dx * i
+                            sy = y + dy * i
+                            if cx == sx and cy == sy:
+                                is_ship_cell = True
+                                break
+                        if is_ship_cell:
+                            continue
+
+                        # Any existing ship in the margin -> not allowed
+                        if self.grid[cy][cx] == 1:
+                            return False
+
+                return True
+
+    def place_ship(self, x: int, y: int, size: int, orientation: str) -> None:
+                """
+                Place a ship on the board by marking its cells as occupied.
+
+                Args:
+                    x: Starting column.
+                    y: Starting row.
+                    size: Ship length.
+                    orientation: "hor" or "ver".
+                """
+                dx = 1 if orientation == "hor" else 0
+                dy = 1 if orientation == "ver" else 0
+
+                for i in range(size):
+                    nx = x + dx * i
+                    ny = y + dy * i
+                    self.grid[ny][nx] = 1
+
+    #part from darshan
     def hit(self, x: int, y: int) -> None:
-        """Marks the cell as a HIT"""
         self.grid[y][x] = 3
 
     def miss(self, x: int, y: int) -> None:
-        """Marks the cell as a MISS"""
         self.grid[y][x] = 2
 
     def sunk(self, ship) -> None:
-        """Marks the whole ship as SUNK"""
         sx, sy = ship.position
         dx = 1 if ship.orientation == "hor" else 0
         dy = 1 if ship.orientation == "ver" else 0
