@@ -1,4 +1,5 @@
 import pygame
+import random
 from battleship_game.board import Board
 from battleship_game.fleet_commander import FleetManager
 from battleship_game.config import (
@@ -62,6 +63,10 @@ class Game:
         self.enemy_fleet = ComputerFleetManager(self.enemy_board)
         self.enemy_fleet.auto_place_fleet()
 
+        #Game over
+        self.game_over = False
+        self.game_over_message = ""
+
     def run(self):
         """
         Main game loop.
@@ -102,37 +107,69 @@ class Game:
         """
         x_pixel, y_pixel = pos
 
-        # If placement is finished, switch to shooting mode
+        # SHOOTING PHASE
         if self.placement_done:
-            print("Shooting mode active — shooting logic will be added later.")
+            # Ignore clicks on player board
+            if x_pixel < self.enemy_offset_x:
+                return
+
+            # Convert to grid
+            x = (x_pixel - self.enemy_offset_x) // BLOCK_SIZE
+            y = y_pixel // BLOCK_SIZE
+
+            # Validate grid bounds
+            if not (0 <= x < GRID_COLS and 0 <= y < GRID_ROWS):
+                return
+
+            # Prevent double shots
+            if self.enemy_board.grid[y][x] in [2, 3, 4]:
+                print("You already shot here")
+                return
+
+            # Player shoots
+            ship_hit = self.enemy_fleet.receive_shot(x, y)
+
+            if ship_hit:
+                self.enemy_board.hit(x, y)
+                print("Hit!")
+
+                if ship_hit.is_sunk():
+                    self.enemy_board.sunk(ship_hit)
+                    print(f"You sunk the enemy {ship_hit.name}")
+
+                    if self.enemy_fleet.is_defeated():
+                        print("You win!")
+                        return
+            else:
+                self.enemy_board.miss(x, y)
+                print("Miss")
+
+            # Enemy turn
+            self.enemy_turn()
             return
 
-        # Only allow placement on the left board (gamers sea)
+        # PLACEMENT PHASE
         if x_pixel > GRID_COLS * BLOCK_SIZE:
             return
 
-        # Convert pixel position to grid coordinates
         x = x_pixel // BLOCK_SIZE
         y = y_pixel // BLOCK_SIZE
 
-        # Safety check: if all ships are placed, finalize placement
         if self.current_ship_index >= len(self.fleet_manager.ships):
             self.placement_done = True
             print("All ships placed. Shooting mode enabled.")
             return
 
-        # Get the ship that is currently being placed
         ship = self.fleet_manager.ships[self.current_ship_index]
 
-        # Attempt to place the ship
         if self.fleet_manager.place_ship(ship, x, y, self.current_orientation):
             print(f"Placed ship {self.current_ship_index} at {x},{y}")
             self.current_ship_index += 1
 
-            # If this was the last ship, switch to shooting mode
             if self.current_ship_index >= len(self.fleet_manager.ships):
                 self.placement_done = True
                 print("All ships placed! Shooting mode active.")
+
 
     def draw(self):
         """
@@ -166,3 +203,36 @@ class Game:
                         pygame.draw.rect(self.screen, COLOR_BG, rect)
                         pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
 
+            # first part/idea for the game over screen
+            if self.game_over:
+                font = pygame.font.SysFont(None, 90)
+                text_surface = font.render(self.game_over_message, True, (255, 0, 0))
+                text_rect = text_surface.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
+                self.screen.blit(text_surface, text_rect)
+
+    def enemy_turn(self):
+        while True:
+            x = random.randint(0, GRID_COLS - 1)
+            y = random.randint(0, GRID_ROWS - 1)
+
+            # Skip already shot cells
+            if self.player_board.grid[y][x] in [2, 3, 4]:
+                continue
+            break
+
+        ship_hit = self.fleet_manager.receive_shot(x, y)
+
+        if ship_hit:
+            self.player_board.hit(x, y)
+            print("Enemy hit!")
+
+            if ship_hit.is_sunk():
+                self.player_board.sunk(ship_hit)
+                print(f"Enemy sunk your {ship_hit.name}")
+
+                if self.fleet_manager.is_defeated():
+                    print("Computer wins!")
+                    return
+        else:
+            self.player_board.miss(x, y)
+            print("Enemy miss")

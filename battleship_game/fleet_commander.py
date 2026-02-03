@@ -89,3 +89,37 @@ class FleetManager:
             True if all ships are placed, False otherwise.
         """
         return all(ship.position is not None for ship in self.ships)
+
+
+    def receive_shot(self, x, y):
+        """
+        Check if a shot at (x, y) hits any ship.
+
+        Returns:
+            - ship object if hit
+            - None if miss
+        """
+        for ship in self.ships:
+            if ship.position is None:
+                continue
+
+            sx, sy = ship.position
+            dx = 1 if ship.orientation == "hor" else 0
+            dy = 1 if ship.orientation == "ver" else 0
+
+            for i in range(ship.size):
+                cx = sx + dx * i
+                cy = sy + dy * i
+
+                if cx == x and cy == y:
+                    ship.register_hits()
+                    return ship
+
+        return None
+
+    def is_defeated(self):
+        """
+        Returns True if all ships in this fleet are sunk.
+        """
+        return all(ship.is_sunk() for ship in self.ships)
+
