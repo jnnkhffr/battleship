@@ -6,50 +6,50 @@
 pip install -r requirements.txt
 ```
 
-## Tests ausführen
+## Running Tests
 
-### Alle Tests ausführen
+### Run all tests
 ```bash
 pytest
 ```
 
-### Tests mit mehr Details
+### Run tests with more details
 ```bash
 pytest -v
 ```
 
-### Einzelne Test-Datei ausführen
+### Run a single test file
 ```bash
 pytest test_board.py
 pytest test_fleet.py
 pytest test_fleet_commander.py
 ```
 
-### Spezifische Test-Klasse ausführen
+### Run a specific test class
 ```bash
 pytest test_board.py::TestShipPlacement
 ```
 
-### Einzelnen Test ausführen
+### Run a single test
 ```bash
 pytest test_board.py::TestShipPlacement::test_can_place_ship_on_empty_board
 ```
 
-## Coverage (Test-Abdeckung)
+## Coverage (Test Coverage)
 
-### Coverage Report erstellen
+### Generate coverage report
 ```bash
 pytest --cov=battleship_game
 ```
 
-### HTML Coverage Report
+### HTML coverage report
 ```bash
 pytest --cov=battleship_game --cov-report=html
 ```
 
-Dann öffne `htmlcov/index.html` im Browser.
+Then open `htmlcov/index.html` in your browser.
 
-## Projektstruktur
+## Project Structure
 
 ```
 battleship_game/
@@ -61,28 +61,28 @@ battleship_game/
 ├── config.py
 └── main.py
 
-tests/  (oder battleship_tests/)
-├── conftest.py              # Fixtures für alle Tests
-├── test_board.py           # Tests für Board-Klasse
-├── test_fleet.py           # Tests für Schiffs-Klassen
-└── test_fleet_commander.py # Tests für FleetManager
+tests/  (or battleship_tests/)
+├── conftest.py              # Fixtures for all tests
+├── test_board.py           # Tests for Board class
+├── test_fleet.py           # Tests for Ship classes
+└── test_fleet_commander.py # Tests for FleetManager
 ```
 
-## Was wird getestet?
+## What is being tested?
 
 ### test_board.py
-- Board-Initialisierung
-- Schiffsplatzierung (gültig/ungültig)
-- Treffer und Fehlschüsse
-- Schiff versenken
+- Board initialization
+- Ship placement (valid/invalid)
+- Hits and misses
+- Sinking ships
 
 ### test_fleet.py
-- Schiffs-Initialisierung
-- Treffer registrieren
-- Schiff versenken
+- Ship initialization
+- Registering hits
+- Sinking ships
 
 ### test_fleet_commander.py
-- FleetManager-Initialisierung
-- Schiffe platzieren
-- Schüsse empfangen
-- Flotte besiegt
+- FleetManager initialization
+- Placing ships
+- Receiving shots
+- Fleet defeated
