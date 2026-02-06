@@ -11,7 +11,7 @@ from battleship_game.config import (
     COLOR_BG,
     COLOR_GRID,
     COLOR_MESSAGE,
-    DEBUG_SHOW_ENEMY_SHIPS
+    DEBUG_SHOW_ENEMY_SHIPS,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -64,7 +64,7 @@ class Game:
         self.enemy_fleet = ComputerFleetManager(self.enemy_board)
         self.enemy_fleet.auto_place_fleet()
 
-        #Game over
+        # Game over
         self.game_over = False
         self.game_over_message = ""
 
@@ -72,7 +72,7 @@ class Game:
         self.mouse_grid_pos = (0, 0)
         pygame.font.init()
         self.font = pygame.font.SysFont(None, 64)
-        #self.top_margin = 0
+        # self.top_margin = 0
 
     def run(self):
         """
@@ -187,24 +187,30 @@ class Game:
                 print("All ships placed! Shooting mode active.")
 
     def draw(self):
-        """ Render both screens on the board."""
+        """Render both screens on the board."""
         self.screen.fill(COLOR_BG)
 
         preview = None
-        if not self.placement_done and self.current_ship_index < len(self.fleet_manager.ships) and not self.game_over:
+        if (
+            not self.placement_done
+            and self.current_ship_index < len(self.fleet_manager.ships)
+            and not self.game_over
+        ):
             mx, my = getattr(self, "mouse_grid_pos", (0, 0))
             if mx < GRID_COLS * BLOCK_SIZE:
                 gx = mx // BLOCK_SIZE
                 gy = my // BLOCK_SIZE
                 ship = self.fleet_manager.ships[self.current_ship_index]
-                valid = self.player_board.can_place_ship(gx, gy, ship.size, self.current_orientation)
+                valid = self.player_board.can_place_ship(
+                    gx, gy, ship.size, self.current_orientation
+                )
                 preview = {
                     "x": gx,
                     "y": gy,
                     "size": ship.size,
                     "orientation": self.current_orientation,
                     "alpha": 128,  # 50% Transparency
-                    "valid": valid
+                    "valid": valid,
                 }
 
         # Draw player's board with preview
@@ -222,7 +228,7 @@ class Game:
                             self.enemy_offset_x + x * BLOCK_SIZE,
                             y * BLOCK_SIZE,
                             BLOCK_SIZE,
-                            BLOCK_SIZE
+                            BLOCK_SIZE,
                         )
                         pygame.draw.rect(self.screen, COLOR_BG, rect)
                         pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
@@ -230,11 +236,12 @@ class Game:
         # Game over message
         if self.game_over and self.game_over_message:
             text_surface = self.font.render(self.game_over_message, True, COLOR_MESSAGE)
-            text_rect = text_surface.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
+            text_rect = text_surface.get_rect(
+                center=(self.screen_width // 2, self.screen_height // 2)
+            )
             self.screen.blit(text_surface, text_rect)
 
     def enemy_turn(self):
-
         if self.game_over:
             return
 

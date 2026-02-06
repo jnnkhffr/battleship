@@ -34,7 +34,6 @@ class FleetManager:
 
         self.create_fleet()
 
-
     def create_fleet(self):
         """
         Create the player's fleet based on configuration values.
@@ -59,7 +58,6 @@ class FleetManager:
         for _ in range(NUM_SUBS):
             self.ships.append(Submarine())
 
-
     def place_ship(self, ship, x, y, orientation):
         """
         Attempt to place a ship on the board.
@@ -80,7 +78,6 @@ class FleetManager:
             return True
         return False
 
-
     def all_ships_placed(self):
         """
         Check whether all ships have been assigned a position.
@@ -89,7 +86,6 @@ class FleetManager:
             True if all ships are placed, False otherwise.
         """
         return all(ship.position is not None for ship in self.ships)
-
 
     def receive_shot(self, x, y):
         """
@@ -122,4 +118,3 @@ class FleetManager:
         Returns True if all ships in this fleet are sunk.
         """
         return all(ship.is_sunk() for ship in self.ships)
-
