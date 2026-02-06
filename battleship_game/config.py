@@ -2,7 +2,7 @@
 GRID_COLS = 10
 GRID_ROWS = 10
 
-BLOCK_SIZE = 40  # size of a grid cell
+BLOCK_SIZE = 40  # size of a grid cell in pixel
 
 BOARD_SPACING = BLOCK_SIZE * 2  # distance between two boards
 

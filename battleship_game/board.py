@@ -51,6 +51,7 @@ class Board:
         self.bgcolor = bgcolor
         self.gridcolor = gridcolor
 
+        # grid state (0 for empty, 1 for ship)
         self.grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
     def draw(
@@ -69,6 +70,7 @@ class Board:
             surface: Target surface to draw on.
             offset_x: horizontal offset for drawing (used for enemy board)
             offset_y: vertical offset for drawing (used for enemy board)
+            preview: ...
         """
         rect = pygame.Rect(
             offset_x, 0, self.cols * self.block_size, self.rows * self.block_size
