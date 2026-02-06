@@ -1,7 +1,7 @@
 from battleship_game.config import SUB_SIZE, FRIG_SIZE, DEST_SIZE, ACC_SIZE
 
 
-class ship:
+class Ship:
     """
     Base class for all ship types.
     Stores size, position and orientation and hit tracking.
@@ -25,25 +25,25 @@ class ship:
 # All ships in different classes
 
 
-class Submarine(ship):
+class Submarine(Ship):
     def __init__(self, position=None, orientation=None):
         super().__init__(SUB_SIZE, position, orientation)
         self.name = "Submarine"
 
 
-class Frigate(ship):
+class Frigate(Ship):
     def __init__(self, position=None, orientation=None):
         super().__init__(FRIG_SIZE, position, orientation)
         self.name = "Frigate"
 
 
-class Destroyer(ship):
+class Destroyer(Ship):
     def __init__(self, position=None, orientation=None):
         super().__init__(DEST_SIZE, position, orientation)
         self.name = "Destroyer"
 
 
-class AircraftCarrier(ship):
+class AircraftCarrier(Ship):
     def __init__(self, position=None, orientation=None):
         super().__init__(ACC_SIZE, position, orientation)
         self.name = "Aircraft Carrier"
