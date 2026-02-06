@@ -97,6 +97,7 @@ class Board:
                 pygame.draw.rect(surface, COLOR_HIT, rect)
             elif val == 4:
                 pygame.draw.rect(surface, COLOR_SUNK, rect)
+            pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
         # Draw preview on top if provided
         if preview is not None:
@@ -135,7 +136,7 @@ class Board:
                     cell_rect = pygame.Rect(
                         dest[0], dest[1], self.block_size, self.block_size
                     )
-                    pygame.draw.rect(surface, self.gridcolor, cell_rect, 1)
+
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
         """
