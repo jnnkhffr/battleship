@@ -14,7 +14,7 @@ class Ship:
         self.hits = 0
 
     def register_hits(self):
-        "Increase hit counter when this ship is hit."
+        """Increase hit counter when this ship is hit."""
         self.hits += 1
 
     def is_sunk(self):

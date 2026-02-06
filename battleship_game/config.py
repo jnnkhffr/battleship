@@ -1,4 +1,4 @@
-# Board Conifg.
+# Board Config.
 GRID_COLS = 10
 GRID_ROWS = 10
 
@@ -18,7 +18,7 @@ COLOR_PREVIEW: tuple[int, int, int] = (255, 80, 80)
 COLOR_TEXT: tuple[int, int, int] = (255, 255, 255)
 
 
-# Ship PLacement
+# Ship placement
 ALPHA_PREVIEW = 128
 
 # Ship config.

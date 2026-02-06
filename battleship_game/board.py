@@ -68,6 +68,7 @@ class Board:
         Args:
             surface: Target surface to draw on.
             offset_x: horizontal offset for drawing (used for enemy board)
+            offset_y: vertical offset for drawing (used for enemy board)
         """
         rect = pygame.Rect(
             offset_x, 0, self.cols * self.block_size, self.rows * self.block_size
