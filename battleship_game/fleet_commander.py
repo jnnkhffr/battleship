@@ -1,4 +1,4 @@
-#from battleship_game.fleet import (Submarine, Frigate, Destroyer, AircraftCarrier)
+# from battleship_game.fleet import (Submarine, Frigate, Destroyer, AircraftCarrier)
 from battleship_game.ship_builder import ShipBuilder
 from battleship_game.config import (
     NUM_SUBS,
@@ -40,22 +40,22 @@ class FleetManager:
 
         # Aircraft carriers
         for _ in range(NUM_ACCS):
-            #self.ships.append(AircraftCarrier())
+            # self.ships.append(AircraftCarrier())
             self.ships.append(ShipBuilder.create_ship("AircraftCarrier"))
 
         # Destroyers
         for _ in range(NUM_DESTS):
-            #self.ships.append(Destroyer())
+            # self.ships.append(Destroyer())
             self.ships.append(ShipBuilder.create_ship("Destroyer"))
 
         # Frigates
         for _ in range(NUM_FRIGS):
-            #self.ships.append(Frigate())
+            # self.ships.append(Frigate())
             self.ships.append(ShipBuilder.create_ship("Frigate"))
 
         # Submarines
         for _ in range(NUM_SUBS):
-            #self.ships.append(Submarine())
+            # self.ships.append(Submarine())
             self.ships.append(ShipBuilder.create_ship("Submarine"))
 
     def place_ship(self, ship, x, y, orientation):

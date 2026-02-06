@@ -137,7 +137,6 @@ class Board:
                         dest[0], dest[1], self.block_size, self.block_size
                     )
 
-
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
         """
         Check if a ship can be placed at (x, y) with given size and orientation.

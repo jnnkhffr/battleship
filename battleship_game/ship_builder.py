@@ -1,14 +1,11 @@
-from battleship_game.fleet import (
-    AircraftCarrier,
-    Destroyer,
-    Frigate,
-    Submarine
-)
+from battleship_game.fleet import AircraftCarrier, Destroyer, Frigate, Submarine
+
 
 class ShipBuilder:
     """
     Create ship objects
     """
+
     def create_ship(ship_type):
         """
         Returns a ship object

@@ -264,6 +264,3 @@ class Game:
         else:
             self.player_board.miss(x, y)
             print("Enemy miss")
-
-
-
