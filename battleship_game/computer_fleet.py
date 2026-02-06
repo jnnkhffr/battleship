@@ -2,13 +2,11 @@ from battleship_game.config import GRID_COLS, GRID_ROWS
 from battleship_game.fleet_commander import FleetManager
 import random
 
-
 class ComputerFleetManager(FleetManager):
     """
     Manage the computer fleet (ENEMY).
     Takes logic from FleetManager and adds the enemy logic.
     """
-
     def auto_place_fleet(self):
         """
         Randomly place all enemy ships on board.
@@ -21,6 +19,17 @@ class ComputerFleetManager(FleetManager):
                 y = random.randint(0, GRID_ROWS - 1)
                 orientation = random.choice(["hor", "ver"])
 
-                # Place the enemy ship
+                #Place the enemy ship
                 if self.place_ship(ship, x, y, orientation):
                     placed = True
+
+    def get_next_shot(self, opponent_board):
+        """
+        Decides where to shoot next
+        """
+        while True:
+            x = random.randint(0, GRID_COLS - 1)
+            y = random.randint(0, GRID_ROWS - 1)
+            # Skip already shot targets
+            if opponent_board.grid[y][x] not in [2, 3, 4]:
+                return x, y

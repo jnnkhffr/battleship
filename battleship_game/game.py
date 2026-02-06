@@ -244,16 +244,8 @@ class Game:
     def enemy_turn(self):
         if self.game_over:
             return
-
-        while True:
-            x = random.randint(0, GRID_COLS - 1)
-            y = random.randint(0, GRID_ROWS - 1)
-
-            # Skip already shot cells
-            if self.player_board.grid[y][x] in [2, 3, 4]:
-                continue
-            break
-
+        # Co-ordinates of shooting
+        x, y = self.enemy_fleet.get_next_shot(self.player_board)
         ship_hit = self.fleet_manager.receive_shot(x, y)
 
         if ship_hit:
@@ -274,6 +266,4 @@ class Game:
             print("Enemy miss")
 
 
-if __name__ == "__main__":
-    game = Game()
-    game.run()
+
