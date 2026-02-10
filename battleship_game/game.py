@@ -27,10 +27,13 @@ class Game:
     - Transition into shooting phase once placement is complete
     """
 
-    def __init__(self):
+    def __init__(self, difficulty: str = "Easy"):
         """
         Initialize the game environment, create boards, fleet manager,
         and prepare the placement phase.
+
+        Args:
+            difficulty: Selected difficulty level (for future AI implementation)
         """
         pygame.init()
 
@@ -39,7 +42,7 @@ class Game:
         self.screen_height = GRID_ROWS * BLOCK_SIZE
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
-        pygame.display.set_caption("Battleship")
+        pygame.display.set_caption(f"Battleship - {difficulty} Mode")
 
         # Boards
         self.player_board = Board()
