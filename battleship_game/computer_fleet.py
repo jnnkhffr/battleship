@@ -8,6 +8,7 @@ class ComputerFleetManager(FleetManager):
     Manage the computer fleet (ENEMY).
     Takes logic from FleetManager and adds the enemy logic.
     """
+
     def __init__(self, board, shooting_strategy):
         super().__init__(board)
         self.shooting_strategy = shooting_strategy

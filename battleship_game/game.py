@@ -85,8 +85,8 @@ class Game:
         self.placement_done = False
 
         # Enemy fleet
-        #self.enemy_fleet = ComputerFleetManager(self.enemy_board)
-        #self.enemy_fleet.auto_place_fleet()
+        # self.enemy_fleet = ComputerFleetManager(self.enemy_board)
+        # self.enemy_fleet.auto_place_fleet()
 
         # Game over
         self.game_over = False
@@ -315,8 +315,7 @@ class BattleshipEasy(GameFactory):
     def create(self) -> Game:
         game = Game(self._screen, self._clock, "Easy")
         game.enemy_fleet = ComputerFleetManager(
-            game.enemy_board,
-            RandomShootingStrategy()
+            game.enemy_board, RandomShootingStrategy()
         )
         game.enemy_fleet.auto_place_fleet()
         return game
@@ -326,8 +325,7 @@ class BattleshipMedium(GameFactory):
     def create(self) -> Game:
         game = Game(self._screen, self._clock, "Medium")
         game.enemy_fleet = ComputerFleetManager(
-            game.enemy_board,
-            HuntShootingStrategy()
+            game.enemy_board, HuntShootingStrategy()
         )
         game.enemy_fleet.auto_place_fleet()
         return game
@@ -337,8 +335,7 @@ class BattleshipHard(GameFactory):
     def create(self) -> Game:
         game = Game(self._screen, self._clock, "Hard")
         game.enemy_fleet = ComputerFleetManager(
-            game.enemy_board,
-            SmartShootingStrategy()
+            game.enemy_board, SmartShootingStrategy()
         )
         game.enemy_fleet.auto_place_fleet()
         return game
