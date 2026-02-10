@@ -19,6 +19,12 @@ from battleship_game.config import (
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
+from battleship_game.ai_shooting import (
+    RandomShootingStrategy,
+    HuntShootingStrategy,
+    SmartShootingStrategy,
+)
+
 
 class Game:
     """
@@ -31,11 +37,16 @@ class Game:
     - Transition into shooting phase once placement is complete
     """
 
-    def __init__(self, screen: pygame.Surface, clock: pygame.time.Clock, difficulty_name: str = ""):
+    def __init__(
+        self,
+        screen: pygame.Surface,
+        clock: pygame.time.Clock,
+        difficulty_name: str = "",
+    ):
         """
         Initialize the game environment, create boards, fleet manager,
         and prepare the placement phase.
-        
+
         Args:
             screen: Pygame display surface
             clock: Pygame clock for timing
@@ -43,13 +54,15 @@ class Game:
         """
         self.screen = screen
         self.clock = clock
-        
+
         # Calculate window size
         self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
         self.screen_height = GRID_ROWS * BLOCK_SIZE
 
         # Set caption
-        caption = "Battleship" if not difficulty_name else f"Battleship - {difficulty_name}"
+        caption = (
+            "Battleship" if not difficulty_name else f"Battleship - {difficulty_name}"
+        )
         pygame.display.set_caption(caption)
 
         # Boards
@@ -88,10 +101,10 @@ class Game:
         """
         Main game loop iteration.
         Handles events, updates the game state, and renders the Boards.
-        
+
         Args:
             events: List of pygame events to process
-            
+
         Returns:
             True if game is still running, False if game over
         """
@@ -113,7 +126,7 @@ class Game:
         self.draw()
         pygame.display.flip()
         self.clock.tick(60)
-        
+
         return not self.game_over
 
     def handle_mouse_click(self, pos):
@@ -284,7 +297,7 @@ class GameFactory(ABC):
     def __init__(self, screen: pygame.Surface, clock: pygame.time.Clock):
         """
         Initialize the factory.
-        
+
         Args:
             screen: Pygame display surface
             clock: Pygame clock for timing
@@ -299,36 +312,33 @@ class GameFactory(ABC):
 
 
 class BattleshipEasy(GameFactory):
-    """Easy difficulty Battleship - standard rules."""
-
     def create(self) -> Game:
-        """Create an Easy difficulty game."""
-        return Game(
-            screen=self._screen,
-            clock=self._clock,
-            difficulty_name="Easy"
+        game = Game(self._screen, self._clock, "Easy")
+        game.enemy_fleet = ComputerFleetManager(
+            game.enemy_board,
+            RandomShootingStrategy()
         )
+        game.enemy_fleet.auto_place_fleet()
+        return game
 
 
 class BattleshipMedium(GameFactory):
-    """Medium difficulty Battleship - standard rules (AI will be smarter in future)."""
-
     def create(self) -> Game:
-        """Create a Medium difficulty game."""
-        return Game(
-            screen=self._screen,
-            clock=self._clock,
-            difficulty_name="Medium"
+        game = Game(self._screen, self._clock, "Medium")
+        game.enemy_fleet = ComputerFleetManager(
+            game.enemy_board,
+            HuntShootingStrategy()
         )
+        game.enemy_fleet.auto_place_fleet()
+        return game
 
 
 class BattleshipHard(GameFactory):
-    """Hard difficulty Battleship - standard rules (AI will be smartest in future)."""
-
     def create(self) -> Game:
-        """Create a Hard difficulty game."""
-        return Game(
-            screen=self._screen,
-            clock=self._clock,
-            difficulty_name="Hard"
+        game = Game(self._screen, self._clock, "Hard")
+        game.enemy_fleet = ComputerFleetManager(
+            game.enemy_board,
+            SmartShootingStrategy()
         )
+        game.enemy_fleet.auto_place_fleet()
+        return game
