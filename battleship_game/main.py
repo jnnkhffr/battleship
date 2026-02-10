@@ -10,6 +10,7 @@ from battleship_game.config import GRID_COLS, GRID_ROWS, BLOCK_SIZE, BOARD_SPACI
 
 class GameState(Enum):
     """Game state enum."""
+
     SELECTING = 1
     NEW = 2
     RUNNING = 3
@@ -19,11 +20,11 @@ class GameState(Enum):
 
 class GameHandler:
     """Main game handler that manages game states and transitions."""
-    
+
     def __init__(self, game_factories: list[type]):
         """
         Initialize the game handler.
-        
+
         Args:
             game_factories: List of GameFactory classes to offer as choices
         """
@@ -33,10 +34,8 @@ class GameHandler:
         # Calculate window size
         self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
         self.screen_height = GRID_ROWS * BLOCK_SIZE
-        
-        self.screen = pygame.display.set_mode(
-            (self.screen_width, self.screen_height)
-        )
+
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption("Battleship")
 
         self.clock = pygame.time.Clock()
@@ -44,7 +43,7 @@ class GameHandler:
 
         self.game_factories = game_factories
         self._selected_game_factory = None
-        
+
         # Create start screen
         self.start_screen = StartScreen(self.screen, game_factories)
 
@@ -52,10 +51,10 @@ class GameHandler:
         """Run the main game loop."""
         current_game = None
         game_state = GameState.SELECTING
-        
+
         while self.running:
             events = pygame.event.get()
-            
+
             # Check for quit event
             if any(event.type == pygame.QUIT for event in events):
                 self.running = False
@@ -67,8 +66,7 @@ class GameHandler:
                 if selected_factory_class is not None:
                     # Create factory instance with screen and clock
                     self._selected_game_factory = selected_factory_class(
-                        self.screen, 
-                        self.clock
+                        self.screen, self.clock
                     )
                     game_state = GameState.NEW
 
@@ -80,7 +78,7 @@ class GameHandler:
             elif game_state == GameState.RUNNING:
                 # Run the game and check if it's still running
                 still_running = current_game.run(events)
-                
+
                 if not still_running:
                     # Game ended - check if won or lost
                     if current_game.game_over_message == "You win!":
@@ -96,14 +94,16 @@ class GameHandler:
 
         pygame.quit()
 
-    def game_over_screen(self, game_state: GameState, events: list[pygame.event.Event]) -> GameState:
+    def game_over_screen(
+        self, game_state: GameState, events: list[pygame.event.Event]
+    ) -> GameState:
         """
         Render the game over screen with replay and menu options.
-        
+
         Args:
             game_state: Current game state (WIN or LOSS)
             events: List of pygame events
-            
+
         Returns:
             Next game state
         """
@@ -144,7 +144,7 @@ class GameHandler:
         # Draw buttons
         mouse_pos = pygame.mouse.get_pos()
         small_font = pygame.font.Font(pygame.font.get_default_font(), 30)
-        
+
         self._draw_button(
             "Replay",
             replay_button,
@@ -177,7 +177,9 @@ class GameHandler:
         pygame.display.flip()
         return game_state
 
-    def _draw_button(self, text, rect, font, text_color, button_color, hover_color, mouse_pos):
+    def _draw_button(
+        self, text, rect, font, text_color, button_color, hover_color, mouse_pos
+    ):
         """Draw a button with hover effect."""
         color = hover_color if rect.collidepoint(mouse_pos) else button_color
         pygame.draw.rect(self.screen, color, rect)
