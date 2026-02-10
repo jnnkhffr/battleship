@@ -1,5 +1,9 @@
+"""Game module with factory pattern for different difficulty levels."""
+
+from __future__ import annotations
+from abc import ABC, abstractmethod
+
 import pygame
-import random
 from battleship_game.board import Board
 from battleship_game.fleet_commander import FleetManager
 from battleship_game.config import (
@@ -27,22 +31,26 @@ class Game:
     - Transition into shooting phase once placement is complete
     """
 
-    def __init__(self, difficulty: str = "Easy"):
+    def __init__(self, screen: pygame.Surface, clock: pygame.time.Clock, difficulty_name: str = ""):
         """
         Initialize the game environment, create boards, fleet manager,
         and prepare the placement phase.
-
+        
         Args:
-            difficulty: Selected difficulty level (for future AI implementation)
+            screen: Pygame display surface
+            clock: Pygame clock for timing
+            difficulty_name: Name of the difficulty (for window caption)
         """
-        pygame.init()
-
+        self.screen = screen
+        self.clock = clock
+        
         # Calculate window size
         self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
         self.screen_height = GRID_ROWS * BLOCK_SIZE
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
-        pygame.display.set_caption(f"Battleship - {difficulty} Mode")
+        # Set caption
+        caption = "Battleship" if not difficulty_name else f"Battleship - {difficulty_name}"
+        pygame.display.set_caption(caption)
 
         # Boards
         self.player_board = Board()
@@ -75,37 +83,38 @@ class Game:
         self.mouse_grid_pos = (0, 0)
         pygame.font.init()
         self.font = pygame.font.SysFont(None, 64)
-        # self.top_margin = 0
 
-    def run(self):
+    def run(self, events: list[pygame.event.Event]) -> bool:
         """
-        Main game loop.
+        Main game loop iteration.
         Handles events, updates the game state, and renders the Boards.
+        
+        Args:
+            events: List of pygame events to process
+            
+        Returns:
+            True if game is still running, False if game over
         """
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+        for event in events:
+            # Rotate ship during placement phase
+            if not self.placement_done and event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.current_orientation = (
+                        "ver" if self.current_orientation == "hor" else "hor"
+                    )
 
-                # Rotate ship during placement phase
-                if not self.placement_done and event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.current_orientation = (
-                            "ver" if self.current_orientation == "hor" else "hor"
-                        )
+            # Handle mouse clicks
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_click(event.pos)
 
-                # Handle mouse clicks
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.handle_mouse_click(event.pos)
+            if event.type == pygame.MOUSEMOTION:
+                self.mouse_grid_pos = event.pos
 
-                if event.type == pygame.MOUSEMOTION:
-                    self.mouse_grid_pos = event.pos
-
-            self.draw()
-            pygame.display.flip()
-
-        pygame.quit()
+        self.draw()
+        pygame.display.flip()
+        self.clock.tick(60)
+        
+        return not self.game_over
 
     def handle_mouse_click(self, pos):
         """
@@ -267,3 +276,59 @@ class Game:
         else:
             self.player_board.miss(x, y)
             print("Enemy miss")
+
+
+class GameFactory(ABC):
+    """Abstract factory class to create Battleship games with different difficulties."""
+
+    def __init__(self, screen: pygame.Surface, clock: pygame.time.Clock):
+        """
+        Initialize the factory.
+        
+        Args:
+            screen: Pygame display surface
+            clock: Pygame clock for timing
+        """
+        self._screen = screen
+        self._clock = clock
+
+    @abstractmethod
+    def create(self) -> Game:
+        """Create and return a Game instance."""
+        ...
+
+
+class BattleshipEasy(GameFactory):
+    """Easy difficulty Battleship - standard rules."""
+
+    def create(self) -> Game:
+        """Create an Easy difficulty game."""
+        return Game(
+            screen=self._screen,
+            clock=self._clock,
+            difficulty_name="Easy"
+        )
+
+
+class BattleshipMedium(GameFactory):
+    """Medium difficulty Battleship - standard rules (AI will be smarter in future)."""
+
+    def create(self) -> Game:
+        """Create a Medium difficulty game."""
+        return Game(
+            screen=self._screen,
+            clock=self._clock,
+            difficulty_name="Medium"
+        )
+
+
+class BattleshipHard(GameFactory):
+    """Hard difficulty Battleship - standard rules (AI will be smartest in future)."""
+
+    def create(self) -> Game:
+        """Create a Hard difficulty game."""
+        return Game(
+            screen=self._screen,
+            clock=self._clock,
+            difficulty_name="Hard"
+        )
