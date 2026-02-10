@@ -72,8 +72,8 @@ class Game:
         self.placement_done = False
 
         # Enemy fleet
-        self.enemy_fleet = ComputerFleetManager(self.enemy_board)
-        self.enemy_fleet.auto_place_fleet()
+        #self.enemy_fleet = ComputerFleetManager(self.enemy_board)
+        #self.enemy_fleet.auto_place_fleet()
 
         # Game over
         self.game_over = False
