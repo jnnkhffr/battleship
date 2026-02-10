@@ -8,6 +8,9 @@ class ComputerFleetManager(FleetManager):
     Manage the computer fleet (ENEMY).
     Takes logic from FleetManager and adds the enemy logic.
     """
+    def __init__(self, board, shooting_strategy):
+        super().__init__(board)
+        self.shooting_strategy = shooting_strategy
 
     def auto_place_fleet(self):
         """
@@ -26,12 +29,4 @@ class ComputerFleetManager(FleetManager):
                     placed = True
 
     def get_next_shot(self, opponent_board):
-        """
-        Decides where to shoot next
-        """
-        while True:
-            x = random.randint(0, GRID_COLS - 1)
-            y = random.randint(0, GRID_ROWS - 1)
-            # Skip already shot targets
-            if opponent_board.grid[y][x] not in [2, 3, 4]:
-                return x, y
+        return self.shooting_strategy.get_next_shot(opponent_board)
