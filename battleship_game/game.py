@@ -84,10 +84,6 @@ class Game:
         # True once all ships have been placed
         self.placement_done = False
 
-        # Enemy fleet
-        # self.enemy_fleet = ComputerFleetManager(self.enemy_board)
-        # self.enemy_fleet.auto_place_fleet()
-
         # Game over
         self.game_over = False
         self.game_over_message = ""
