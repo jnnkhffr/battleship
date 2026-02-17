@@ -64,7 +64,7 @@ class Game:
         self.placement_done = False
 
         # Enemy fleet
-        self.enemy_fleet = ComputerFleetManager(self.enemy_board)
+        self.enemy_fleet = ComputerFleetManager(self.enemy_board,difficulty)
         self.enemy_fleet.auto_place_fleet()
 
         # Game over
@@ -255,7 +255,11 @@ class Game:
             self.player_board.hit(x, y)
             print("Enemy hit!")
 
-            if ship_hit.is_sunk():
+            sunk = ship_hit.is_sunk()
+
+            self.enemy_fleet.register_shot_result(x, y, True, sunk)
+
+            if sunk:
                 self.player_board.sunk(ship_hit)
                 print(f"Enemy sunk your {ship_hit.name}")
 
@@ -267,3 +271,6 @@ class Game:
         else:
             self.player_board.miss(x, y)
             print("Enemy miss")
+
+            # Notify Ai about the miss
+            self.enemy_fleet.register_shot_result(x, y, False, False)
