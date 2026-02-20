@@ -24,12 +24,16 @@ The aim of the game is to sink all the ships arranged by the computer before the
 
 # Gameplan
 
-- define ships
-- open second game field 
-- place ships on board
-  - check function that ships don't overlap and have at least on grid cell space
-  - first step is to place them on board via hard-code
-- hit logic
-- opponent (computer)
-  - set of that computer creates a board and places his ships as well
-  - computer should also run the hit logic
+- define ships  *DONE*
+- open second game field *DONE*
+- place ships on board *DONE*
+  - check function that ships don't overlap and have at least on grid cell space *DONE*
+  - first step is to place them on board via hard-code *DONE*
+- hit logic *DONE*
+- opponent (computer) *DONE*
+  - set of that computer creates a board and places his ships as well *DONE*
+  - computer should also run the hit logic *DONE*
+- Start and End Screens *ON DIFFERENT BRANCH*
+- small text between ship placement and the start of firing (only visible for 3 Seconds) *OPEN*
+
+- run mypy; ruff and black for Code-Style *OPEN*
