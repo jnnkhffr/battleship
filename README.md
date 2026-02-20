@@ -34,6 +34,10 @@ The aim of the game is to sink all the ships arranged by the computer before the
   - set of that computer creates a board and places his ships as well *DONE*
   - computer should also run the hit logic *DONE*
 - Start and End Screens *ON DIFFERENT BRANCH*
-- small text between ship placement and the start of firing (only visible for 3 Seconds) *OPEN*
+- small text between ship placement and the start of firing (only visible for 3 Seconds) *DONE*
 
 - run mypy; ruff and black for Code-Style *OPEN*
+- files that we don´t use should be deleted for a better overview *OPEN*
+- adding useful things from the "difficulites_factory_pattern" Branch *OPEN*
+- (meaningful) Docstrings at every class,function? *OPEN*
+- Can we use more design patterns anywhere else? *OPEN*
