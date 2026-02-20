@@ -41,3 +41,4 @@ The aim of the game is to sink all the ships arranged by the computer before the
 - adding useful things from the "difficulites_factory_pattern" Branch *-> OPEN*
 - (meaningful) Docstrings at every class,function? *-> OPEN*
 - Can we use more design patterns anywhere else? *-> OPEN*
+- Game instructions in the README. *-> OPEN*
