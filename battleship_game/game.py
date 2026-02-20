@@ -80,7 +80,7 @@ class Game:
         # self.top_margin = 0
         self.battle_message_start = None
         self.battle_message_duration = DURATION
-        self.battle_message_surface = self.font.render("THE BATTLE IS ON!", True, COLOR_MESSAGE_FIRING)
+        self.battle_message_surface = self.font.render("THE BATTLE STARTS!", True, COLOR_MESSAGE_FIRING)
 
 
     def run(self):
