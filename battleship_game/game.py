@@ -11,7 +11,9 @@ from battleship_game.config import (
     COLOR_BG,
     COLOR_GRID,
     COLOR_MESSAGE,
+    COLOR_MESSAGE_FIRING,
     DEBUG_SHOW_ENEMY_SHIPS,
+    DURATION,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -76,6 +78,10 @@ class Game:
         pygame.font.init()
         self.font = pygame.font.SysFont(None, 64)
         # self.top_margin = 0
+        self.battle_message_start = None
+        self.battle_message_duration = DURATION
+        self.battle_message_surface = self.font.render("THE BATTLE IS ON!", True, COLOR_MESSAGE_FIRING)
+
 
     def run(self):
         """
@@ -176,6 +182,7 @@ class Game:
 
         if self.current_ship_index >= len(self.fleet_manager.ships):
             self.placement_done = True
+            self.battle_message_start = pygame.time.get_ticks()
             print("All ships placed. Shooting mode enabled.")
             return
 
@@ -187,6 +194,7 @@ class Game:
 
             if self.current_ship_index >= len(self.fleet_manager.ships):
                 self.placement_done = True
+                self.battle_message_start = pygame.time.get_ticks()
                 print("All ships placed! Shooting mode active.")
 
     def draw(self):
@@ -235,6 +243,18 @@ class Game:
                         )
                         pygame.draw.rect(self.screen, COLOR_BG, rect)
                         pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
+
+        # Show battle start message for 3 seconds
+        if self.battle_message_start is not None and not self.game_over:
+            elapsed = pygame.time.get_ticks() - self.battle_message_start
+            if elapsed < self.battle_message_duration:
+                text_rect = self.battle_message_surface.get_rect(
+                    center=(self.screen_width // 2, self.screen_height // 2)
+                )
+                self.screen.blit(self.battle_message_surface, text_rect)
+            else:
+                # Stops after 3 Seconds
+                self.battle_message_start = None
 
         # Game over message
         if self.game_over and self.game_over_message:
