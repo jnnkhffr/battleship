@@ -19,6 +19,7 @@ from battleship_game.config import (
     COLOR_MESSAGE_FIRING,
     DEBUG_SHOW_ENEMY_SHIPS,
     DURATION,
+    DELAY,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -100,6 +101,11 @@ class Game:
         self.battle_message_duration = DURATION
         self.battle_message_surface = self.font.render("THE BATTLE STARTS!", True, COLOR_MESSAGE_FIRING)
 
+        self.player_turn = True
+        self.enemy_turn_pending = False
+        self.enemy_turn_time = 0
+        self.enemy_delay = DELAY
+
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -127,6 +133,14 @@ class Game:
             if event.type == pygame.MOUSEMOTION:
                 self.mouse_grid_pos = event.pos
 
+            # Delay of computer shooting
+            if self.enemy_turn_pending:
+                now = pygame.time.get_ticks()
+                if now - self.enemy_turn_time >= self.enemy_delay:
+                    self.enemy_turn()
+                    self.enemy_turn_pending = False
+                    self.player_turn = True
+
         self.draw()
         pygame.display.flip()
         self.clock.tick(60)
@@ -144,6 +158,9 @@ class Game:
         Shooting phase:
             - (Future) Handle firing shots at the enemy board
         """
+        if not self.player_turn:
+            return
+
         if self.game_over:
             return
 
@@ -190,7 +207,9 @@ class Game:
                 print("Miss")
 
             # Enemy turn
-            self.enemy_turn()
+            self.player_turn = False
+            self.enemy_turn_pending = True
+            self.enemy_turn_time = pygame.time.get_ticks()
             return
 
         # PLACEMENT PHASE
