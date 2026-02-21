@@ -6,10 +6,15 @@ BLOCK_SIZE = 40  # size of a grid cell in pixel
 
 BOARD_SPACING = BLOCK_SIZE * 2  # distance between two boards
 
+WINDOW_WIDTH = GRID_COLS * BLOCK_SIZE * 2 + BOARD_SPACING
+WINDOW_HEIGHT = GRID_ROWS * BLOCK_SIZE
+
 DURATION = 3000
+FPS = 60
 
 # Colors
 COLOR_BG: tuple[int, int, int] = (0, 0, 0)
+COLOR_OVERLAY: tuple[int, int, int] = (0, 0, 0)
 COLOR_GRID: tuple[int, int, int] = (40, 40, 40)
 COLOR_SHIP: tuple[int, int, int] = (169, 169, 169)
 COLOR_MISS: tuple[int, int, int] = (0, 150, 255)  # Blue for Miss
@@ -20,7 +25,7 @@ COLOR_PREVIEW: tuple[int, int, int] = (255, 80, 80)
 COLOR_TEXT: tuple[int, int, int] = (255, 255, 255)
 COLOR_MESSAGE_FIRING: tuple[int, int, int] = (0, 0, 200)
 
-
+OVERLAY_ALPHA = 180
 # Ship placement
 ALPHA_PREVIEW = 128
 
@@ -34,6 +39,17 @@ NUM_SUBS = 4
 NUM_FRIGS = 1
 NUM_DESTS = 1
 NUM_ACCS = 1
+
+# For Screens
+FONT_TITLE = 72
+FONT_SUBTITLE = 32
+FONT_BUTTON = 48
+FONT_GAMEOVER = 48
+
+BUTTON_WIDTH_FACTOR = 0.35
+BUTTON_HEIGHT_FACTOR = 0.08
+BUTTON_REPLAY_Y = 0.55
+BUTTON_MENU_Y = 0.68
 
 # Gameplay Settings
 DEFAULT_ORIENTATION = "hor"

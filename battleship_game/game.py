@@ -294,19 +294,32 @@ class Game:
         if ship_hit:
             self.player_board.hit(x, y)
             print("Enemy hit!")
+            sunk = ship_hit.is_sunk()
 
-            if ship_hit.is_sunk():
+            if sunk:
                 self.player_board.sunk(ship_hit)
                 print(f"Enemy sunk your {ship_hit.name}")
 
-                if self.fleet_manager.is_defeated():
-                    print("Computer wins!")
-                    self.game_over = True
-                    self.game_over_message = "You lost!"
-                    return
+            self.enemy_fleet.strategy.register_shot_result(
+                x, y,
+                hit=True,
+                sunk=sunk
+            )
+
+            if self.fleet_manager.is_defeated():
+                print("Computer wins!")
+                self.game_over = True
+                self.game_over_message = "You lost!"
+                return
         else:
             self.player_board.miss(x, y)
             print("Enemy miss")
+
+            self.enemy_fleet.strategy.register_shot_result(
+                x, y,
+                hit=False,
+                sunk=False
+            )
 
 
 class GameFactory(ABC):

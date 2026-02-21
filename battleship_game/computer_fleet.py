@@ -11,7 +11,7 @@ class ComputerFleetManager(FleetManager):
 
     def __init__(self, board, shooting_strategy):
         super().__init__(board)
-        self.shooting_strategy = shooting_strategy
+        self.strategy = shooting_strategy
 
     def auto_place_fleet(self):
         """
@@ -31,4 +31,4 @@ class ComputerFleetManager(FleetManager):
 
 
     def get_next_shot(self, opponent_board):
-        return self.shooting_strategy.get_next_shot(opponent_board)
+        return self.strategy.get_next_shot(opponent_board)
