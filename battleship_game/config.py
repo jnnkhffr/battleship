@@ -25,7 +25,7 @@ COLOR_PREVIEW: tuple[int, int, int] = (255, 80, 80)
 COLOR_TEXT: tuple[int, int, int] = (255, 255, 255)
 COLOR_MESSAGE_FIRING: tuple[int, int, int] = (0, 0, 200)
 
-OVERLAY_ALPHA = 180
+OVERLAY_ALPHA = 128
 # Ship placement
 ALPHA_PREVIEW = 128
 

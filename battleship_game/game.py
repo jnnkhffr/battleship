@@ -280,7 +280,7 @@ class Game:
         if self.game_over and self.game_over_message:
             text_surface = self.font.render(self.game_over_message, True, COLOR_MESSAGE)
             text_rect = text_surface.get_rect(
-                center=(self.screen_width // 2, self.screen_height // 2)
+                center=(self.screen_width // 2, self.screen_height // 4)
             )
             self.screen.blit(text_surface, text_rect)
 

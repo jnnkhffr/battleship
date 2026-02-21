@@ -62,6 +62,7 @@ class GameHandler:
                     state = GameState.WIN if current_game.game_over_message == "You win!" else GameState.LOSS
 
             elif state in (GameState.WIN, GameState.LOSS):
+                current_game.draw()
                 state = self.game_over_screen.run(state, events)
 
             self.clock.tick(FPS)

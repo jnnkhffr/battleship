@@ -8,6 +8,9 @@ class ShootingStrategy(ABC):
     def get_next_shot(self, opponent_board):
         pass
 
+    def register_shot_result(self, x, y, hit, sunk):
+        pass
+
 
 class RandomShootingStrategy(ShootingStrategy):
     def get_next_shot(self, opponent_board):
@@ -108,19 +111,12 @@ class HuntShootingStrategy(ShootingStrategy):
 
 
 
-class SmartShootingStrategy(ShootingStrategy):
-    def get_next_shot(self, opponent_board):
-        # Hunt first
-        for y in range(GRID_ROWS):
-            for x in range(GRID_COLS):
-                if opponent_board.grid[y][x] == 3:
-                    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                        nx, ny = x + dx, y + dy
-                        if 0 <= nx < GRID_COLS and 0 <= ny < GRID_ROWS:
-                            if opponent_board.grid[ny][nx] not in [2, 3, 4]:
-                                return nx, ny
+class SmartShootingStrategy(HuntShootingStrategy):
 
-        # Checkerboard search
+    def get_next_shot(self, opponent_board):
+        if self.pending_hits:
+            return super().get_next_shot(opponent_board)
+
         candidates = [
             (x, y)
             for y in range(GRID_ROWS)
@@ -131,5 +127,5 @@ class SmartShootingStrategy(ShootingStrategy):
         if candidates:
             return random.choice(candidates)
 
-        # Final fallback
+        # Fallback
         return RandomShootingStrategy().get_next_shot(opponent_board)

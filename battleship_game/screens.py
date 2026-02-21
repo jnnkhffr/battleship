@@ -119,14 +119,9 @@ class GameOverScreen:
     def run(self, state, events):
         w, h = self.screen.get_size()
 
-        overlay = pygame.Surface((w, h))
-        overlay.set_alpha(OVERLAY_ALPHA)
-        overlay.fill(COLOR_OVERLAY)
+        overlay = pygame.Surface((w, h), pygame.SRCALPHA)
+        overlay.fill((*COLOR_OVERLAY, OVERLAY_ALPHA))
         self.screen.blit(overlay, (0, 0))
-
-        msg = "You Win!" if state == 4 else "You Lost!"
-        text = self.font.render(msg, True, COLOR_TEXT)
-        self.screen.blit(text, text.get_rect(center=(w // 2, h // 4)))
 
         button_w = int(w * BUTTON_WIDTH_FACTOR)
         button_h = int(h * BUTTON_HEIGHT_FACTOR)
@@ -155,9 +150,9 @@ class GameOverScreen:
         for e in events:
             if e.type == pygame.MOUSEBUTTONDOWN:
                 if replay_rect.collidepoint(e.pos):
-                    return 2  # NEW
+                    return 2
                 if menu_rect.collidepoint(e.pos):
-                    return 1  # SELECTING
+                    return 1
 
         return state
 
