@@ -50,11 +50,11 @@ return to the main menu and select a different difficulty level.
   - computer should also run the hit logic *-> DONE*
 - Start and End Screens *-> ON DIFFERENT BRANCH*
 - small text between ship placement and the start of firing (only visible for 3 Seconds) *-> DONE*
-
 - timedelay for the computershot? *-> DONE*
+- adding useful things from the "difficulites_factory_pattern" Branch *-> DONE*
+
 - run mypy; ruff and black for Code-Style *-> OPEN*
 - files that we don´t use should be deleted for a better overview *-> OPEN*
-- adding useful things from the "difficulites_factory_pattern" Branch *-> DONE*
 - (meaningful) Docstrings at every class,function? *-> OPEN*
 - unnecessary comments within the code deleted? *-> OPEN*
 - Can we use more design patterns anywhere else? *-> OPEN*
