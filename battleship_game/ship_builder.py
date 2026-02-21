@@ -1,3 +1,4 @@
+"""The shipyard."""
 from battleship_game.fleet import AircraftCarrier, Destroyer, Frigate, Submarine
 
 

@@ -11,6 +11,7 @@ from battleship_game.config import (
 
 
 class GameState:
+    """Simple state container representing the different phases of the game."""
     SELECTING = 1
     NEW = 2
     RUNNING = 3
@@ -19,7 +20,14 @@ class GameState:
 
 
 class GameHandler:
+    """Handle the overall game flow including menus, game creation, and state transitions."""
     def __init__(self, game_factories):
+        """
+        Initialize the game handler, set up Pygame, and prepare screens.
+
+        Args:
+            game_factories: List of factory classes for different difficulty modes.
+        """
         pygame.init()
         pygame.font.init()
 
@@ -36,6 +44,15 @@ class GameHandler:
         self.game_over_screen = GameOverScreen(self.screen)
 
     def run(self):
+        """
+        Run the main game loop, handling state transitions and user input.
+
+        Args:
+            None. Uses internal state and Pygame events.
+
+        Returns:
+            None. The loop continues until the user quits the game.
+        """
         current_game = None
         state = GameState.SELECTING
 
@@ -71,6 +88,7 @@ class GameHandler:
 
 
 def main():
+    """Entry point for starting the Battleship game with all difficulty modes enabled."""
     handler = GameHandler([BattleshipEasy, BattleshipMedium, BattleshipHard])
     handler.run()
 

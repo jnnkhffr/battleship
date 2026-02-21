@@ -149,15 +149,24 @@ class Game:
 
     def handle_mouse_click(self, pos):
         """
-        Handle mouse clicks depending on the current game phase.
+        Handle mouse click actions depending on the current game phase.
 
-        Placement phase:
-            - Convert mouse position to grid coordinates
-            - Attempt to place the next ship on the player's board
+        During placement:
+            Converts the mouse position into grid coordinates and attempts
+            to place the next ship on the player's board.
 
-        Shooting phase:
-            - (Future) Handle firing shots at the enemy board
+        During shooting:
+            Converts the mouse position into enemy grid coordinates,
+            validates the shot, applies hit/miss logic, and checks for win conditions.
+
+        Args:
+            pos: Mouse click position as (x, y) pixel coordinates.
+
+        Returns:
+            None. The method updates game state, triggers ship placement,
+            processes shots, and may set the game-over state.
         """
+
         if not self.player_turn:
             return
 
@@ -168,7 +177,6 @@ class Game:
 
         # SHOOTING PHASE
         if self.placement_done:
-            # Ignore clicks on player board
             if x_pixel < self.enemy_offset_x:
                 return
 
@@ -180,12 +188,10 @@ class Game:
             if not (0 <= x < GRID_COLS and 0 <= y < GRID_ROWS):
                 return
 
-            # Prevent double shots
             if self.enemy_board.grid[y][x] in [2, 3, 4]:
                 print("You already shot here")
                 return
 
-            # Player shoots
             ship_hit = self.enemy_fleet.receive_shot(x, y)
 
             if ship_hit:
@@ -237,7 +243,18 @@ class Game:
                 print("All ships placed! Shooting mode active.")
 
     def draw(self):
-        """Render both screens on the board."""
+        """
+        Render the full game screen including both boards, placement previews,
+        battle messages, and game‑over messages.
+
+        Args:
+            None. Uses internal game state such as placement progress,
+            mouse position, fleet status, and timing values.
+
+        Returns:
+            None. The method updates the visual output on the main screen
+            by drawing player and enemy boards, ship previews, and messages.
+        """
         self.screen.fill(COLOR_BG)
 
         preview = None
@@ -304,9 +321,20 @@ class Game:
             self.screen.blit(text_surface, text_rect)
 
     def enemy_turn(self):
+        """
+        Execute the enemy's turn by selecting a target, applying hit or miss logic,
+        updating board state, and checking for defeat conditions.
+
+        Args:
+            None. Uses the enemy fleet's targeting strategy and the player's board state.
+
+        Returns:
+            None. Updates the player's board, registers shot results in the enemy AI,
+            and may set the game-over state if all player ships are destroyed.
+        """
         if self.game_over:
             return
-        # Co-ordinates of shooting
+
         x, y = self.enemy_fleet.get_next_shot(self.player_board)
         ship_hit = self.fleet_manager.receive_shot(x, y)
 
@@ -362,7 +390,18 @@ class GameFactory(ABC):
 
 
 class BattleshipEasy(GameFactory):
+    """Factory for creating a Battleship game configured with easy difficulty and random enemy shooting."""
     def create(self) -> Game:
+        """
+        Create a new Game instance configured for the Easy difficulty.
+
+        Args:
+            None. Uses the factory's screen and clock to initialize the game.
+
+        Returns:
+            A fully initialized Game object with an enemy fleet that uses
+            random shooting behavior and automatically placed ships.
+        """
         game = Game(self._screen, self._clock, "Easy")
         game.enemy_fleet = ComputerFleetManager(
             game.enemy_board, RandomShootingStrategy()
@@ -372,7 +411,21 @@ class BattleshipEasy(GameFactory):
 
 
 class BattleshipMedium(GameFactory):
+    """
+    Factory for creating a Battleship game with medium difficulty
+    using a hunt-based enemy strategy.
+    """
     def create(self) -> Game:
+        """
+        Create a new Game instance configured for the Medium difficulty.
+
+        Args:
+            None. Uses the factory's screen and clock to initialize the game.
+
+        Returns:
+            A fully initialized Game object with an enemy fleet that uses
+            a hunt-based shooting strategy and automatically placed ships.
+        """
         game = Game(self._screen, self._clock, "Medium")
         game.enemy_fleet = ComputerFleetManager(
             game.enemy_board, HuntShootingStrategy()
@@ -382,7 +435,18 @@ class BattleshipMedium(GameFactory):
 
 
 class BattleshipHard(GameFactory):
+    """Factory for creating a Battleship game with hard difficulty using an advanced enemy strategy."""
     def create(self) -> Game:
+        """
+        Create a new Game instance configured for the Hard difficulty.
+
+        Args:
+            None. Uses the factory's screen and clock to initialize the game.
+
+        Returns:
+            A fully initialized Game object with an enemy fleet that uses
+            an advanced smart shooting strategy and automatically placed ships.
+        """
         game = Game(self._screen, self._clock, "Hard")
         game.enemy_fleet = ComputerFleetManager(
             game.enemy_board, SmartShootingStrategy()

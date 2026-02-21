@@ -1,19 +1,50 @@
+"""Different difficulty levels."""
+
 from abc import ABC, abstractmethod
 from battleship_game.config import GRID_COLS, GRID_ROWS
 import random
 
 
 class ShootingStrategy(ABC):
+    """ Abstract base class for all enemy shooting strategies. """
     @abstractmethod
     def get_next_shot(self, opponent_board):
+        """
+        Return the next shot coordinates based on the strategy.
+
+        Args:
+            opponent_board: The player's board used to evaluate shot choices.
+
+        Returns:
+            A tuple (x, y) representing the next target cell.
+        """
         pass
 
     def register_shot_result(self, x, y, hit, sunk):
+        """
+        Receive feedback about the last shot to update strategy state.
+
+        Args:
+            x: Column of the shot.
+            y: Row of the shot.
+            hit: True if the shot hit a ship.
+            sunk: True if the shot sank a ship.
+        """
         pass
 
 
 class RandomShootingStrategy(ShootingStrategy):
+    """Shooting strategy that selects random unshot cells."""
     def get_next_shot(self, opponent_board):
+        """
+        Return a random valid shot that has not been fired before.
+
+        Args:
+            opponent_board: The player's board used to avoid repeated shots.
+
+        Returns:
+            A tuple (x, y) representing a random unshot cell.
+        """
         while True:
             x = random.randint(0, GRID_COLS - 1)
             y = random.randint(0, GRID_ROWS - 1)
@@ -23,25 +54,42 @@ class RandomShootingStrategy(ShootingStrategy):
 
 
 class HuntShootingStrategy(ShootingStrategy):
+    """Shooting strategy that hunts around previous hits to find full ships."""
     def __init__(self):
+        """Shooting strategy that hunts around previous hits to find full ships."""
         self.pending_hits = []
         self.hunt_direction = None
 
     def get_next_shot(self, opponent_board):
-        # Falls wir Treffer haben → Target Mode
+        """
+        Return the next shot using hunt logic or fallback scanning.
+
+        Args:
+            opponent_board: The player's board used to evaluate shot choices.
+
+        Returns:
+            A tuple (x, y) representing the next target cell.
+        """
         if self.pending_hits:
             return self._target_mode(opponent_board)
 
-        # Sonst: Treffer suchen und merken
         self._scan_for_hits(opponent_board)
 
         if self.pending_hits:
             return self._target_mode(opponent_board)
 
-        # Fallback: Random
         return RandomShootingStrategy().get_next_shot(opponent_board)
 
     def register_shot_result(self, x, y, hit, sunk):
+        """
+        Update internal state based on the result of the last shot.
+
+        Args:
+            x: Column of the shot.
+            y: Row of the shot.
+            hit: True if the shot hit a ship.
+            sunk: True if the shot sank a ship.
+        """
         if hit:
             self.pending_hits.append((x, y))
 
@@ -50,6 +98,12 @@ class HuntShootingStrategy(ShootingStrategy):
             self.hunt_direction = None
 
     def _scan_for_hits(self, board):
+        """
+        Scan the board for existing hit markers to continue hunting.
+
+        Args:
+            board: The player's board used to detect previous hits.
+        """
         self.pending_hits.clear()
         for y in range(GRID_ROWS):
             for x in range(GRID_COLS):
@@ -57,7 +111,15 @@ class HuntShootingStrategy(ShootingStrategy):
                     self.pending_hits.append((x, y))
 
     def _target_mode(self, board):
-        # 1 Treffer → Nachbarn probieren
+        """
+        Attempt to continue shooting around known hits.
+
+        Args:
+            board: The player's board used to evaluate shot choices.
+
+        Returns:
+            A tuple (x, y) for the next target, or a fallback random shot.
+        """
         if len(self.pending_hits) == 1:
             x, y = self.pending_hits[0]
             candidates = [(x+1,y), (x-1,y), (x,y+1), (x,y-1)]
@@ -65,22 +127,19 @@ class HuntShootingStrategy(ShootingStrategy):
             if shot:
                 return shot
 
-        # Richtung bestimmen
         if self.hunt_direction is None:
             self._determine_direction()
 
-        # Horizontal weiterschießen
         if self.hunt_direction == "horizontal":
             return self._continue_horizontal(board)
 
-        # Vertikal weiterschießen
         if self.hunt_direction == "vertical":
             return self._continue_vertical(board)
 
-        # Fallback
         return RandomShootingStrategy().get_next_shot(board)
 
     def _determine_direction(self):
+        """Determine whether the ship is aligned horizontally or vertically."""
         if len(self.pending_hits) < 2:
             return
         (x1, y1), (x2, y2) = self.pending_hits[:2]
@@ -90,18 +149,46 @@ class HuntShootingStrategy(ShootingStrategy):
             self.hunt_direction = "horizontal"
 
     def _continue_horizontal(self, board):
+        """
+        Continue shooting left or right along a horizontal hit line.
+
+        Args:
+            board: The player's board.
+
+        Returns:
+            A tuple (x, y) or None if no valid shot exists.
+        """
         hits = sorted(self.pending_hits, key=lambda p: p[0])
         left = (hits[0][0] - 1, hits[0][1])
         right = (hits[-1][0] + 1, hits[-1][1])
         return self._pick_valid(board, [left, right])
 
     def _continue_vertical(self, board):
+        """
+        Continue shooting up or down along a vertical hit line.
+
+        Args:
+            board: The player's board.
+
+        Returns:
+            A tuple (x, y) or None if no valid shot exists.
+        """
         hits = sorted(self.pending_hits, key=lambda p: p[1])
         up = (hits[0][0], hits[0][1] - 1)
         down = (hits[-1][0], hits[-1][1] + 1)
         return self._pick_valid(board, [up, down])
 
     def _pick_valid(self, board, candidates):
+        """
+        Return the first valid shot from a list of candidates.
+
+        Args:
+            board: The player's board.
+            candidates: List of (x, y) positions to test.
+
+        Returns:
+            A valid (x, y) shot or None if none are valid.
+        """
         random.shuffle(candidates)
         for x, y in candidates:
             if 0 <= x < GRID_COLS and 0 <= y < GRID_ROWS:
@@ -112,8 +199,17 @@ class HuntShootingStrategy(ShootingStrategy):
 
 
 class SmartShootingStrategy(HuntShootingStrategy):
-
+    """Advanced shooting strategy combining hunt logic with checkerboard scanning."""
     def get_next_shot(self, opponent_board):
+        """
+        Return the next shot using hunt mode or optimized checkerboard scanning.
+
+        Args:
+            opponent_board: The player's board used to evaluate shot choices.
+
+        Returns:
+            A tuple (x, y) representing the next target cell.
+        """
         if self.pending_hits:
             return super().get_next_shot(opponent_board)
 
@@ -127,5 +223,4 @@ class SmartShootingStrategy(HuntShootingStrategy):
         if candidates:
             return random.choice(candidates)
 
-        # Fallback
         return RandomShootingStrategy().get_next_shot(opponent_board)

@@ -22,8 +22,6 @@ from battleship_game.config import (
 class StartScreen:
     """
     Start screen for Battleship game with difficulty selection.
-
-    Works with GameFactory classes to select and create games.
     """
 
     def __init__(self, screen: pygame.Surface, game_factories: list[type]):
@@ -76,6 +74,15 @@ class StartScreen:
 
 
     def draw(self):
+        """
+        Render the start screen including title, subtitle, and difficulty buttons.
+
+        Args:
+            None. Uses internal screen state and mouse position.
+
+        Returns:
+            None. Draws directly onto the display surface.
+        """
         self.screen.fill(COLOR_BG)
         w = self.screen.get_width()
 
@@ -102,6 +109,15 @@ class StartScreen:
         pygame.display.flip()
 
     def run(self, events):
+        """
+        Update the start screen and return the selected difficulty factory if clicked.
+
+        Args:
+            events: List of Pygame events for the current frame.
+
+        Returns:
+            The selected GameFactory class if a button was clicked, otherwise None.
+        """
         self.draw()
         for e in events:
             if e.type == pygame.MOUSEBUTTONDOWN:
@@ -111,12 +127,31 @@ class StartScreen:
         return None
 
 class GameOverScreen:
+    """Screen shown after the game ends, offering replay or return to menu."""
     def __init__(self, screen):
+        """
+        Initialize the game‑over screen with fonts and display surface.
+
+        Args:
+            screen: Pygame display surface.
+        """
         self.screen = screen
         self.font = pygame.font.SysFont(None, FONT_GAMEOVER)
         self.button_font = pygame.font.SysFont(None, FONT_BUTTON)
 
     def run(self, state, events):
+        """
+        Render the game‑over overlay and handle replay/menu button clicks.
+
+        Args:
+            state: Current game‑over state (win or loss).
+            events: List of Pygame events for the current frame.
+
+        Returns:
+            2 if replay was selected,
+            1 if return to menu was selected,
+            otherwise the unchanged state.
+        """
         w, h = self.screen.get_size()
 
         overlay = pygame.Surface((w, h), pygame.SRCALPHA)
@@ -157,6 +192,17 @@ class GameOverScreen:
         return state
 
     def _draw_button(self, text, rect, mouse):
+        """
+        Draw a single interactive button with hover highlighting.
+
+        Args:
+            text: Button label.
+            rect: Button rectangle.
+            mouse: Current mouse position.
+
+        Returns:
+            None. Draws directly onto the display surface.
+        """
         hovered = rect.collidepoint(mouse)
         color = COLOR_GRID if hovered else COLOR_SHIP
 
