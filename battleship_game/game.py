@@ -1,3 +1,8 @@
+"""Game module with factory pattern for different difficulty levels."""
+
+from __future__ import annotations
+from abc import ABC, abstractmethod
+
 import pygame
 import random
 from battleship_game.board import Board
@@ -17,6 +22,12 @@ from battleship_game.config import (
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
+from battleship_game.ai_shooting import (
+    RandomShootingStrategy,
+    HuntShootingStrategy,
+    SmartShootingStrategy,
+)
+
 
 class Game:
     """
@@ -29,22 +40,33 @@ class Game:
     - Transition into shooting phase once placement is complete
     """
 
-    def __init__(self, difficulty: str = "Easy"):
+    def __init__(
+        self,
+        screen: pygame.Surface,
+        clock: pygame.time.Clock,
+        difficulty_name: str = "",
+    ):
         """
         Initialize the game environment, create boards, fleet manager,
         and prepare the placement phase.
 
         Args:
-            difficulty: Selected difficulty level (for future AI implementation)
+            screen: Pygame display surface
+            clock: Pygame clock for timing
+            difficulty_name: Name of the difficulty (for window caption)
         """
-        pygame.init()
+        self.screen = screen
+        self.clock = clock
 
         # Calculate window size
         self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
         self.screen_height = GRID_ROWS * BLOCK_SIZE
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
-        pygame.display.set_caption(f"Battleship - {difficulty} Mode")
+        # Set caption
+        caption = (
+            "Battleship" if not difficulty_name else f"Battleship - {difficulty_name}"
+        )
+        pygame.display.set_caption(caption)
 
         # Boards
         self.player_board = Board()
@@ -65,10 +87,6 @@ class Game:
         # True once all ships have been placed
         self.placement_done = False
 
-        # Enemy fleet
-        self.enemy_fleet = ComputerFleetManager(self.enemy_board,difficulty)
-        self.enemy_fleet.auto_place_fleet()
-
         # Game over
         self.game_over = False
         self.game_over_message = ""
@@ -83,35 +101,37 @@ class Game:
         self.battle_message_surface = self.font.render("THE BATTLE STARTS!", True, COLOR_MESSAGE_FIRING)
 
 
-    def run(self):
+    def run(self, events: list[pygame.event.Event]) -> bool:
         """
-        Main game loop.
+        Main game loop iteration.
         Handles events, updates the game state, and renders the Boards.
+
+        Args:
+            events: List of pygame events to process
+
+        Returns:
+            True if game is still running, False if game over
         """
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+        for event in events:
+            # Rotate ship during placement phase
+            if not self.placement_done and event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.current_orientation = (
+                        "ver" if self.current_orientation == "hor" else "hor"
+                    )
 
-                # Rotate ship during placement phase
-                if not self.placement_done and event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.current_orientation = (
-                            "ver" if self.current_orientation == "hor" else "hor"
-                        )
+            # Handle mouse clicks
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_click(event.pos)
 
-                # Handle mouse clicks
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.handle_mouse_click(event.pos)
+            if event.type == pygame.MOUSEMOTION:
+                self.mouse_grid_pos = event.pos
 
-                if event.type == pygame.MOUSEMOTION:
-                    self.mouse_grid_pos = event.pos
+        self.draw()
+        pygame.display.flip()
+        self.clock.tick(60)
 
-            self.draw()
-            pygame.display.flip()
-
-        pygame.quit()
+        return not self.game_over
 
     def handle_mouse_click(self, pos):
         """
@@ -275,11 +295,7 @@ class Game:
             self.player_board.hit(x, y)
             print("Enemy hit!")
 
-            sunk = ship_hit.is_sunk()
-
-            self.enemy_fleet.register_shot_result(x, y, True, sunk)
-
-            if sunk:
+            if ship_hit.is_sunk():
                 self.player_board.sunk(ship_hit)
                 print(f"Enemy sunk your {ship_hit.name}")
 
@@ -292,5 +308,52 @@ class Game:
             self.player_board.miss(x, y)
             print("Enemy miss")
 
-            # Notify Ai about the miss
-            self.enemy_fleet.register_shot_result(x, y, False, False)
+
+class GameFactory(ABC):
+    """Abstract factory class to create Battleship games with different difficulties."""
+
+    def __init__(self, screen: pygame.Surface, clock: pygame.time.Clock):
+        """
+        Initialize the factory.
+
+        Args:
+            screen: Pygame display surface
+            clock: Pygame clock for timing
+        """
+        self._screen = screen
+        self._clock = clock
+
+    @abstractmethod
+    def create(self) -> Game:
+        """Create and return a Game instance."""
+        ...
+
+
+class BattleshipEasy(GameFactory):
+    def create(self) -> Game:
+        game = Game(self._screen, self._clock, "Easy")
+        game.enemy_fleet = ComputerFleetManager(
+            game.enemy_board, RandomShootingStrategy()
+        )
+        game.enemy_fleet.auto_place_fleet()
+        return game
+
+
+class BattleshipMedium(GameFactory):
+    def create(self) -> Game:
+        game = Game(self._screen, self._clock, "Medium")
+        game.enemy_fleet = ComputerFleetManager(
+            game.enemy_board, HuntShootingStrategy()
+        )
+        game.enemy_fleet.auto_place_fleet()
+        return game
+
+
+class BattleshipHard(GameFactory):
+    def create(self) -> Game:
+        game = Game(self._screen, self._clock, "Hard")
+        game.enemy_fleet = ComputerFleetManager(
+            game.enemy_board, SmartShootingStrategy()
+        )
+        game.enemy_fleet.auto_place_fleet()
+        return game
