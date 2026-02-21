@@ -12,25 +12,28 @@ that is two boxes in size. A destroyer is three squares in size, and aircraft ca
 
 At the beginning, you have to select a difficulty level. Here you can choose between Easy, Medium, and Hard by clicking 
 on the level you want to play. 
+
 Then the player has to place the ships on the playing field. The ships cannot be selected individually. 
 The game starts with the largest ship. If you move the mouse over the left playing field, which is our sea area, 
 you can see how to position the ship. The ship is displayed with 50% of its color intensity so that you can see where 
 the ship would be located. Press the space bar to rotate the ship 90°. Press it again to rotate it back. Click the mouse
 to confirm the ship's position at the location where the mouse is currently located. The ship is now placed and the next
 smaller ship can now be placed. 
-However, there are a few rules governing how the next ships may be placed. They must not overlap or be placed directly 
+
+However, there are a few rules governing how the next ships may be placed. They are not allowed to overlap or be placed 
+directly 
 next to each other. This is indicated by the ship turning red at points where it cannot be placed, and it cannot be 
 confirmed in place with a click. Only when the ship turns white again can it be placed at that location. This continues
 until all ships are placed. Then a message appears: "THE BATTLE STARTS", 
-and the player knows that all ships are placed and he can now fire the first shot. The computer always follows suit and 
+and the player knows that all ships are placed, and he can now fire the first shot. The computer always follows suit and 
 fires immediately after we have fired. 
 The opponent, in our case the computer, then has one shot per round. You must fire by selecting a box and click on it. 
 
 If no ship is hit, the gridbox is marked blue on the playing field. If part of a ship is hit, i.e., only one box and 
 not the entire ship, the gridbox is marked orange. If all boxes of the ship are hit, the ship is destroyed and sunk. 
-All squares along the length of the ship are then marked red. 
+All squares along the length of the ship, are then marked red. 
 
-The aim of the game is to sink all the ships arranged by the computer before the computer sinks the ships we have 
+The aim of the game is to sink all the ships arranged by the computer before the computer sinks the ships you have 
 arranged. Depending on the level you are playing, the computer follows different strategies to sink your fleet. At the 
 end, you can win or lose the battle. Afterwards, you have the option to repeat the game at the same difficulty level or 
 return to the main menu and select a different difficulty level. 
@@ -52,6 +55,7 @@ return to the main menu and select a different difficulty level.
 - small text between ship placement and the start of firing (only visible for 3 Seconds) *-> DONE*
 - timedelay for the computershot? *-> DONE*
 - adding useful things from the "difficulites_factory_pattern" Branch *-> DONE*
+
 
 - run mypy; ruff and black for Code-Style *-> OPEN*
 - files that we don´t use should be deleted for a better overview *-> OPEN*
