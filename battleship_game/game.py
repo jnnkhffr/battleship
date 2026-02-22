@@ -4,7 +4,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 import pygame
-import random
+
 from battleship_game.board import Board
 from battleship_game.fleet_commander import FleetManager
 from battleship_game.config import (
