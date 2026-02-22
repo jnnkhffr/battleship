@@ -62,5 +62,5 @@ return to the main menu and select a different difficulty level.
 - (meaningful) Docstrings at every class,function? *-> OPEN*
 - unnecessary comments within the code deleted? *-> OPEN*
 - Can we use more design patterns anywhere else? *-> OPEN*
-- Game instructions in the README. *-> OPEN*
+- Game instructions in the README. *-> FIRST DRAFT*
 - requirements fully documented? *-> OPEN*
