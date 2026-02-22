@@ -51,7 +51,7 @@ return to the main menu and select a different difficulty level.
 - opponent (computer) *-> DONE*
   - set of that computer creates a board and places his ships as well *-> DONE*
   - computer should also run the hit logic *-> DONE*
-- Start and End Screens *-> ON DIFFERENT BRANCH*
+- Start and End Screens *-> DONE*
 - small text between ship placement and the start of firing (only visible for 3 Seconds) *-> DONE*
 - timedelay for the computershot? *-> DONE*
 - adding useful things from the "difficulites_factory_pattern" Branch *-> DONE*
