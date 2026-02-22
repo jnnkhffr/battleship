@@ -39,6 +39,26 @@ end, you can win or lose the battle. Afterwards, you have the option to repeat t
 return to the main menu and select a different difficulty level. 
 
 
+## Installation
+
+### Requirements
+- Python 3.12 or higher
+- `pip` (Python package manager)
+
+### StepsClone this repository:
+   ```bash
+   git clone https://github.com/jnnkhffr/battleship
+   cd Snake 
+   ```
+
+### Install dependencies:
+pip install -r requirements.txt
+
+
+## Execution
+From the project root, run:
+- python -m battleship_game.main
+
 
 # Gameplan
 
