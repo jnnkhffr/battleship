@@ -48,7 +48,6 @@ return to the main menu and select a different difficulty level.
 ### StepsClone this repository:
    ```bash
    git clone https://github.com/jnnkhffr/battleship
-   cd Snake 
    ```
 
 ### Install dependencies:
