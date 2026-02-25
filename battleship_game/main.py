@@ -7,6 +7,7 @@ from battleship_game.config import (
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     FPS,
+    Theme,
 )
 
 
@@ -34,7 +35,8 @@ class GameHandler:
 
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("Battleship")
-        pygame.mixer.music.load("assets/sounds/theme.mp3")
+        pygame.mixer.music.load(Theme)
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1)
 
         self.clock = pygame.time.Clock()

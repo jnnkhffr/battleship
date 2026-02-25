@@ -125,14 +125,23 @@ class Board:
             img = ship_images.get(ship.name)
             if not img:
                 return
+
+            # Creat a copy so we don't change the ship image
             preview_img = img.copy()
 
-            # orientation
+            # Handles orientation
             if orientation == "hor":
                 preview_img = pygame.transform.rotate(preview_img, 90)
 
             # Transparency
             preview_img.set_alpha(alpha)
+
+            # Change color in case of invalid spots
+            if not valid:
+                # Fills the space with red
+                preview_img.fill((255, 0, 0, 255), special_flags=pygame.BLEND_RGBA_MULT)
+            else:
+                preview_img.set_alpha(alpha)
 
             draw_x = offset_x + px * self.block_size
             draw_y = py * self.block_size

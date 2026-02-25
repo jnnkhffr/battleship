@@ -20,6 +20,7 @@ from battleship_game.config import (
     DEBUG_SHOW_ENEMY_SHIPS,
     DURATION,
     DELAY,
+    hit,miss,sunk, hit_token, miss_token, sunk_token
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -138,14 +139,17 @@ class Game:
             self.fire_animation.append(img_fire)
 
         # Sounds file
-        self.hit_sound = pygame.mixer.Sound("assets/sounds/hit.wav")
-        self.miss_sound = pygame.mixer.Sound("assets/sounds/miss.wav")
-        self.sunk_sound = pygame.mixer.Sound("assets/sounds/sunk.wav")
+        self.hit_sound = pygame.mixer.Sound(hit)
+        self.miss_sound = pygame.mixer.Sound(miss)
+        self.sunk_sound = pygame.mixer.Sound(sunk)
+        self.hit_sound.set_volume(0.1)
+        self.miss_sound.set_volume(0.1)
+        self.sunk_sound.set_volume(0.3)
 
         # token for hits, misses and sunk
-        self.miss_token = pygame.image.load("assets/images/tokens/bluetoken.png")
-        self.hit_token = pygame.image.load("assets/images/tokens/greentoken.png")
-        self.sunk_token = pygame.image.load("assets/images/tokens/redtoken.png")
+        self.miss_token = pygame.image.load(miss_token)
+        self.hit_token = pygame.image.load(hit_token)
+        self.sunk_token = pygame.image.load(sunk_token)
 
         self.miss_token = pygame.transform.scale(self.miss_token, (BLOCK_SIZE, BLOCK_SIZE))
         self.hit_token = pygame.transform.scale(self.hit_token, (BLOCK_SIZE, BLOCK_SIZE))
@@ -156,6 +160,11 @@ class Game:
             3: self.hit_token,
             4: self.sunk_token
         }
+
+        # Load the theme for the game
+        #pygame.mixer.music.load("assets/sounds/theme.mp3")
+
+        #pygame.mixer.music.play(-1)
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """

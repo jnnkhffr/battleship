@@ -56,3 +56,15 @@ BUTTON_MENU_Y = 0.68
 DEFAULT_ORIENTATION = "hor"
 SHIP_MARGIN = 1  # distance between ships
 DEBUG_SHOW_ENEMY_SHIPS = False  # or False
+
+# Sounds
+Theme = "assets/sounds/theme.mp3"
+hit = "assets/sounds/hit.wav"
+sunk = "assets/sounds/sunk.wav"
+miss = "assets/sounds/miss.wav"
+
+# Tokens
+hit_token = "assets/images/tokens/greentoken.png"
+miss_token = "assets/images/tokens/bluetoken.png"
+sunk_token = "assets/images/tokens/redtoken.png"
+
