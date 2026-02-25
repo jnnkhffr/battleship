@@ -328,6 +328,7 @@ class Game:
                     "x": gx,
                     "y": gy,
                     "size": ship.size,
+                    "ship": ship,
                     "orientation": self.current_orientation,
                     "alpha": 128,  # 50% Transparency
                     "valid": valid,

@@ -113,40 +113,31 @@ class Board:
 
 
 
-        if preview is not None:
+        if preview and ship_images:
             px = preview.get("x")
             py = preview.get("y")
-            size = preview.get("size", 1)
             orientation = preview.get("orientation", "hor")
             alpha = preview.get("alpha", ALPHA_PREVIEW)
             valid = preview.get("valid", True)
+            ship = preview.get("ship")
+            if ship is None:
+                return
+            img = ship_images.get(ship.name)
+            if not img:
+                return
+            preview_img = img.copy()
 
-            # choose color: ship color if valid else red-ish
-            preview_color = COLOR_SHIP if valid else COLOR_PREVIEW
+            # orientation
+            if orientation == "hor":
+                preview_img = pygame.transform.rotate(preview_img, 90)
 
-            dx = 1 if orientation == "hor" else 0
-            dy = 1 if orientation == "ver" else 0
+            # Transparency
+            preview_img.set_alpha(alpha)
 
-            cell_surf = pygame.Surface(
-                (self.block_size, self.block_size), pygame.SRCALPHA
-            )
-            r, g, b = preview_color
-            cell_surf.fill((r, g, b, alpha))
+            draw_x = offset_x + px * self.block_size
+            draw_y = py * self.block_size
+            surface.blit(preview_img, (draw_x, draw_y))
 
-            for i in range(size):
-                cx = px + dx * i
-                cy = py + dy * i
-                if 0 <= cx < self.cols and 0 <= cy < self.rows:
-
-                    dest = (
-                        offset_x + cx * self.block_size,
-                        offset_y + cy * self.block_size,
-                    )
-                    surface.blit(cell_surf, dest)
-                    # redraw grid border so lines stay visible
-                    cell_rect = pygame.Rect(
-                        dest[0], dest[1], self.block_size, self.block_size
-                    )
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
         """
