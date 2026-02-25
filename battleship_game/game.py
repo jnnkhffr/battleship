@@ -29,30 +29,6 @@ from battleship_game.ai_shooting import (
     SmartShootingStrategy,
 )
 
-
-class Token:
-    """Handles the hit/miss along with the fire animations"""
-    def __init__(self, x_pixel, y_pixel, static_image, animation_list=None):
-        self.x_pixel = x_pixel
-        self.y_pixel = y_pixel
-        self.static_image = static_image
-        self.animation_list = animation_list
-        self.frame_index = 0
-        self.timer = pygame.time.get_ticks()
-
-    def draw(self, surface):
-        """Cycles the fire frames for animations"""
-        if self.animation_list:
-            now = pygame.time.get_ticks()
-            if now - self.timer > 100:
-                self.timer = now
-                self.frame_index += 1
-                if self.frame_index >= len(self.animation_list):
-                    self.frame_index = 0
-                image = self.animation_list[self.frame_index]
-            else:
-                image = self.static_image
-            surface.blit(image, (self.x, self.y))
 class Game:
     """
     Main game controller class.
@@ -150,7 +126,7 @@ class Game:
             #Load and scale the images to fit the grid
             img = pygame.image.load(image_path)
             size = ship_sizes[name]
-            scaled_img = pygame.transform.scale(img, (BLOCK_SIZE * size, BLOCK_SIZE))
+            scaled_img = pygame.transform.scale(img, (BLOCK_SIZE, BLOCK_SIZE * size))
             self.ship_images[name] = scaled_img
 
 
@@ -165,6 +141,21 @@ class Game:
         self.hit_sound = pygame.mixer.Sound("assets/sounds/hit.wav")
         self.miss_sound = pygame.mixer.Sound("assets/sounds/miss.wav")
         self.sunk_sound = pygame.mixer.Sound("assets/sounds/sunk.wav")
+
+        # token for hits, misses and sunk
+        self.miss_token = pygame.image.load("assets/images/tokens/bluetoken.png")
+        self.hit_token = pygame.image.load("assets/images/tokens/greentoken.png")
+        self.sunk_token = pygame.image.load("assets/images/tokens/redtoken.png")
+
+        self.miss_token = pygame.transform.scale(self.miss_token, (BLOCK_SIZE, BLOCK_SIZE))
+        self.hit_token = pygame.transform.scale(self.hit_token, (BLOCK_SIZE, BLOCK_SIZE))
+        self.sunk_token = pygame.transform.scale(self.sunk_token, (BLOCK_SIZE, BLOCK_SIZE))
+
+        self.tokens = {
+            2: self.miss_token,
+            3: self.hit_token,
+            4: self.sunk_token
+        }
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -343,10 +334,10 @@ class Game:
                 }
 
         # Draw player's board with preview
-        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview, ship_images=self.ship_images, fleet=self.fleet_manager)
+        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview, token_images=self.tokens)
 
         # Draw enemy's board once
-        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0, ship_images=self.ship_images, fleet=self.enemy_fleet)
+        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0, token_images=self.tokens)
 
         # If DEBUG off: overpaint enemy ships
         if not DEBUG_SHOW_ENEMY_SHIPS:

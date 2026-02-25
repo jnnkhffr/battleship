@@ -20,7 +20,7 @@ from battleship_game.config import (
 
 class Board:
     """
-    Represents a Battleship game board with grid state, drawing logic,
+    Represents a Battleship game board with grid states, drawing logic,
     and ship placement validation.
     """
 
@@ -48,7 +48,7 @@ class Board:
         self.bgcolor = bgcolor
         self.gridcolor = gridcolor
 
-        # grid state (0 for empty, 1 for ship)
+        # grid states (0 for empty, 1 for ship)
         self.grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
     def draw(
@@ -57,6 +57,7 @@ class Board:
         offset_x: int = 0,
         offset_y: int = 0,
         preview: dict | None = None,
+        token_images=None
     ) -> None:
         """
         Draw the board, grid lines, ships, hits, and misses onto a Pygame surface.
@@ -84,15 +85,12 @@ class Board:
 
             # draw ship (darshan)
             val = self.grid[y][x]
-
             if val == 1:
                 pygame.draw.rect(surface, COLOR_SHIP, rect)
-            elif val == 2:
-                pygame.draw.rect(surface, COLOR_MISS, rect)
-            elif val == 3:
-                pygame.draw.rect(surface, COLOR_HIT, rect)
-            elif val == 4:
-                pygame.draw.rect(surface, COLOR_SUNK, rect)
+            elif token_images and val in token_images:
+                token = token_images[val]
+                token_rect = token.get_rect(center=rect.center)
+                surface.blit(token, token_rect)
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
         if preview is not None:
