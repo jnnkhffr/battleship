@@ -72,46 +72,47 @@ class Board:
             preview: Optional preview data for ship placement containing:
                 x, y, size, orientation, alpha, valid.
         """
+        # Background
         rect = pygame.Rect(
             offset_x, 0, self.cols * self.block_size, self.rows * self.block_size
         )
         pygame.draw.rect(surface, self.bgcolor, rect)
 
+        # Ships
+        if fleet and ship_images:
+            for ship in fleet.ships:
+                if ship.position is None:
+                    continue
+
+                img = ship_images.get(ship.name)
+                if not img:
+                    continue
+                sx, sy = ship.position
+                draw_x = offset_x + sx * self.block_size
+                draw_y = sy * self.block_size
+                draw_img = img
+                if ship.orientation == "hor":
+                    draw_img = pygame.transform.rotate(img, 90)
+
+                surface.blit(draw_img, (draw_x, draw_y))
+
+            # draw grid lines and tokens
         for x, y in product(range(self.cols), range(self.rows)):
-            rect = pygame.Rect(
-                offset_x + x * self.block_size,
-                y * self.block_size,
-                self.block_size,
-                self.block_size,
-            )
-            pygame.draw.rect(surface, self.gridcolor, rect, 1)
+                rect = pygame.Rect(
+                        offset_x + x * self.block_size,
+                        y * self.block_size,
+                        self.block_size,
+                        self.block_size,
+                    )
+                pygame.draw.rect(surface, self.gridcolor, rect, 1)
+                val = self.grid[y][x]
+                if token_images and val in token_images:
+                    token = token_images[val]
+                    token_rect = token.get_rect(center=rect.center)
+                    surface.blit(token, token_rect)
+                pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
-            # draw ship (darshan)
-            val = self.grid[y][x]
-            #if val == 1:
-                #pygame.draw.rect(surface, COLOR_SHIP, rect)
-            if token_images and val in token_images:
-                token = token_images[val]
-                token_rect = token.get_rect(center=rect.center)
-                surface.blit(token, token_rect)
-            pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
-            if fleet and ship_images:
-                for ship in fleet.ships:
-                    if ship.position is None:
-                        continue
-
-                    img = ship_images.get(ship.name)
-                    if not img:
-                        continue
-                    x, y = ship.position
-                    draw_x = offset_x + x * self.block_size
-                    draw_y = y * self.block_size
-                    draw_img = img
-                    if ship.orientation == "hor":
-                        draw_img = pygame.transform.rotate(img, 90)
-
-                    surface.blit(draw_img, (draw_x, draw_y))
 
         if preview is not None:
             px = preview.get("x")
