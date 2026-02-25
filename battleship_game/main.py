@@ -11,7 +11,7 @@ from battleship_game.config import (
 
 
 class GameState:
-    """Simple state container representing the different phases of the game."""
+    """Simple states container representing the different phases of the game."""
     SELECTING = 1
     NEW = 2
     RUNNING = 3
@@ -20,7 +20,7 @@ class GameState:
 
 
 class GameHandler:
-    """Handle the overall game flow including menus, game creation, and state transitions."""
+    """Handle the overall game flow including menus, game creation, and states transitions."""
     def __init__(self, game_factories):
         """
         Initialize the game handler, set up Pygame, and prepare screens.
@@ -30,9 +30,12 @@ class GameHandler:
         """
         pygame.init()
         pygame.font.init()
+        pygame.mixer.init()
 
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("Battleship")
+        pygame.mixer.music.load("assets/sounds/theme.mp3")
+        pygame.mixer.music.play(-1)
 
         self.clock = pygame.time.Clock()
         self.running = True
@@ -45,10 +48,10 @@ class GameHandler:
 
     def run(self):
         """
-        Run the main game loop, handling state transitions and user input.
+        Run the main game loop, handling states transitions and user input.
 
         Args:
-            None. Uses internal state and Pygame events.
+            None. Uses internal states and Pygame events.
 
         Returns:
             None. The loop continues until the user quits the game.
