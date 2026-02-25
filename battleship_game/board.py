@@ -57,7 +57,10 @@ class Board:
         offset_x: int = 0,
         offset_y: int = 0,
         preview: dict | None = None,
-        token_images=None
+        token_images=None,
+        ship_images=None,
+        fleet=None
+
     ) -> None:
         """
         Draw the board, grid lines, ships, hits, and misses onto a Pygame surface.
@@ -85,13 +88,30 @@ class Board:
 
             # draw ship (darshan)
             val = self.grid[y][x]
-            if val == 1:
-                pygame.draw.rect(surface, COLOR_SHIP, rect)
-            elif token_images and val in token_images:
+            #if val == 1:
+                #pygame.draw.rect(surface, COLOR_SHIP, rect)
+            if token_images and val in token_images:
                 token = token_images[val]
                 token_rect = token.get_rect(center=rect.center)
                 surface.blit(token, token_rect)
             pygame.draw.rect(surface, self.gridcolor, rect, 1)
+
+            if fleet and ship_images:
+                for ship in fleet.ships:
+                    if ship.position is None:
+                        continue
+
+                    img = ship_images.get(ship.name)
+                    if not img:
+                        continue
+                    x, y = ship.position
+                    draw_x = offset_x + x * self.block_size
+                    draw_y = y * self.block_size
+                    draw_img = img
+                    if ship.orientation == "hor":
+                        draw_img = pygame.transform.rotate(img, 90)
+
+                    surface.blit(draw_img, (draw_x, draw_y))
 
         if preview is not None:
             px = preview.get("x")

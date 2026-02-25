@@ -334,10 +334,10 @@ class Game:
                 }
 
         # Draw player's board with preview
-        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview, token_images=self.tokens)
+        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview, token_images=self.tokens, ship_images=self.ship_images, fleet=self.fleet_manager)
 
         # Draw enemy's board once
-        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0, token_images=self.tokens)
+        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0, token_images=self.tokens, ship_images=None, fleet=None)
 
         # If DEBUG off: overpaint enemy ships
         if not DEBUG_SHOW_ENEMY_SHIPS:
