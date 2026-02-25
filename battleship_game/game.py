@@ -30,6 +30,29 @@ from battleship_game.ai_shooting import (
 )
 
 
+class Token:
+    """Handles the hit/miss along with the fire animations"""
+    def __init__(self, x_pixel, y_pixel, static_image, animation_list=None):
+        self.x_pixel = x_pixel
+        self.y_pixel = y_pixel
+        self.static_image = static_image
+        self.animation_list = animation_list
+        self.frame_index = 0
+        self.timer = pygame.time.get_ticks()
+
+    def draw(self, surface):
+        """Cycles the fire frames for animations"""
+        if self.animation_list:
+            now = pygame.time.get_ticks()
+            if now - self.timer > 100:
+                self.timer = now
+                self.frame_index += 1
+                if self.frame_index >= len(self.animation_list):
+                    self.frame_index = 0
+                image = self.animation_list[self.frame_index]
+            else:
+                image = self.static_image
+            surface.blit(image, (self.x, self.y))
 class Game:
     """
     Main game controller class.
@@ -106,6 +129,42 @@ class Game:
         self.enemy_turn_time = 0
         self.enemy_delay = DELAY
 
+        # container for holding images
+        self.ship_images = {}
+
+        # ship sizes
+        ship_sizes = {
+            "AircraftCarrier": 4,
+            "Destroyer": 3,
+            "Frigate": 2,
+            "Submarine": 1
+        }
+
+        # List the ships
+        ship_names = ["AircraftCarrier", "Destroyer", "Frigate", "Submarine"]
+        for name in ship_names:
+            #File paths for images:
+            folder_name = name.lower()
+            image_path = f"assets/images/ships/{folder_name}/{name}.png"
+
+            #Load and scale the images to fit the grid
+            img = pygame.image.load(image_path)
+            size = ship_sizes[name]
+            scaled_img = pygame.transform.scale(img, (BLOCK_SIZE * size, BLOCK_SIZE))
+            self.ship_images[name] = scaled_img
+
+
+        # Loading animations using frames
+        self.fire_animation = []
+        for i in range(1,14):
+            frame_path = f"assets/images/tokens/fireloop/fire1_{i:02}.png"
+            img_fire = pygame.image.load(frame_path)
+            self.fire_animation.append(img_fire)
+
+        # Sounds file
+        self.hit_sound = pygame.mixer.Sound("assets/sounds/hit.wav")
+        self.miss_sound = pygame.mixer.Sound("assets/sounds/miss.wav")
+        self.sunk_sound = pygame.mixer.Sound("assets/sounds/sunk.wav")
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -196,10 +255,12 @@ class Game:
 
             if ship_hit:
                 self.enemy_board.hit(x, y)
+                self.hit_sound.play()
                 print("Hit!")
 
                 if ship_hit.is_sunk():
                     self.enemy_board.sunk(ship_hit)
+                    self.sunk_sound.play()
                     print(f"You sunk the enemy {ship_hit.name}")
 
                     if self.enemy_fleet.is_defeated():
@@ -210,6 +271,7 @@ class Game:
                         return
             else:
                 self.enemy_board.miss(x, y)
+                self.miss_sound.play()
                 print("Miss")
 
             # Enemy turn
@@ -281,10 +343,10 @@ class Game:
                 }
 
         # Draw player's board with preview
-        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview)
+        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview, ship_images=self.ship_images, fleet=self.fleet_manager)
 
         # Draw enemy's board once
-        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0)
+        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0, ship_images=self.ship_images, fleet=self.enemy_fleet)
 
         # If DEBUG off: overpaint enemy ships
         if not DEBUG_SHOW_ENEMY_SHIPS:
@@ -340,11 +402,13 @@ class Game:
 
         if ship_hit:
             self.player_board.hit(x, y)
+            self.hit_sound.play()
             print("Enemy hit!")
             sunk = ship_hit.is_sunk()
 
             if sunk:
                 self.player_board.sunk(ship_hit)
+                self.sunk_sound.play()
                 print(f"Enemy sunk your {ship_hit.name}")
 
             self.enemy_fleet.strategy.register_shot_result(
@@ -360,6 +424,7 @@ class Game:
                 return
         else:
             self.player_board.miss(x, y)
+            self.miss_sound.play()
             print("Enemy miss")
 
             self.enemy_fleet.strategy.register_shot_result(
