@@ -10,7 +10,7 @@ WINDOW_WIDTH = GRID_COLS * BLOCK_SIZE * 2 + BOARD_SPACING
 WINDOW_HEIGHT = GRID_ROWS * BLOCK_SIZE
 
 DURATION = 3000
-DELAY = 600 #millisec
+DELAY = 600  # millisec
 FPS = 60
 
 # Colors
@@ -67,4 +67,3 @@ miss = "assets/sounds/miss.wav"
 hit_token = "assets/images/tokens/greentoken.png"
 miss_token = "assets/images/tokens/bluetoken.png"
 sunk_token = "assets/images/tokens/redtoken.png"
-

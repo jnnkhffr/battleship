@@ -13,6 +13,7 @@ from battleship_game.config import (
 
 class GameState:
     """Simple states container representing the different phases of the game."""
+
     SELECTING = 1
     NEW = 2
     RUNNING = 3
@@ -22,6 +23,7 @@ class GameState:
 
 class GameHandler:
     """Handle the overall game flow including menus, game creation, and states transitions."""
+
     def __init__(self, game_factories):
         """
         Initialize the game handler, set up Pygame, and prepare screens.
@@ -81,7 +83,11 @@ class GameHandler:
             elif state == GameState.RUNNING:
                 still_running = current_game.run(events)
                 if not still_running:
-                    state = GameState.WIN if current_game.game_over_message == "You win!" else GameState.LOSS
+                    state = (
+                        GameState.WIN
+                        if current_game.game_over_message == "You win!"
+                        else GameState.LOSS
+                    )
 
             elif state in (GameState.WIN, GameState.LOSS):
                 current_game.draw()
@@ -100,4 +106,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

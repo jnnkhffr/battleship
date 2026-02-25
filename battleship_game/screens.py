@@ -72,7 +72,6 @@ class StartScreen:
             buttons.append((factory, rect))
         return buttons
 
-
     def draw(self):
         """
         Render the start screen including title, subtitle, and difficulty buttons.
@@ -126,8 +125,10 @@ class StartScreen:
                         return factory
         return None
 
+
 class GameOverScreen:
     """Screen shown after the game ends, offering replay or return to menu."""
+
     def __init__(self, screen):
         """
         Initialize the game‑over screen with fonts and display surface.

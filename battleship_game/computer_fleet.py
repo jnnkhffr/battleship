@@ -44,7 +44,6 @@ class ComputerFleetManager(FleetManager):
                 if self.place_ship(ship, x, y, orientation):
                     placed = True
 
-
     def get_next_shot(self, opponent_board):
         """
         Determine the next shot coordinates using the assigned shooting strategy.

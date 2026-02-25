@@ -1,4 +1,5 @@
 """This file creates the game board."""
+
 import pygame
 from itertools import product
 
@@ -59,8 +60,7 @@ class Board:
         preview: dict | None = None,
         token_images=None,
         ship_images=None,
-        fleet=None
-
+        fleet=None,
     ) -> None:
         """
         Draw the board, grid lines, ships, hits, and misses onto a Pygame surface.
@@ -98,20 +98,18 @@ class Board:
 
             # draw grid lines and tokens
         for x, y in product(range(self.cols), range(self.rows)):
-                rect = pygame.Rect(
-                        offset_x + x * self.block_size,
-                        y * self.block_size,
-                        self.block_size,
-                        self.block_size,
-                    )
-                val = self.grid[y][x]
-                if token_images and val in token_images:
-                    token = token_images[val]
-                    token_rect = token.get_rect(center=rect.center)
-                    surface.blit(token, token_rect)
-                pygame.draw.rect(surface, self.gridcolor, rect, 1)
-
-
+            rect = pygame.Rect(
+                offset_x + x * self.block_size,
+                y * self.block_size,
+                self.block_size,
+                self.block_size,
+            )
+            val = self.grid[y][x]
+            if token_images and val in token_images:
+                token = token_images[val]
+                token_rect = token.get_rect(center=rect.center)
+                surface.blit(token, token_rect)
+            pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
         if preview and ship_images:
             px = preview.get("x")
@@ -146,7 +144,6 @@ class Board:
             draw_x = offset_x + px * self.block_size
             draw_y = py * self.block_size
             surface.blit(preview_img, (draw_x, draw_y))
-
 
     def can_place_ship(self, x: int, y: int, size: int, orientation: str) -> bool:
         """

@@ -1,4 +1,5 @@
 """Module for creating, managing, and evaluating a player's fleet in the Battleship game."""
+
 from battleship_game.ship_builder import ShipBuilder
 from battleship_game.config import (
     NUM_SUBS,

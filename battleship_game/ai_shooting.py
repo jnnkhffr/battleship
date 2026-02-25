@@ -6,7 +6,8 @@ import random
 
 
 class ShootingStrategy(ABC):
-    """ Abstract base class for all enemy shooting strategies. """
+    """Abstract base class for all enemy shooting strategies."""
+
     @abstractmethod
     def get_next_shot(self, opponent_board):
         """
@@ -35,6 +36,7 @@ class ShootingStrategy(ABC):
 
 class RandomShootingStrategy(ShootingStrategy):
     """Shooting strategy that selects random unshot cells."""
+
     def get_next_shot(self, opponent_board):
         """
         Return a random valid shot that has not been fired before.
@@ -55,6 +57,7 @@ class RandomShootingStrategy(ShootingStrategy):
 
 class HuntShootingStrategy(ShootingStrategy):
     """Shooting strategy that hunts around previous hits to find full ships."""
+
     def __init__(self):
         """Shooting strategy that hunts around previous hits to find full ships."""
         self.pending_hits = []
@@ -122,7 +125,7 @@ class HuntShootingStrategy(ShootingStrategy):
         """
         if len(self.pending_hits) == 1:
             x, y = self.pending_hits[0]
-            candidates = [(x+1,y), (x-1,y), (x,y+1), (x,y-1)]
+            candidates = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
             shot = self._pick_valid(board, candidates)
             if shot:
                 return shot
@@ -197,9 +200,9 @@ class HuntShootingStrategy(ShootingStrategy):
         return None
 
 
-
 class SmartShootingStrategy(HuntShootingStrategy):
     """Advanced shooting strategy combining hunt logic with checkerboard scanning."""
+
     def get_next_shot(self, opponent_board):
         """
         Return the next shot using hunt mode or optimized checkerboard scanning.

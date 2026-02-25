@@ -11,7 +11,8 @@ Available modes:
 import random
 from config import GRID_COLS, GRID_ROWS
 
-#easy is what we had in the computer_fleet before
+
+# easy is what we had in the computer_fleet before
 class EasyAI:
     """
     AI Mode: Easy
@@ -55,7 +56,6 @@ class EasyAI:
         pass
 
 
-
 class MediumAI:
     """
     AI Mode: Medium
@@ -74,7 +74,7 @@ class MediumAI:
         """
         Initializes internal state used for tracking ongoing ship hunts.
         """
-        self.pending_hits = []      # Coordinates of hits on ships not yet sunk
+        self.pending_hits = []  # Coordinates of hits on ships not yet sunk
         self.hunt_direction = None  # "horizontal" or "vertical"
 
     def get_next_shot(self, board):
@@ -113,7 +113,6 @@ class MediumAI:
                 self.pending_hits.clear()
                 self.hunt_direction = None
 
-
     def _target_mode(self, board):
         """
         Executes targeted shooting around known hit coordinates.
@@ -124,7 +123,7 @@ class MediumAI:
         # Only one hit → probe neighbors
         if len(self.pending_hits) == 1:
             x, y = self.pending_hits[0]
-            candidates = [(x+1,y), (x-1,y), (x,y+1), (x,y-1)]
+            candidates = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
             shot = self._pick_valid(board, candidates)
             if shot:
                 return shot

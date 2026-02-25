@@ -20,7 +20,12 @@ from battleship_game.config import (
     DEBUG_SHOW_ENEMY_SHIPS,
     DURATION,
     DELAY,
-    hit,miss,sunk, hit_token, miss_token, sunk_token
+    hit,
+    miss,
+    sunk,
+    hit_token,
+    miss_token,
+    sunk_token,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -29,6 +34,7 @@ from battleship_game.ai_shooting import (
     HuntShootingStrategy,
     SmartShootingStrategy,
 )
+
 
 class Game:
     """
@@ -99,7 +105,9 @@ class Game:
         # self.top_margin = 0
         self.battle_message_start = None
         self.battle_message_duration = DURATION
-        self.battle_message_surface = self.font.render("THE BATTLE STARTS!", True, COLOR_MESSAGE_FIRING)
+        self.battle_message_surface = self.font.render(
+            "THE BATTLE STARTS!", True, COLOR_MESSAGE_FIRING
+        )
 
         self.player_turn = True
         self.enemy_turn_pending = False
@@ -114,26 +122,25 @@ class Game:
             "AircraftCarrier": 4,
             "Destroyer": 3,
             "Frigate": 2,
-            "Submarine": 1
+            "Submarine": 1,
         }
 
         # List the ships
         ship_names = ["AircraftCarrier", "Destroyer", "Frigate", "Submarine"]
         for name in ship_names:
-            #File paths for images:
+            # File paths for images:
             folder_name = name.lower()
             image_path = f"assets/images/ships/{folder_name}/{name}.png"
 
-            #Load and scale the images to fit the grid
+            # Load and scale the images to fit the grid
             img = pygame.image.load(image_path)
             size = ship_sizes[name]
             scaled_img = pygame.transform.scale(img, (BLOCK_SIZE, BLOCK_SIZE * size))
             self.ship_images[name] = scaled_img
 
-
         # Loading animations using frames
         self.fire_animation = []
-        for i in range(1,14):
+        for i in range(1, 14):
             frame_path = f"assets/images/tokens/fireloop/fire1_{i:02}.png"
             img_fire = pygame.image.load(frame_path)
             self.fire_animation.append(img_fire)
@@ -151,20 +158,22 @@ class Game:
         self.hit_token = pygame.image.load(hit_token)
         self.sunk_token = pygame.image.load(sunk_token)
 
-        self.miss_token = pygame.transform.scale(self.miss_token, (BLOCK_SIZE, BLOCK_SIZE))
-        self.hit_token = pygame.transform.scale(self.hit_token, (BLOCK_SIZE, BLOCK_SIZE))
-        self.sunk_token = pygame.transform.scale(self.sunk_token, (BLOCK_SIZE, BLOCK_SIZE))
+        self.miss_token = pygame.transform.scale(
+            self.miss_token, (BLOCK_SIZE, BLOCK_SIZE)
+        )
+        self.hit_token = pygame.transform.scale(
+            self.hit_token, (BLOCK_SIZE, BLOCK_SIZE)
+        )
+        self.sunk_token = pygame.transform.scale(
+            self.sunk_token, (BLOCK_SIZE, BLOCK_SIZE)
+        )
 
-        self.tokens = {
-            2: self.miss_token,
-            3: self.hit_token,
-            4: self.sunk_token
-        }
+        self.tokens = {2: self.miss_token, 3: self.hit_token, 4: self.sunk_token}
 
         # Load the theme for the game
-        #pygame.mixer.music.load("assets/sounds/theme.mp3")
+        # pygame.mixer.music.load("assets/sounds/theme.mp3")
 
-        #pygame.mixer.music.play(-1)
+        # pygame.mixer.music.play(-1)
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -344,10 +353,25 @@ class Game:
                 }
 
         # Draw player's board with preview
-        self.player_board.draw(self.screen, offset_x=0, offset_y=0, preview=preview, token_images=self.tokens, ship_images=self.ship_images, fleet=self.fleet_manager)
+        self.player_board.draw(
+            self.screen,
+            offset_x=0,
+            offset_y=0,
+            preview=preview,
+            token_images=self.tokens,
+            ship_images=self.ship_images,
+            fleet=self.fleet_manager,
+        )
 
         # Draw enemy's board once
-        self.enemy_board.draw(self.screen, offset_x=self.enemy_offset_x, offset_y=0, token_images=self.tokens, ship_images=None, fleet=None)
+        self.enemy_board.draw(
+            self.screen,
+            offset_x=self.enemy_offset_x,
+            offset_y=0,
+            token_images=self.tokens,
+            ship_images=None,
+            fleet=None,
+        )
 
         # If DEBUG off: overpaint enemy ships
         if not DEBUG_SHOW_ENEMY_SHIPS:
@@ -412,11 +436,7 @@ class Game:
                 self.sunk_sound.play()
                 print(f"Enemy sunk your {ship_hit.name}")
 
-            self.enemy_fleet.strategy.register_shot_result(
-                x, y,
-                hit=True,
-                sunk=sunk
-            )
+            self.enemy_fleet.strategy.register_shot_result(x, y, hit=True, sunk=sunk)
 
             if self.fleet_manager.is_defeated():
                 print("Computer wins!")
@@ -428,11 +448,7 @@ class Game:
             self.miss_sound.play()
             print("Enemy miss")
 
-            self.enemy_fleet.strategy.register_shot_result(
-                x, y,
-                hit=False,
-                sunk=False
-            )
+            self.enemy_fleet.strategy.register_shot_result(x, y, hit=False, sunk=False)
 
 
 class GameFactory(ABC):
@@ -457,6 +473,7 @@ class GameFactory(ABC):
 
 class BattleshipEasy(GameFactory):
     """Factory for creating a Battleship game configured with easy difficulty and random enemy shooting."""
+
     def create(self) -> Game:
         """
         Create a new Game instance configured for the Easy difficulty.
@@ -481,6 +498,7 @@ class BattleshipMedium(GameFactory):
     Factory for creating a Battleship game with medium difficulty
     using a hunt-based enemy strategy.
     """
+
     def create(self) -> Game:
         """
         Create a new Game instance configured for the Medium difficulty.
@@ -502,6 +520,7 @@ class BattleshipMedium(GameFactory):
 
 class BattleshipHard(GameFactory):
     """Factory for creating a Battleship game with hard difficulty using an advanced enemy strategy."""
+
     def create(self) -> Game:
         """
         Create a new Game instance configured for the Hard difficulty.

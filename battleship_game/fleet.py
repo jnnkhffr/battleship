@@ -39,6 +39,7 @@ class Ship:
 
 class Submarine(Ship):
     """Submarine ship with predefined size."""
+
     def __init__(self, position=None, orientation=None):
         """
         Initialize a submarine with optional position and orientation.
@@ -53,6 +54,7 @@ class Submarine(Ship):
 
 class Frigate(Ship):
     """Frigate ship with predefined size."""
+
     def __init__(self, position=None, orientation=None):
         """Initialize a frigate with optional position and orientation."""
         super().__init__(FRIG_SIZE, position, orientation)
@@ -60,7 +62,8 @@ class Frigate(Ship):
 
 
 class Destroyer(Ship):
-    """ Destroyer ship with predefined size."""
+    """Destroyer ship with predefined size."""
+
     def __init__(self, position=None, orientation=None):
         """Initialize a destroyer with optional position and orientation."""
         super().__init__(DEST_SIZE, position, orientation)
@@ -69,6 +72,7 @@ class Destroyer(Ship):
 
 class AircraftCarrier(Ship):
     """Aircraft Carrier with predefined size."""
+
     def __init__(self, position=None, orientation=None):
         """Initialize an Aircraft Carrier with optional position and orientation."""
         super().__init__(ACC_SIZE, position, orientation)
