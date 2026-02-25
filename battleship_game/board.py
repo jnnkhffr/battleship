@@ -104,7 +104,6 @@ class Board:
                         self.block_size,
                         self.block_size,
                     )
-                pygame.draw.rect(surface, self.gridcolor, rect, 1)
                 val = self.grid[y][x]
                 if token_images and val in token_images:
                     token = token_images[val]
