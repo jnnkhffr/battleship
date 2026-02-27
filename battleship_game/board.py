@@ -9,12 +9,7 @@ from battleship_game.config import (
     BLOCK_SIZE,
     COLOR_BG,
     COLOR_GRID,
-    COLOR_SHIP,
     SHIP_MARGIN,
-    COLOR_MISS,
-    COLOR_HIT,
-    COLOR_SUNK,
-    COLOR_PREVIEW,
     ALPHA_PREVIEW,
 )
 
@@ -30,6 +25,7 @@ class Board:
         cols: int = GRID_COLS,
         rows: int = GRID_ROWS,
         block_size: int = BLOCK_SIZE,
+        grid_image_path: str | None = None,
         bgcolor: tuple[int, int, int] = COLOR_BG,
         gridcolor: tuple[int, int, int] = COLOR_GRID,
     ) -> None:
@@ -47,7 +43,10 @@ class Board:
         self.rows = rows
         self.block_size = block_size
         self.bgcolor = bgcolor
-        self.gridcolor = gridcolor
+        self.grid_img = pygame.image.load(grid_image_path).convert_alpha()
+        self.grid_img = pygame.transform.scale(
+            self.grid_img, (self.cols * self.block_size, self.rows * self.block_size)
+        )
 
         # grid states (0 for empty, 1 for ship)
         self.grid = [[0 for _ in range(cols)] for _ in range(rows)]
@@ -61,12 +60,13 @@ class Board:
         token_images=None,
         ship_images=None,
         fleet=None,
+        show_ships: bool = True,
     ) -> None:
         """
         Draw the board, grid lines, ships, hits, and misses onto a Pygame surface.
 
         Args:
-            surface: The Pygame surface to draw on.
+            surface: The pygame surface to draw on.
             offset_x: Horizontal drawing offset.
             offset_y: Vertical drawing offset.
             preview: Optional preview data for ship placement containing:
@@ -78,8 +78,12 @@ class Board:
         )
         pygame.draw.rect(surface, self.bgcolor, rect)
 
+        # The PNG Grid
+        if self.grid_img:
+            surface.blit(self.grid_img, (offset_x, offset_y))
+
         # Ships
-        if fleet and ship_images:
+        if show_ships and fleet and ship_images:
             for ship in fleet.ships:
                 if ship.position is None:
                     continue
@@ -96,7 +100,7 @@ class Board:
 
                 surface.blit(draw_img, (draw_x, draw_y))
 
-            # draw grid lines and tokens
+        # Draw grid lines and tokens
         for x, y in product(range(self.cols), range(self.rows)):
             rect = pygame.Rect(
                 offset_x + x * self.block_size,
@@ -109,7 +113,6 @@ class Board:
                 token = token_images[val]
                 token_rect = token.get_rect(center=rect.center)
                 surface.blit(token, token_rect)
-            pygame.draw.rect(surface, self.gridcolor, rect, 1)
 
         if preview and ship_images:
             px = preview.get("x")

@@ -15,7 +15,9 @@ from battleship_game.config import (
     BUTTON_HEIGHT_FACTOR,
     BUTTON_REPLAY_Y,
     BUTTON_MENU_Y,
-    main_bg, WINDOW_WIDTH, WINDOW_HEIGHT
+    main_bg,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
 )
 
 

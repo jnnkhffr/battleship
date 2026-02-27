@@ -67,3 +67,16 @@ miss = "assets/sounds/miss.wav"
 hit_token = "assets/images/tokens/greentoken.png"
 miss_token = "assets/images/tokens/bluetoken.png"
 sunk_token = "assets/images/tokens/redtoken.png"
+
+# Images
+main_bg = "assets/images/background/Battleship.jpg"
+player_grid = "assets/images/grids/player_grid.png"
+enemy_grid = "assets/images/grids/enemy_grid.png"
+
+# Ship Configuration: Size, Image Path
+SHIP_DATA = {
+    "AircraftCarrier": (4, "assets/images/ships/AircraftCarrier.png"),
+    "Destroyer": (3, "assets/images/ships/Destroyer.png"),
+    "Frigate": (2, "assets/images/ships/Frigate.png"),
+    "Submarine": (1, "assets/images/ships/Submarine.png"),
+}

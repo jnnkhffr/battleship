@@ -115,4 +115,3 @@ class FleetManager:
         Returns True if all ships in this fleet are sunk.
         """
         return all(ship.is_sunk() for ship in self.ships)
-

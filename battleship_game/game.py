@@ -14,7 +14,6 @@ from battleship_game.config import (
     BOARD_SPACING,
     DEFAULT_ORIENTATION,
     COLOR_BG,
-    COLOR_GRID,
     COLOR_MESSAGE,
     COLOR_MESSAGE_FIRING,
     DEBUG_SHOW_ENEMY_SHIPS,
@@ -26,6 +25,9 @@ from battleship_game.config import (
     hit_token,
     miss_token,
     sunk_token,
+    player_grid,
+    enemy_grid,
+    SHIP_DATA,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -76,8 +78,8 @@ class Game:
         pygame.display.set_caption(caption)
 
         # Boards
-        self.player_board = Board()
-        self.enemy_board = Board()
+        self.player_board = Board(grid_image_path=player_grid)
+        self.enemy_board = Board(grid_image_path=enemy_grid)
 
         # Player fleet
         self.fleet_manager = FleetManager(self.player_board)
@@ -117,24 +119,11 @@ class Game:
         # container for holding images
         self.ship_images = {}
 
-        # ship sizes
-        ship_sizes = {
-            "AircraftCarrier": 4,
-            "Destroyer": 3,
-            "Frigate": 2,
-            "Submarine": 1,
-        }
+        # Load ships directly from config
+        for name, (size, path) in SHIP_DATA.items():
+            img = pygame.image.load(path).convert_alpha()
 
-        # List the ships
-        ship_names = ["AircraftCarrier", "Destroyer", "Frigate", "Submarine"]
-        for name in ship_names:
-            # File paths for images:
-            folder_name = name.lower()
-            image_path = f"assets/images/ships/{folder_name}/{name}.png"
-
-            # Load and scale the images to fit the grid
-            img = pygame.image.load(image_path)
-            size = ship_sizes[name]
+            # Scale the images to fit the grid
             scaled_img = pygame.transform.scale(img, (BLOCK_SIZE, BLOCK_SIZE * size))
             self.ship_images[name] = scaled_img
 
@@ -150,7 +139,7 @@ class Game:
         self.miss_sound = pygame.mixer.Sound(miss)
         self.sunk_sound = pygame.mixer.Sound(sunk)
         self.hit_sound.set_volume(0.1)
-        self.miss_sound.set_volume(0.1)
+        self.miss_sound.set_volume(0.05)
         self.sunk_sound.set_volume(0.3)
 
         # token for hits, misses and sunk
@@ -169,11 +158,6 @@ class Game:
         )
 
         self.tokens = {2: self.miss_token, 3: self.hit_token, 4: self.sunk_token}
-
-        # Load the theme for the game
-        # pygame.mixer.music.load("assets/sounds/theme.mp3")
-
-        # pygame.mixer.music.play(-1)
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -369,23 +353,10 @@ class Game:
             offset_x=self.enemy_offset_x,
             offset_y=0,
             token_images=self.tokens,
-            ship_images=None,
-            fleet=None,
+            ship_images=self.ship_images,
+            fleet=self.enemy_fleet,
+            show_ships=DEBUG_SHOW_ENEMY_SHIPS,
         )
-
-        # If DEBUG off: overpaint enemy ships
-        if not DEBUG_SHOW_ENEMY_SHIPS:
-            for y in range(self.enemy_board.rows):
-                for x in range(self.enemy_board.cols):
-                    if self.enemy_board.grid[y][x] == 1:
-                        rect = pygame.Rect(
-                            self.enemy_offset_x + x * BLOCK_SIZE,
-                            y * BLOCK_SIZE,
-                            BLOCK_SIZE,
-                            BLOCK_SIZE,
-                        )
-                        pygame.draw.rect(self.screen, COLOR_BG, rect)
-                        pygame.draw.rect(self.screen, COLOR_GRID, rect, 1)
 
         # Show battle start message for 3 seconds
         if self.battle_message_start is not None and not self.game_over:

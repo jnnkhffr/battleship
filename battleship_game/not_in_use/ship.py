@@ -4,7 +4,7 @@ from battleship_game.config import SHIP_SIZES
 class Ship:
     """
     Represents a single ship in the Battleship game.
-    This class maintains the state of ship.
+    This class maintains the states of ship.
     """
 
     def __init__(self, name):
@@ -16,7 +16,7 @@ class Ship:
         self.name = name
         self.size = SHIP_SIZES[name]
 
-        # Tracking state
+        # Tracking states
         self.hits = 0  # damage
         self.position = None  # (x,y) tuple after placement
         self.orientation = None  # "hor" or "ver" after placement
