@@ -59,14 +59,14 @@ class Battleship:
         # Track the turn for the game
         self.player_turn = True
 
-        # Game over state
+        # Game over states
         self.game_over = False
         self.winner_text = ""
 
     def run(self):
         """
         Main game loop.
-        Handles events, updates the game state, and renders the Boards.
+        Handles events, updates the game states, and renders the Boards.
         """
         running = True
         while running:
