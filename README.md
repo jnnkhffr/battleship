@@ -30,7 +30,7 @@ fires immediately after we have fired.
 The opponent, in our case the computer, then has one shot per round. You must fire by selecting a box and click on it. 
 
 If no ship is hit, the gridbox is marked blue on the playing field. If part of a ship is hit, i.e., only one box and 
-not the entire ship, the gridbox is marked orange. If all boxes of the ship are hit, the ship is destroyed and sunk. 
+not the entire ship, the gridbox is marked green. If all boxes of the ship are hit, the ship is destroyed and sunk. 
 All squares along the length of the ship, are then marked red. 
 
 The aim of the game is to sink all the ships arranged by the computer before the computer sinks the ships you have 
