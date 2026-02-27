@@ -2,7 +2,6 @@
 
 import pygame
 from battleship_game.config import (
-    COLOR_BG,
     COLOR_TEXT,
     COLOR_SHIP,
     COLOR_GRID,
@@ -16,6 +15,7 @@ from battleship_game.config import (
     BUTTON_HEIGHT_FACTOR,
     BUTTON_REPLAY_Y,
     BUTTON_MENU_Y,
+    main_bg, WINDOW_WIDTH, WINDOW_HEIGHT
 )
 
 
@@ -34,6 +34,10 @@ class StartScreen:
         """
         self.screen = screen
         self.game_factories = game_factories
+
+        # Background
+        self.bg_img = pygame.image.load(main_bg).convert()
+        self.bg_img = pygame.transform.scale(self.bg_img, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
         # Fonts
         pygame.font.init()
@@ -77,12 +81,11 @@ class StartScreen:
         Render the start screen including title, subtitle, and difficulty buttons.
 
         Args:
-            None. Uses internal screen state and mouse position.
+            None. Uses internal screen states and mouse position.
 
         Returns:
             None. Draws directly onto the display surface.
         """
-        self.screen.fill(COLOR_BG)
         w = self.screen.get_width()
 
         title = self.title_font.render("BATTLESHIP", True, COLOR_TEXT)
@@ -117,6 +120,7 @@ class StartScreen:
         Returns:
             The selected GameFactory class if a button was clicked, otherwise None.
         """
+        self.screen.blit(self.bg_img, (0, 0))
         self.draw()
         for e in events:
             if e.type == pygame.MOUSEBUTTONDOWN:
@@ -145,13 +149,13 @@ class GameOverScreen:
         Render the game‑over overlay and handle replay/menu button clicks.
 
         Args:
-            state: Current game‑over state (win or loss).
+            state: Current game‑over states (win or loss).
             events: List of Pygame events for the current frame.
 
         Returns:
             2 if replay was selected,
             1 if return to menu was selected,
-            otherwise the unchanged state.
+            otherwise the unchanged states.
         """
         w, h = self.screen.get_size()
 
