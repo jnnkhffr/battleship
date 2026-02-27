@@ -26,7 +26,7 @@ class GameHandler:
 
     def __init__(self, game_factories):
         """
-        Initialize the game handler, set up Pygame, and prepare screens.
+        Initialize the game handler, set up pygame, and prepare screens.
 
         Args:
             game_factories: List of factory classes for different difficulty modes.
@@ -55,7 +55,7 @@ class GameHandler:
         Run the main game loop, handling states transitions and user input.
 
         Args:
-            None. Uses internal states and Pygame events.
+            None. Uses internal states and pygame events.
 
         Returns:
             None. The loop continues until the user quits the game.

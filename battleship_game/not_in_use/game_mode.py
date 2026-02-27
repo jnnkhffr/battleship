@@ -72,14 +72,14 @@ class MediumAI:
 
     def __init__(self):
         """
-        Initializes internal state used for tracking ongoing ship hunts.
+        Initializes internal states used for tracking ongoing ship hunts.
         """
         self.pending_hits = []  # Coordinates of hits on ships not yet sunk
         self.hunt_direction = None  # "horizontal" or "vertical"
 
     def get_next_shot(self, board):
         """
-        Determines the next shot based on current AI state.
+        Determines the next shot based on current AI states.
 
         If the AI has active hits, it enters target mode. Otherwise,
         it falls back to random shooting.
@@ -97,7 +97,7 @@ class MediumAI:
 
     def register_shot_result(self, x, y, hit, sunk):
         """
-        Updates the AI's internal state based on the result of a shot.
+        Updates the AI's internal states based on the result of a shot.
 
         Args:
             x (int): X-coordinate of the shot.
@@ -108,7 +108,7 @@ class MediumAI:
         if hit:
             self.pending_hits.append((x, y))
 
-            # If the ship is sunk, reset hunt state
+            # If the ship is sunk, reset hunt states
             if sunk:
                 self.pending_hits.clear()
                 self.hunt_direction = None

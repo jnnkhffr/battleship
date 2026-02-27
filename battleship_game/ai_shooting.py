@@ -23,7 +23,7 @@ class ShootingStrategy(ABC):
 
     def register_shot_result(self, x, y, hit, sunk):
         """
-        Receive feedback about the last shot to update strategy state.
+        Receive feedback about the last shot to update strategy states.
 
         Args:
             x: Column of the shot.
@@ -85,7 +85,7 @@ class HuntShootingStrategy(ShootingStrategy):
 
     def register_shot_result(self, x, y, hit, sunk):
         """
-        Update internal state based on the result of the last shot.
+        Update internal states based on the result of the last shot.
 
         Args:
             x: Column of the shot.
