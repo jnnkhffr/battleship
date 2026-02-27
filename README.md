@@ -44,6 +44,7 @@ return to the main menu and select a different difficulty level.
 ### Requirements
 - Python 3.12 or higher
 - `pip` (Python package manager)
+-  Assets Dependencies
 
 ### StepsClone this repository:
    ```bash
