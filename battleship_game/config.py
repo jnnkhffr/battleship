@@ -54,7 +54,7 @@ BUTTON_MENU_Y = 0.68
 
 # Gameplay Settings
 DEFAULT_ORIENTATION = "hor"
-SHIP_MARGIN = 1  # distance between ships
+SHIP_MARGIN: int = 1  # distance between ships
 DEBUG_SHOW_ENEMY_SHIPS = False  # or False
 
 # Sounds
