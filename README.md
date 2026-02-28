@@ -26,7 +26,7 @@ next to each other. This is indicated by the ship turning red at points where it
 confirmed in place with a click. Only when the ship turns white again can it be placed at that location. This continues
 until all ships are placed. Then a message appears: "THE BATTLE STARTS", 
 and the player knows that all ships are placed, and he can now fire the first shot. The computer always follows suit and 
-fires immediately after we have fired. 
+fires after we have fired. 
 The opponent, in our case the computer, then has one shot per round. You must fire by selecting a box and click on it. 
 
 If no ship is hit, the gridbox is marked blue on the playing field. If part of a ship is hit, i.e., only one box and 
@@ -81,6 +81,6 @@ From the project root, run:
 - files that we don´t use should be deleted for a better overview *-> OPEN*
 - (meaningful) Docstrings at every class,function? *-> OPEN*
 - unnecessary comments within the code deleted? *-> OPEN*
-- Can we use more design patterns anywhere else? *-> OPEN*
+- Can we use more design patterns anywhere else? *-> DONE?*
 - Game instructions in the README. *-> FIRST DRAFT*
 - requirements fully documented? *-> OPEN*
