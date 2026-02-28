@@ -5,7 +5,7 @@ These can be used in all tests.
 
 import pytest
 from battleship_game.board import Board
-from battleship_game.fleet import Submarine, Frigate, Destroyer, AircraftCarrier
+from battleship_game.fleet import Submarine, Destroyer
 from battleship_game.fleet_commander import FleetManager
 
 
