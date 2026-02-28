@@ -84,6 +84,9 @@ class Game:
         # Player fleet
         self.fleet_manager = FleetManager(self.player_board)
 
+        # Enemy fleet
+        self.enemy_fleet: ComputerFleetManager | None = None
+
         # Index of the ship currently being placed
         self.current_ship_index = 0
 
@@ -104,7 +107,6 @@ class Game:
         self.mouse_grid_pos = (0, 0)
         pygame.font.init()
         self.font = pygame.font.SysFont(None, 64)
-        # self.top_margin = 0
         self.battle_message_start = None
         self.battle_message_duration = DURATION
         self.battle_message_surface = self.font.render(
