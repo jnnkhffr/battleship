@@ -28,6 +28,10 @@ from battleship_game.config import (
     PLAYER_GRID,
     ENEMY_GRID,
     SHIP_DATA,
+    ALPHA_PREVIEW,
+    HIT_SOUND_VOL,
+    MISS_SOUND_VOL,
+    SUNK_SOUND_VOL,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
 
@@ -67,11 +71,9 @@ class Game:
         self.screen = screen
         self.clock = clock
 
-        # Calculate window size
         self.screen_width = (GRID_COLS * BLOCK_SIZE) * 2 + BOARD_SPACING
         self.screen_height = GRID_ROWS * BLOCK_SIZE
 
-        # Set caption
         caption = (
             "Battleship" if not difficulty_name else f"Battleship - {difficulty_name}"
         )
@@ -90,16 +92,13 @@ class Game:
         # Index of the ship currently being placed
         self.current_ship_index = 0
 
-        # Default orientation for placement
         self.current_orientation = DEFAULT_ORIENTATION
 
-        # Offset for drawing the enemy board
         self.enemy_offset_x = GRID_COLS * BLOCK_SIZE + BOARD_SPACING
 
         # True once all ships have been placed
         self.placement_done = False
 
-        # Game over
         self.game_over = False
         self.game_over_message = ""
 
@@ -136,15 +135,13 @@ class Game:
             img_fire = pygame.image.load(frame_path)
             self.fire_animation.append(img_fire)
 
-        # Sounds file
         self.hit_sound = pygame.mixer.Sound(HIT_SOUND)
         self.miss_sound = pygame.mixer.Sound(MISS_SOUND)
         self.sunk_sound = pygame.mixer.Sound(SUNK_SOUND)
-        self.hit_sound.set_volume(0.1)
-        self.miss_sound.set_volume(0.05)
-        self.sunk_sound.set_volume(0.3)
+        self.hit_sound.set_volume(HIT_SOUND_VOL)
+        self.miss_sound.set_volume(MISS_SOUND_VOL)
+        self.sunk_sound.set_volume(SUNK_SOUND_VOL)
 
-        # token for hits, misses and sunk
         self.miss_token = pygame.image.load(MISS_TOKEN)
         self.hit_token = pygame.image.load(HIT_TOKEN)
         self.sunk_token = pygame.image.load(SUNK_TOKEN)
@@ -269,7 +266,6 @@ class Game:
                 self.miss_sound.play()
                 print("Miss")
 
-            # Enemy turn
             self.player_turn = False
             self.enemy_turn_pending = True
             self.enemy_turn_time = pygame.time.get_ticks()
@@ -334,7 +330,7 @@ class Game:
                     "size": ship.size,
                     "ship": ship,
                     "orientation": self.current_orientation,
-                    "alpha": 128,  # 50% Transparency
+                    "alpha": ALPHA_PREVIEW,  # 50% Transparency
                     "valid": valid,
                 }
 
