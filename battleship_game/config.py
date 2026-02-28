@@ -1,3 +1,4 @@
+"""TODO doc."""
 # Board Config.
 GRID_COLS = 10
 GRID_ROWS = 10
@@ -13,7 +14,13 @@ DURATION = 3000
 DELAY = 600  # millisec
 FPS = 60
 
+
 # Colors
+# TODO: One could use a class here (for more structure and easier importing)
+class Color:
+    BG = (0, 0, 0)
+
+
 COLOR_BG: tuple[int, int, int] = (0, 0, 0)
 COLOR_OVERLAY: tuple[int, int, int] = (0, 0, 0)
 COLOR_GRID: tuple[int, int, int] = (40, 40, 40)
@@ -57,6 +64,7 @@ DEFAULT_ORIENTATION = "hor"
 SHIP_MARGIN = 1  # distance between ships
 DEBUG_SHOW_ENEMY_SHIPS = False  # or False
 
+# TODO: Constants should be allcaps
 # Sounds
 Theme = "assets/sounds/theme.mp3"
 hit = "assets/sounds/hit.wav"
