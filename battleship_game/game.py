@@ -19,14 +19,14 @@ from battleship_game.config import (
     DEBUG_SHOW_ENEMY_SHIPS,
     DURATION,
     DELAY,
-    hit,
-    miss,
-    sunk,
-    hit_token,
-    miss_token,
-    sunk_token,
-    player_grid,
-    enemy_grid,
+    HIT_SOUND,
+    MISS_SOUND,
+    SUNK_SOUND,
+    HIT_TOKEN,
+    MISS_TOKEN,
+    SUNK_TOKEN,
+    PLAYER_GRID,
+    ENEMY_GRID,
     SHIP_DATA,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
@@ -78,8 +78,8 @@ class Game:
         pygame.display.set_caption(caption)
 
         # Boards
-        self.player_board = Board(grid_image_path=player_grid)
-        self.enemy_board = Board(grid_image_path=enemy_grid)
+        self.player_board = Board(grid_image_path=PLAYER_GRID)
+        self.enemy_board = Board(grid_image_path=ENEMY_GRID)
 
         # Player fleet
         self.fleet_manager = FleetManager(self.player_board)
@@ -137,17 +137,17 @@ class Game:
             self.fire_animation.append(img_fire)
 
         # Sounds file
-        self.hit_sound = pygame.mixer.Sound(hit)
-        self.miss_sound = pygame.mixer.Sound(miss)
-        self.sunk_sound = pygame.mixer.Sound(sunk)
+        self.hit_sound = pygame.mixer.Sound(HIT_SOUND)
+        self.miss_sound = pygame.mixer.Sound(MISS_SOUND)
+        self.sunk_sound = pygame.mixer.Sound(SUNK_SOUND)
         self.hit_sound.set_volume(0.1)
         self.miss_sound.set_volume(0.05)
         self.sunk_sound.set_volume(0.3)
 
         # token for hits, misses and sunk
-        self.miss_token = pygame.image.load(miss_token)
-        self.hit_token = pygame.image.load(hit_token)
-        self.sunk_token = pygame.image.load(sunk_token)
+        self.miss_token = pygame.image.load(MISS_TOKEN)
+        self.hit_token = pygame.image.load(HIT_TOKEN)
+        self.sunk_token = pygame.image.load(SUNK_TOKEN)
 
         self.miss_token = pygame.transform.scale(
             self.miss_token, (BLOCK_SIZE, BLOCK_SIZE)

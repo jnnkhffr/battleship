@@ -59,20 +59,20 @@ SHIP_MARGIN: int = 1  # distance between ships
 DEBUG_SHOW_ENEMY_SHIPS = False  # or False
 
 # Sounds
-Theme = "assets/sounds/theme.mp3"
-hit = "assets/sounds/hit.wav"
-sunk = "assets/sounds/sunk.wav"
-miss = "assets/sounds/miss.wav"
+THEME_SOUND = "assets/sounds/theme.mp3"
+HIT_SOUND = "assets/sounds/hit.wav"
+SUNK_SOUND = "assets/sounds/sunk.wav"
+MISS_SOUND = "assets/sounds/miss.wav"
 
 # Tokens
-hit_token = "assets/images/tokens/greentoken.png"
-miss_token = "assets/images/tokens/bluetoken.png"
-sunk_token = "assets/images/tokens/redtoken.png"
+HIT_TOKEN = "assets/images/tokens/greentoken.png"
+MISS_TOKEN = "assets/images/tokens/bluetoken.png"
+SUNK_TOKEN = "assets/images/tokens/redtoken.png"
 
 # Images
-main_bg = "assets/images/background/Battleship.jpg"
-player_grid = "assets/images/grids/player_grid.png"
-enemy_grid = "assets/images/grids/enemy_grid.png"
+MAIN_BG = "assets/images/background/Battleship.jpg"
+PLAYER_GRID = "assets/images/grids/player_grid.png"
+ENEMY_GRID = "assets/images/grids/enemy_grid.png"
 
 # Ship Configuration: Size, Image Path
 SHIP_DATA = {
