@@ -8,9 +8,9 @@ from battleship_game.config import (
     GRID_ROWS,
     BLOCK_SIZE,
     COLOR_BG,
-    COLOR_GRID,
     SHIP_MARGIN,
     ALPHA_PREVIEW,
+    COLOR_FILL,
 )
 
 
@@ -143,7 +143,7 @@ class Board:
             # Change color in case of invalid spots
             if not valid:
                 # Fills the space with red
-                preview_img.fill((255, 0, 0, 255), special_flags=pygame.BLEND_RGBA_MULT)
+                preview_img.fill(COLOR_FILL, special_flags=pygame.BLEND_RGBA_MULT)
             else:
                 preview_img.set_alpha(alpha)
 
@@ -230,7 +230,6 @@ class Board:
             ny = y + dy * i
             self.grid[ny][nx] = 1
 
-    # part from darshan
     def hit(self, x: int, y: int) -> None:
         """
         Mark a cell as a hit:
