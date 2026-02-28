@@ -77,8 +77,8 @@ From the project root, run:
 - adding useful things from the "difficulites_factory_pattern" Branch *-> DONE*
 
 
-- run mypy; ruff and black for Code-Style *-> OPEN*
-- files that we don´t use should be deleted for a better overview *-> OPEN*
+- run mypy; ruff and black for Code-Style *-> DONE*
+- files that we don´t use should be deleted for a better overview *-> DONE*
 - (meaningful) Docstrings at every class,function? *-> OPEN*
 - unnecessary comments within the code deleted? *-> OPEN*
 - Can we use more design patterns anywhere else? *-> DONE?*
