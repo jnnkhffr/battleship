@@ -25,13 +25,14 @@ COLOR_BG: tuple[int, int, int] = (0, 0, 0)
 COLOR_OVERLAY: tuple[int, int, int] = (0, 0, 0)
 COLOR_GRID: tuple[int, int, int] = (40, 40, 40)
 COLOR_SHIP: tuple[int, int, int] = (169, 169, 169)
-COLOR_MISS: tuple[int, int, int] = (0, 150, 255)  # Blue for Miss
-COLOR_HIT: tuple[int, int, int] = (255, 165, 0)  # Orange for Hit
-COLOR_SUNK: tuple[int, int, int] = (255, 0, 0)  # Red for sunk
+COLOR_MISS: tuple[int, int, int] = (0, 150, 255)
+COLOR_HIT: tuple[int, int, int] = (255, 165, 0)
+COLOR_SUNK: tuple[int, int, int] = (255, 0, 0)
 COLOR_MESSAGE: tuple[int, int, int] = (0, 255, 0)
 COLOR_PREVIEW: tuple[int, int, int] = (255, 80, 80)
 COLOR_TEXT: tuple[int, int, int] = (255, 255, 255)
 COLOR_MESSAGE_FIRING: tuple[int, int, int] = (0, 0, 200)
+COLOR_FILL: tuple[int, int, int, int] = (255, 0, 0, 255)
 
 OVERLAY_ALPHA = 128
 # Ship placement
@@ -61,25 +62,31 @@ BUTTON_MENU_Y = 0.68
 
 # Gameplay Settings
 DEFAULT_ORIENTATION = "hor"
-SHIP_MARGIN = 1  # distance between ships
+SHIP_MARGIN: int = 1  # distance between ships
 DEBUG_SHOW_ENEMY_SHIPS = False  # or False
 
 # TODO: Constants should be allcaps
 # Sounds
-Theme = "assets/sounds/theme.mp3"
-hit = "assets/sounds/hit.wav"
-sunk = "assets/sounds/sunk.wav"
-miss = "assets/sounds/miss.wav"
+THEME_SOUND = "assets/sounds/theme.mp3"
+HIT_SOUND = "assets/sounds/hit.wav"
+SUNK_SOUND = "assets/sounds/sunk.wav"
+MISS_SOUND = "assets/sounds/miss.wav"
+
+HIT_SOUND_VOL = 0.1
+SUNK_SOUND_VOL = 0.3
+MISS_SOUND_VOL = 0.05
+VOLUME = 0.1
+
 
 # Tokens
-hit_token = "assets/images/tokens/greentoken.png"
-miss_token = "assets/images/tokens/bluetoken.png"
-sunk_token = "assets/images/tokens/redtoken.png"
+HIT_TOKEN = "assets/images/tokens/greentoken.png"
+MISS_TOKEN = "assets/images/tokens/bluetoken.png"
+SUNK_TOKEN = "assets/images/tokens/redtoken.png"
 
 # Images
-main_bg = "assets/images/background/Battleship.jpg"
-player_grid = "assets/images/grids/player_grid.png"
-enemy_grid = "assets/images/grids/enemy_grid.png"
+MAIN_BG = "assets/images/background/Battleship.jpg"
+PLAYER_GRID = "assets/images/grids/player_grid.png"
+ENEMY_GRID = "assets/images/grids/enemy_grid.png"
 
 # Ship Configuration: Size, Image Path
 SHIP_DATA = {

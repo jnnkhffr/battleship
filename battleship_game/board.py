@@ -10,9 +10,9 @@ from battleship_game.config import (
     GRID_ROWS,
     BLOCK_SIZE,
     COLOR_BG,
-    COLOR_GRID,
     SHIP_MARGIN,
     ALPHA_PREVIEW,
+    COLOR_FILL,
 )
 
 
@@ -29,7 +29,6 @@ class Board:
         block_size: int = BLOCK_SIZE,
         grid_image_path: str | None = None,
         bgcolor: tuple[int, int, int] = COLOR_BG,
-        gridcolor: tuple[int, int, int] = COLOR_GRID,
     ) -> None:
         """
         Initializes a Battleship board with a 2D grid and visual settings.
@@ -45,11 +44,14 @@ class Board:
         self.rows = rows
         self.block_size = block_size
         self.bgcolor = bgcolor
-        # TODO: grid_image_path is not optional - what happens if is None?
-        self.grid_img = pygame.image.load(grid_image_path).convert_alpha()
-        self.grid_img = pygame.transform.scale(
-            self.grid_img, (self.cols * self.block_size, self.rows * self.block_size)
-        )
+        self.grid_img: pygame.Surface | None = None
+
+        if grid_image_path is not None:
+            img = pygame.image.load(grid_image_path).convert_alpha()
+            self.grid_img = pygame.transform.scale(
+                img,
+                (self.cols * self.block_size, self.rows * self.block_size),
+            )
 
         # grid states (0 for empty, 1 for ship)
         self.grid = [[0 for _ in range(cols)] for _ in range(rows)]
@@ -124,7 +126,7 @@ class Board:
             alpha = preview.get("alpha", ALPHA_PREVIEW)
             valid = preview.get("valid", True)
             ship = preview.get("ship")
-            if ship is None:
+            if ship is None or px is None or py is None:
                 return
             img = ship_images.get(ship.name)
             if not img:
@@ -143,7 +145,7 @@ class Board:
             # Change color in case of invalid spots
             if not valid:
                 # Fills the space with red
-                preview_img.fill((255, 0, 0, 255), special_flags=pygame.BLEND_RGBA_MULT)
+                preview_img.fill(COLOR_FILL, special_flags=pygame.BLEND_RGBA_MULT)
             else:
                 preview_img.set_alpha(alpha)
 
@@ -230,7 +232,6 @@ class Board:
             ny = y + dy * i
             self.grid[ny][nx] = 1
 
-    # part from darshan
     def hit(self, x: int, y: int) -> None:
         """
         Mark a cell as a hit:

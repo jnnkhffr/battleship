@@ -82,12 +82,12 @@ class TestHitAndMiss:
 
     def test_hit_marks_cell_as_hit(self, empty_board):
         """hit() should mark a cell as hit."""
-        empty_board.hit(x=5, y=5)
+        empty_board.HIT_SOUND(x=5, y=5)
         assert empty_board.grid[5][5] == 3
 
     def test_miss_marks_cell_as_miss(self, empty_board):
         """miss() should mark a cell as a miss."""
-        empty_board.miss(x=3, y=3)
+        empty_board.MISS_SOUND(x=3, y=3)
         assert empty_board.grid[3][3] == 2
 
     def test_sunk_marks_ship_as_sunk(self, submarine):

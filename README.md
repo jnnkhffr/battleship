@@ -1,6 +1,7 @@
 # Battleship
-Game to play battleship.
+Our way of reviving the time-honored game Battleship, which we used to play back in the day. 
 
+__General Structure__:\
 There are essentially two playing fields next to each other. Both are 10 x 10 grids. The right playing field is the 
 computer sea area where the computer places its ships automatically. The left playing field is the 
 player's sea area, where the player can place their seven ships.  
@@ -8,8 +9,7 @@ Four of these ships are submarines that are only one box in size. Then there is 
 that is two boxes in size. A destroyer is three squares in size, and aircraft carriers are four squares in size. 
 
 
- __How to play the game__: 
-
+ __How to play the game__:\
 At the beginning, you have to select a difficulty level. Here you can choose between Easy, Medium, and Hard by clicking 
 on the level you want to play. 
 
@@ -26,7 +26,7 @@ next to each other. This is indicated by the ship turning red at points where it
 confirmed in place with a click. Only when the ship turns white again can it be placed at that location. This continues
 until all ships are placed. Then a message appears: "THE BATTLE STARTS", 
 and the player knows that all ships are placed, and he can now fire the first shot. The computer always follows suit and 
-fires immediately after we have fired. 
+fires after we have fired. 
 The opponent, in our case the computer, then has one shot per round. You must fire by selecting a box and click on it. 
 
 If no ship is hit, the gridbox is marked blue on the playing field. If part of a ship is hit, i.e., only one box and 
@@ -38,6 +38,8 @@ arranged. Depending on the level you are playing, the computer follows different
 end, you can win or lose the battle. Afterwards, you have the option to repeat the game at the same difficulty level or 
 return to the main menu and select a different difficulty level. 
 
+Enjoy!
+
 
 ## Installation
 
@@ -46,7 +48,8 @@ return to the main menu and select a different difficulty level.
 - `pip` (Python package manager)
 -  Assets Dependencies
 
-### StepsClone this repository:
+### Steps
+Clone this repository:
    ```bash
    git clone https://github.com/jnnkhffr/battleship
    ```
@@ -77,10 +80,10 @@ From the project root, run:
 - adding useful things from the "difficulites_factory_pattern" Branch *-> DONE*
 
 
-- run mypy; ruff and black for Code-Style *-> OPEN*
-- files that we don´t use should be deleted for a better overview *-> OPEN*
-- (meaningful) Docstrings at every class,function? *-> OPEN*
-- unnecessary comments within the code deleted? *-> OPEN*
-- Can we use more design patterns anywhere else? *-> OPEN*
-- Game instructions in the README. *-> FIRST DRAFT*
-- requirements fully documented? *-> OPEN*
+- run mypy; ruff and black for Code-Style *-> DONE*
+- files that we don´t use should be deleted for a better overview *-> DONE*
+- (meaningful) Docstrings at every class,function? *-> DONE*
+- unnecessary comments within the code deleted? *-> (DONE)*
+- Can we use more design patterns anywhere else? *-> DONE?*
+- Game instructions in the README. *-> DONE*
+- requirements fully documented? *-> DONE*

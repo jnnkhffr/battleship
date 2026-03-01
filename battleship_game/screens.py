@@ -15,7 +15,7 @@ from battleship_game.config import (
     BUTTON_HEIGHT_FACTOR,
     BUTTON_REPLAY_Y,
     BUTTON_MENU_Y,
-    main_bg,
+    MAIN_BG,
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
 )
@@ -40,7 +40,7 @@ class StartScreen:
         self.game_factories = game_factories
 
         # Background
-        self.bg_img = pygame.image.load(main_bg).convert()
+        self.bg_img = pygame.image.load(MAIN_BG).convert()
         self.bg_img = pygame.transform.scale(self.bg_img, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
         # Fonts
