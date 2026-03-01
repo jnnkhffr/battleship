@@ -9,9 +9,12 @@ from battleship_game.fleet import Submarine, Frigate, Destroyer, AircraftCarrier
 from battleship_game.fleet_commander import FleetManager
 
 
+# TODO: love the usage of fixtures!
 @pytest.fixture
 def empty_board():
     """Creates an empty 10x10 game board."""
+    # TODO: the tests are failing the latest version (the ran before)
+    #  fix the test - Obviously, `grid_image_path` is not an optional parameter
     return Board()
 
 

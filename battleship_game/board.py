@@ -1,4 +1,6 @@
 """This file creates the game board."""
+# TODO: added this line to make the code compatible with python 3.12 (type sep. by |)
+from __future__ import annotations
 
 import pygame
 from itertools import product
@@ -43,6 +45,7 @@ class Board:
         self.rows = rows
         self.block_size = block_size
         self.bgcolor = bgcolor
+        # TODO: grid_image_path is not optional - what happens if is None?
         self.grid_img = pygame.image.load(grid_image_path).convert_alpha()
         self.grid_img = pygame.transform.scale(
             self.grid_img, (self.cols * self.block_size, self.rows * self.block_size)

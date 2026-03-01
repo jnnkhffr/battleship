@@ -252,6 +252,8 @@ class Game:
             #  it is explicitly set in each factory. A user might not know he needs to
             #  do this and will break the code. Make the ComputerFleetManager part of
             #  the init.
+            #  Since there are some circular usage of enemy board, consider making the
+            #  ShootingStrategy an arg.
             ship_hit = self.enemy_fleet.receive_shot(x, y)
 
             if ship_hit:

@@ -1,5 +1,5 @@
 """Initializes the fleet."""
-
+from __future__ import annotations
 from battleship_game.config import SUB_SIZE, FRIG_SIZE, DEST_SIZE, ACC_SIZE
 
 
