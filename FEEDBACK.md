@@ -11,4 +11,5 @@ comments in the IDE. Occasionally I might rewrite some code to highlight best pr
 - [ ] delete not used files
 - [ ] structure the code in a dedicated `src` directory
 - [ ] double check code quality with `ruff check` - 2 (auto-fixable) errors 
-- 
+
+Some of the comments might be outdated - great to see you working on this! :)
