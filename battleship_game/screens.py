@@ -26,6 +26,8 @@ class StartScreen:
     Start screen for Battleship game with difficulty selection.
     """
 
+    # TODO: `type` is the type of all uninitialized classes, while not being wrong,
+    #  be more specific. game_factories: list[GameFactory]
     def __init__(self, screen: pygame.Surface, game_factories: list[type]):
         """
         Initialize the start screen.

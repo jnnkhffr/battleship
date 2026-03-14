@@ -8,6 +8,7 @@ import random
 class ShootingStrategy(ABC):
     """Abstract base class for all enemy shooting strategies."""
 
+    # TODO: typing
     @abstractmethod
     def get_next_shot(self, opponent_board):
         """
@@ -21,6 +22,7 @@ class ShootingStrategy(ABC):
         """
         pass
 
+    # TODO: typing
     def register_shot_result(self, x, y, hit, sunk):
         """
         Receive feedback about the last shot to update strategy states.
@@ -200,6 +202,7 @@ class HuntShootingStrategy(ShootingStrategy):
         return None
 
 
+# TODO: I am impressed by the logic you build for the enemies!
 class SmartShootingStrategy(HuntShootingStrategy):
     """Advanced shooting strategy combining hunt logic with checkerboard scanning."""
 

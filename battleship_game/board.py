@@ -1,4 +1,6 @@
 """This file creates the game board."""
+# TODO: added this line to make the code compatible with python 3.12 (type sep. by |)
+from __future__ import annotations
 
 import pygame
 from itertools import product

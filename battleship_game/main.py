@@ -25,6 +25,7 @@ class GameState:
 class GameHandler:
     """Handle the overall game flow including menus, game creation, and states transitions."""
 
+    # TODO: add typing like: game_factories: list[GameFactory]
     def __init__(self, game_factories):
         """
         Initialize the game handler, set up pygame, and prepare screens.
@@ -51,6 +52,7 @@ class GameHandler:
         self.start_screen = StartScreen(self.screen, game_factories)
         self.game_over_screen = GameOverScreen(self.screen)
 
+    # TODO: GREAT STRUCTURE!
     def run(self):
         """
         Run the main game loop, handling states transitions and user input.
@@ -82,6 +84,8 @@ class GameHandler:
                 state = GameState.RUNNING
 
             elif state == GameState.RUNNING:
+                # TODO: I like to name bool variable like: is_running,
+                #  than it is clear its a bool and selected not
                 still_running = current_game.run(events)
                 if not still_running:
                     state = (

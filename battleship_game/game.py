@@ -1,6 +1,8 @@
 """Game module with factory pattern for different difficulty levels."""
 
 from __future__ import annotations
+
+import logging
 from abc import ABC, abstractmethod
 
 import pygame
@@ -240,22 +242,34 @@ class Game:
                 return
 
             if self.enemy_board.grid[y][x] in [2, 3, 4]:
-                print("You already shot here")
+                # TODO: replace prints with logging
+                # print("You already shot here")
+                logging.debug("You already shot here")
                 return
 
+            # TODO: you need to set the enemy_fleet in the init. The game runs because
+            #  it is explicitly set in each factory. A user might not know he needs to
+            #  do this and will break the code. Make the ComputerFleetManager part of
+            #  the init.
+            #  Since there are some circular usage of enemy board, consider making the
+            #  ShootingStrategy an arg.
             ship_hit = self.enemy_fleet.receive_shot(x, y)
 
             if ship_hit:
                 self.enemy_board.hit(x, y)
                 self.hit_sound.play()
+                # TODO: replace prints with logging
                 print("Hit!")
 
                 if ship_hit.is_sunk():
                     self.enemy_board.sunk(ship_hit)
                     self.sunk_sound.play()
+                    # TODO: replace prints with logging
                     print(f"You sunk the enemy {ship_hit.name}")
 
+                    # TODO: unnecessary level of indentation? in enemy turn it does not
                     if self.enemy_fleet.is_defeated():
+                        # TODO: replace prints with logging
                         print("You win!")
                         self.game_over = True
                         self.game_over_message = "You win!"
@@ -264,6 +278,7 @@ class Game:
             else:
                 self.enemy_board.miss(x, y)
                 self.miss_sound.play()
+                # TODO: replace prints with logging
                 print("Miss")
 
             self.player_turn = False
@@ -281,18 +296,21 @@ class Game:
         if self.current_ship_index >= len(self.fleet_manager.ships):
             self.placement_done = True
             self.battle_message_start = pygame.time.get_ticks()
+            # TODO: replace prints with logging
             print("All ships placed. Shooting mode enabled.")
             return
 
         ship = self.fleet_manager.ships[self.current_ship_index]
 
         if self.fleet_manager.place_ship(ship, x, y, self.current_orientation):
+            # TODO: replace prints with logging
             print(f"Placed {ship.name} at {x},{y}")
             self.current_ship_index += 1
 
             if self.current_ship_index >= len(self.fleet_manager.ships):
                 self.placement_done = True
                 self.battle_message_start = pygame.time.get_ticks()
+                # TODO: replace prints with logging
                 print("All ships placed! Shooting mode active.")
 
     def draw(self):
@@ -316,7 +334,9 @@ class Game:
             and self.current_ship_index < len(self.fleet_manager.ships)
             and not self.game_over
         ):
-            mx, my = getattr(self, "mouse_grid_pos", (0, 0))
+            # TODO: why do you use getattr?
+            mx, my = self.mouse_grid_pos
+            # mx, my = getattr(self, "mouse_grid_pos", (0, 0))
             if mx < GRID_COLS * BLOCK_SIZE:
                 gx = mx // BLOCK_SIZE
                 gy = my // BLOCK_SIZE
@@ -397,17 +417,20 @@ class Game:
         if ship_hit:
             self.player_board.hit(x, y)
             self.hit_sound.play()
+            # TODO: replace prints with logging
             print("Enemy hit!")
             sunk = ship_hit.is_sunk()
 
             if sunk:
                 self.player_board.sunk(ship_hit)
                 self.sunk_sound.play()
+                # TODO: replace prints with logging
                 print(f"Enemy sunk your {ship_hit.name}")
 
             self.enemy_fleet.strategy.register_shot_result(x, y, hit=True, sunk=sunk)
 
             if self.fleet_manager.is_defeated():
+                # TODO: replace prints with logging
                 print("Computer wins!")
                 self.game_over = True
                 self.game_over_message = "You lost!"
@@ -415,6 +438,7 @@ class Game:
         else:
             self.player_board.miss(x, y)
             self.miss_sound.play()
+            # TODO: replace prints with logging
             print("Enemy miss")
 
             self.enemy_fleet.strategy.register_shot_result(x, y, hit=False, sunk=False)
@@ -440,6 +464,7 @@ class GameFactory(ABC):
         ...
 
 
+# TODO: check line length (88 chars)
 class BattleshipEasy(GameFactory):
     """Factory for creating a Battleship game configured with easy difficulty and random enemy shooting."""
 

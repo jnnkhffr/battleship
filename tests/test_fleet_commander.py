@@ -8,6 +8,7 @@ import pytest
 class TestFleetManagerInitialization:
     """Tests for FleetManager initialization."""
 
+    # TODO: typing
     def test_fleet_manager_creates_ships(self, fleet_manager):
         """FleetManager should create all ships."""
         # According to config: 4 Submarines, 1 Frigate, 1 Destroyer, 1 AircraftCarrier
