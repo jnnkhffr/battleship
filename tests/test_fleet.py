@@ -3,7 +3,7 @@ Tests for ship classes.
 """
 
 import pytest
-from battleship_game.fleet import Submarine, Frigate, Destroyer, AircraftCarrier
+from src.battleship_game.fleet import Submarine, Frigate, Destroyer, AircraftCarrier
 
 
 class TestShipInitialization:

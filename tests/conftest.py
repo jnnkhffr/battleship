@@ -4,9 +4,9 @@ These can be used in all tests.
 """
 
 import pytest
-from battleship_game.board import Board
-from battleship_game.fleet import Submarine, Destroyer
-from battleship_game.fleet_commander import FleetManager
+from src.battleship_game import Board
+from src.battleship_game.fleet import Submarine, Destroyer
+from src.battleship_game import FleetManager
 
 
 # TODO: love the usage of fixtures!

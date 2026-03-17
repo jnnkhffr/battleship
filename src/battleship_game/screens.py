@@ -1,11 +1,9 @@
 """Start screen for Battleship game with difficulty selection using factory pattern."""
 
 import pygame
+from battleship_game.game import GameFactory
 from battleship_game.config import (
-    COLOR_TEXT,
-    COLOR_SHIP,
-    COLOR_GRID,
-    COLOR_OVERLAY,
+    Color,
     OVERLAY_ALPHA,
     FONT_TITLE,
     FONT_SUBTITLE,
@@ -28,13 +26,13 @@ class StartScreen:
 
     # TODO: `type` is the type of all uninitialized classes, while not being wrong,
     #  be more specific. game_factories: list[GameFactory]
-    def __init__(self, screen: pygame.Surface, game_factories: list[type]):
+    def __init__(self, screen: pygame.Surface, game_factories: list[type[GameFactory]]):
         """
         Initialize the start screen.
 
         Args:
             screen: Pygame display surface
-            game_factories: List of GameFactory classes to choose from
+            game_factories: list of GameFactory classes to choose from
         """
         self.screen = screen
         self.game_factories = game_factories
@@ -52,12 +50,12 @@ class StartScreen:
         # Selected factory (None until a button is clicked)
         self.selected_factory = None
 
-    def _create_buttons(self):
+    def _create_buttons(self) -> list[tuple[type[GameFactory], pygame.Rect]]:
         """
         Create button rectangles for each difficulty level.
 
         Returns:
-            List of tuples (factory_class, pygame.Rect)
+            list of tuples (factory_class, pygame.Rect)
         """
         buttons = []
         w = self.screen.get_width()
@@ -80,7 +78,7 @@ class StartScreen:
             buttons.append((factory, rect))
         return buttons
 
-    def draw(self):
+    def draw(self) -> None:
         """
         Render the start screen including title, subtitle, and difficulty buttons.
 
@@ -92,10 +90,10 @@ class StartScreen:
         """
         w = self.screen.get_width()
 
-        title = self.title_font.render("BATTLESHIP", True, COLOR_TEXT)
+        title = self.title_font.render("BATTLESHIP", True, Color.TEXT)
         self.screen.blit(title, title.get_rect(center=(w // 2, 80)))
 
-        subtitle = self.subtitle_font.render("Select Difficulty", True, COLOR_SHIP)
+        subtitle = self.subtitle_font.render("Select Difficulty", True, Color.SHIP)
         self.screen.blit(subtitle, subtitle.get_rect(center=(w // 2, 140)))
 
         buttons = self._create_buttons()
@@ -103,23 +101,23 @@ class StartScreen:
 
         for factory, rect in buttons:
             hovered = rect.collidepoint(mouse)
-            color = COLOR_SHIP if hovered else COLOR_GRID
+            color = Color.SHIP if hovered else Color.GRID
 
             pygame.draw.rect(self.screen, color, rect)
-            pygame.draw.rect(self.screen, COLOR_TEXT, rect, 2)
+            pygame.draw.rect(self.screen, Color.TEXT, rect, 2)
 
             label = factory.__name__.replace("Battleship", "")
-            text = self.button_font.render(label, True, COLOR_TEXT)
+            text = self.button_font.render(label, True, Color.TEXT)
             self.screen.blit(text, text.get_rect(center=rect.center))
 
         pygame.display.flip()
 
-    def run(self, events):
+    def run(self, events: list[pygame.event.Event]) -> type[GameFactory] | None:
         """
         Update the start screen and return the selected difficulty factory if clicked.
 
         Args:
-            events: List of Pygame events for the current frame.
+            events: list of Pygame events for the current frame.
 
         Returns:
             The selected GameFactory class if a button was clicked, otherwise None.
@@ -148,13 +146,13 @@ class GameOverScreen:
         self.font = pygame.font.SysFont(None, FONT_GAMEOVER)
         self.button_font = pygame.font.SysFont(None, FONT_BUTTON)
 
-    def run(self, state, events):
+    def run(self, state: int, events: list[pygame.event.Event]) -> int:
         """
         Render the game‑over overlay and handle replay/menu button clicks.
 
         Args:
-            state: Current game‑over states (win or loss).
-            events: List of Pygame events for the current frame.
+            state: Current game‑over-states (win or loss).
+            events: list of Pygame events for the current frame.
 
         Returns:
             2 if replay was selected,
@@ -164,7 +162,7 @@ class GameOverScreen:
         w, h = self.screen.get_size()
 
         overlay = pygame.Surface((w, h), pygame.SRCALPHA)
-        overlay.fill((*COLOR_OVERLAY, OVERLAY_ALPHA))
+        overlay.fill((*Color.OVERLAY, OVERLAY_ALPHA))
         self.screen.blit(overlay, (0, 0))
 
         button_w = int(w * BUTTON_WIDTH_FACTOR)
@@ -200,7 +198,7 @@ class GameOverScreen:
 
         return state
 
-    def _draw_button(self, text, rect, mouse):
+    def _draw_button(self, text: str, rect: pygame.Rect, mouse: tuple[int, int]) -> None:
         """
         Draw a single interactive button with hover highlighting.
 
@@ -213,10 +211,10 @@ class GameOverScreen:
             None. Draws directly onto the display surface.
         """
         hovered = rect.collidepoint(mouse)
-        color = COLOR_GRID if hovered else COLOR_SHIP
+        color = Color.GRID if hovered else Color.SHIP
 
         pygame.draw.rect(self.screen, color, rect)
-        pygame.draw.rect(self.screen, COLOR_TEXT, rect, 2)
+        pygame.draw.rect(self.screen, Color.TEXT, rect, 2)
 
-        label = self.button_font.render(text, True, COLOR_TEXT)
+        label = self.button_font.render(text, True, Color.TEXT)
         self.screen.blit(label, label.get_rect(center=rect.center))
