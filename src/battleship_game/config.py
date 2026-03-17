@@ -17,7 +17,7 @@ FPS = 60
 # Colors
 # TODO: One could use a class here (for more structure and easier importing)
 class Color:
-    """ class that defines the colors."""
+    """Class that defines the colors."""
     BG = (0, 0, 0)
     OVERLAY = (0, 0, 0)
     GRID = (40, 40, 40)
