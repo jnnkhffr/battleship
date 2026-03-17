@@ -3,18 +3,18 @@ Tests for the FleetManager.
 """
 
 import pytest
-
+from battleship_game.fleet_commander import FleetManager
 
 class TestFleetManagerInitialization:
     """Tests for FleetManager initialization."""
 
     # TODO: typing
-    def test_fleet_manager_creates_ships(self, fleet_manager):
+    def test_fleet_manager_creates_ships(self, fleet_manager:FleetManager):
         """FleetManager should create all ships."""
         # According to config: 4 Submarines, 1 Frigate, 1 Destroyer, 1 AircraftCarrier
         assert len(fleet_manager.ships) == 7
 
-    def test_fleet_manager_creates_correct_ship_types(self, fleet_manager):
+    def test_fleet_manager_creates_correct_ship_types(self, fleet_manager:FleetManager):
         """FleetManager should create correct ship types."""
         ship_names = [ship.name for ship in fleet_manager.ships]
 
@@ -27,20 +27,20 @@ class TestFleetManagerInitialization:
 class TestShipPlacement:
     """Tests for ship placement by FleetManager."""
 
-    def test_place_ship_returns_true_on_success(self, fleet_manager):
+    def test_place_ship_returns_true_on_success(self, fleet_manager:FleetManager):
         """place_ship should return True on successful placement."""
         ship = fleet_manager.ships[0]
         result = fleet_manager.place_ship(ship, x=0, y=0, orientation="hor")
         assert result is True
 
-    def test_place_ship_returns_false_on_failure(self, fleet_manager):
+    def test_place_ship_returns_false_on_failure(self, fleet_manager:FleetManager):
         """place_ship should return False on invalid placement."""
         ship = fleet_manager.ships[0]
         # Try placing outside the board
         result = fleet_manager.place_ship(ship, x=10, y=10, orientation="hor")
         assert result is False
 
-    def test_place_ship_sets_ship_position(self, fleet_manager):
+    def test_place_ship_sets_ship_position(self, fleet_manager:FleetManager):
         """place_ship should store the ship position."""
         ship = fleet_manager.ships[0]
         fleet_manager.place_ship(ship, x=2, y=3, orientation="hor")
@@ -48,11 +48,11 @@ class TestShipPlacement:
         assert ship.position == (2, 3)
         assert ship.orientation == "hor"
 
-    def test_all_ships_placed_returns_false_initially(self, fleet_manager):
+    def test_all_ships_placed_returns_false_initially(self, fleet_manager:FleetManager):
         """all_ships_placed should return False when no ships are placed."""
         assert fleet_manager.all_ships_placed() is False
 
-    def test_all_ships_placed_returns_true_when_done(self, fleet_manager):
+    def test_all_ships_placed_returns_true_when_done(self, fleet_manager:FleetManager):
         """all_ships_placed should return True when all ships are placed."""
         # Place all ships intelligently on the board
         positions = [

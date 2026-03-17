@@ -3,7 +3,7 @@ Tests for the Board class.
 """
 
 import pytest
-from src.battleship_game import Board
+from battleship_game import Board
 
 
 class TestBoardInitialization:

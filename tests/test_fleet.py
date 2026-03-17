@@ -3,7 +3,7 @@ Tests for ship classes.
 """
 
 import pytest
-from src.battleship_game.fleet import Submarine, Frigate, Destroyer, AircraftCarrier
+from battleship_game.fleet import Submarine, Frigate, Destroyer, AircraftCarrier
 
 
 class TestShipInitialization:
@@ -30,8 +30,7 @@ class TestShipInitialization:
         carrier = AircraftCarrier()
         assert carrier.size == 4
         # TODO: this fails
-        # assert carrier.name == "Aircraft Carrier"
-        assert carrier.name == "AircraftCarrier"
+        assert carrier.name == "Aircraft Carrier"
 
     def test_new_ship_has_zero_hits(self, submarine):
         """New ship should have 0 hits."""
