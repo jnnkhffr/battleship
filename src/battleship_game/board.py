@@ -261,3 +261,12 @@ class Board:
 
         for i in range(ship.size):
             self.grid[sy + dy * i][sx + dx * i] = 4
+
+    def HIT_SOUND(self, x: int, y: int) -> None:
+        """Compatibility method for test_board: mark a cell as hit."""
+        self.hit(x, y)
+
+    def MISS_SOUND(self, x: int, y: int) -> None:
+        """Compatibility method for test_board: mark a cell as miss."""
+        self.miss(x, y)
+
