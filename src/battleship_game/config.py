@@ -59,7 +59,7 @@ BUTTON_MENU_Y = 0.68
 # Gameplay Settings
 DEFAULT_ORIENTATION = "hor"
 SHIP_MARGIN: int = 1  # distance between ships
-DEBUG_SHOW_ENEMY_SHIPS = True  # or False
+DEBUG_SHOW_ENEMY_SHIPS = False  # or True
 
 # TODO: Constants should be allcaps
 # Absolute path
