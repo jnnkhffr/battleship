@@ -78,4 +78,4 @@ class AircraftCarrier(Ship):
     def __init__(self, position: tuple = None, orientation: str = None) -> None:
         """Initialize an Aircraft Carrier with optional position and orientation."""
         super().__init__(ACC_SIZE, position, orientation)
-        self.name = "AircraftCarrier"
+        self.name = "Aircraft Carrier"
