@@ -60,7 +60,7 @@ pip install -r requirements.txt
 
 ## Execution
 From the project root, run:
-- python -m battleship_game.main
+- python -m main
 
 
 # Gameplan

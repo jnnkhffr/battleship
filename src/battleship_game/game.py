@@ -148,7 +148,11 @@ class Game:
             self.sunk_token, (BLOCK_SIZE, BLOCK_SIZE)
         )
 
-        self.tokens: dict[int, pygame.Surface] = {2: self.miss_token, 3: self.hit_token, 4: self.sunk_token}
+        self.tokens: dict[int, pygame.Surface] = {
+            2: self.miss_token,
+            3: self.hit_token,
+            4: self.sunk_token,
+        }
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -245,7 +249,7 @@ class Game:
                 self.enemy_board.hit(x, y)
                 self.hit_sound.play()
                 # TODO: replace prints with logging
-                logging.debug(f"Hit!")
+                logging.debug("Hit!")
 
                 if ship_hit.is_sunk():
                     self.enemy_board.sunk(ship_hit)
@@ -255,8 +259,8 @@ class Game:
 
                     # TODO: unnecessary level of indentation? in enemy turn it does not
                 if self.enemy_fleet.is_defeated():
-                        # TODO: replace prints with logging
-                    logging.debug(f"Player wins")
+                    # TODO: replace prints with logging
+                    logging.debug("Player wins")
                     self.game_over = True
                     self.game_over_message = "You win!"
                     self.placement_done = True
@@ -266,7 +270,7 @@ class Game:
                 self.enemy_board.miss(x, y)
                 self.miss_sound.play()
                 # TODO: replace prints with logging
-                logging.debug(f"Miss")
+                logging.debug("Miss")
 
             self.player_turn = False
             self.enemy_turn_pending = True
@@ -284,7 +288,7 @@ class Game:
             self.placement_done = True
             self.battle_message_start = pygame.time.get_ticks()
             # TODO: replace prints with logging
-            logging.debug(f"All ships placed. Shooting mode enabled")
+            logging.debug("All ships placed. Shooting mode enabled")
             return
 
         ship = self.fleet_manager.ships[self.current_ship_index]
@@ -298,7 +302,7 @@ class Game:
                 self.placement_done = True
                 self.battle_message_start = pygame.time.get_ticks()
                 # TODO: replace prints with logging
-                logging.debug(f"All ships places. Shooting mode activated")
+                logging.debug("All ships places. Shooting mode activated")
 
     def draw(self) -> None:
         """
@@ -404,7 +408,7 @@ class Game:
             self.player_board.hit(x, y)
             self.hit_sound.play()
             # TODO: replace prints with logging
-            logging.debug(f"Enemy hit")
+            logging.debug("Enemy hit")
             sunk = ship_hit.is_sunk()
 
             if sunk:
@@ -417,7 +421,7 @@ class Game:
 
             if self.fleet_manager.is_defeated():
                 # TODO: replace prints with logging
-                logging.debug(f"Enemy wins")
+                logging.debug("Enemy wins")
                 self.game_over = True
                 self.game_over_message = "You lost!"
                 return
@@ -425,7 +429,7 @@ class Game:
             self.player_board.miss(x, y)
             self.miss_sound.play()
             # TODO: replace prints with logging
-            logging.debug(f"Enemy Miss")
+            logging.debug("Enemy Miss")
 
             self.enemy_fleet.strategy.register_shot_result(x, y, hit=False, sunk=False)
 
@@ -485,7 +489,9 @@ class BattleshipMedium(GameFactory):
             A fully initialized Game object with an enemy fleet that uses
             a hunt-based shooting strategy and automatically placed ships.
         """
-        return Game(self._screen, self._clock, HuntShootingStrategy(), difficulty_name="Medium")
+        return Game(
+            self._screen, self._clock, HuntShootingStrategy(), difficulty_name="Medium"
+        )
 
 
 class BattleshipHard(GameFactory):
@@ -502,4 +508,6 @@ class BattleshipHard(GameFactory):
             A fully initialized Game object with an enemy fleet that uses
             an advanced smart shooting strategy and automatically placed ships.
         """
-        return Game(self._screen, self._clock, SmartShootingStrategy(), difficulty_name="Hard")
+        return Game(
+            self._screen, self._clock, SmartShootingStrategy(), difficulty_name="Hard"
+        )

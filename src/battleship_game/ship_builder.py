@@ -7,6 +7,7 @@ class ShipBuilder:
     """
     Create ship objects
     """
+
     @staticmethod
     def create_ship(ship_type):
         """

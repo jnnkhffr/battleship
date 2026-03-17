@@ -198,7 +198,9 @@ class GameOverScreen:
 
         return state
 
-    def _draw_button(self, text: str, rect: pygame.Rect, mouse: tuple[int, int]) -> None:
+    def _draw_button(
+        self, text: str, rect: pygame.Rect, mouse: tuple[int, int]
+    ) -> None:
         """
         Draw a single interactive button with hover highlighting.
 

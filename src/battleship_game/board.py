@@ -62,8 +62,8 @@ class Board:
         offset_y: int = 0,
         preview: dict | None = None,
         token_images: dict[int, pygame.Surface] | None = None,
-        ship_images: dict[str, pygame.Surface] | None =None,
-        fleet: FleetManager | None =None,
+        ship_images: dict[str, pygame.Surface] | None = None,
+        fleet: FleetManager | None = None,
         show_ships: bool = True,
     ) -> None:
         """

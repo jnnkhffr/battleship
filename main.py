@@ -1,8 +1,14 @@
 """Main module to run the Battleship game."""
+
 import logging
 
 import pygame
-from battleship_game.game import BattleshipEasy, BattleshipMedium, BattleshipHard, GameFactory
+from battleship_game.game import (
+    BattleshipEasy,
+    BattleshipMedium,
+    BattleshipHard,
+    GameFactory,
+)
 from battleship_game.screens import StartScreen, GameOverScreen
 from battleship_game.config import (
     WINDOW_WIDTH,

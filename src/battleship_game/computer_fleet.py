@@ -1,4 +1,5 @@
 """Initializes the computer fleet."""
+
 from battleship_game.ai_shooting import ShootingStrategy
 from battleship_game.config import GRID_COLS, GRID_ROWS
 from battleship_game.fleet_commander import FleetManager
