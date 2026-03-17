@@ -1,3 +1,5 @@
+"""This file contains all the constants used in the program."""
+
 import os
 
 # Board Config.
@@ -15,6 +17,7 @@ FPS = 60
 # Colors
 # TODO: One could use a class here (for more structure and easier importing)
 class Color:
+    """ class that defines the colors."""
     BG = (0, 0, 0)
     OVERLAY = (0, 0, 0)
     GRID = (40, 40, 40)
@@ -92,7 +95,7 @@ PLAYER_GRID = os.path.join(ASSETS_DIR, "images", "grids", "player_grid.png")
 ENEMY_GRID = os.path.join(ASSETS_DIR, "images", "grids", "enemy_grid.png")
 # Ship Configuration: Size, Image Path
 SHIP_DATA = {
-    "AircraftCarrier": (
+    "Aircraft Carrier": (
         4,
         os.path.join(ASSETS_DIR, "images", "ships", "AircraftCarrier.png"),
     ),
