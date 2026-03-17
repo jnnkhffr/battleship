@@ -10,7 +10,7 @@ class ShootingStrategy(ABC):
 
     # TODO: typing
     @abstractmethod
-    def get_next_shot(self, opponent_board):
+    def get_next_shot(self, opponent_board) -> tuple[int, int]:
         """
         Return the next shot coordinates based on the strategy.
 
@@ -23,7 +23,7 @@ class ShootingStrategy(ABC):
         pass
 
     # TODO: typing
-    def register_shot_result(self, x, y, hit, sunk):
+    def register_shot_result(self, x: int, y: int, hit: bool, sunk: bool) -> None:
         """
         Receive feedback about the last shot to update strategy states.
 
@@ -39,7 +39,7 @@ class ShootingStrategy(ABC):
 class RandomShootingStrategy(ShootingStrategy):
     """Shooting strategy that selects random unshot cells."""
 
-    def get_next_shot(self, opponent_board):
+    def get_next_shot(self, opponent_board) -> tuple[int, int]:
         """
         Return a random valid shot that has not been fired before.
 
@@ -60,12 +60,12 @@ class RandomShootingStrategy(ShootingStrategy):
 class HuntShootingStrategy(ShootingStrategy):
     """Shooting strategy that hunts around previous hits to find full ships."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Shooting strategy that hunts around previous hits to find full ships."""
-        self.pending_hits = []
+        self.pending_hits: list[tuple[int, int]] = []
         self.hunt_direction = None
 
-    def get_next_shot(self, opponent_board):
+    def get_next_shot(self, opponent_board) -> tuple[int, int]:
         """
         Return the next shot using hunt logic or fallback scanning.
 
@@ -85,7 +85,7 @@ class HuntShootingStrategy(ShootingStrategy):
 
         return RandomShootingStrategy().get_next_shot(opponent_board)
 
-    def register_shot_result(self, x, y, hit, sunk):
+    def register_shot_result(self, x: int, y: int, hit: bool, sunk: bool) -> None:
         """
         Update internal states based on the result of the last shot.
 
@@ -102,7 +102,7 @@ class HuntShootingStrategy(ShootingStrategy):
             self.pending_hits.clear()
             self.hunt_direction = None
 
-    def _scan_for_hits(self, board):
+    def _scan_for_hits(self, board) -> None:
         """
         Scan the board for existing hit markers to continue hunting.
 
@@ -115,7 +115,7 @@ class HuntShootingStrategy(ShootingStrategy):
                 if board.grid[y][x] == 3:
                     self.pending_hits.append((x, y))
 
-    def _target_mode(self, board):
+    def _target_mode(self, board) -> tuple[int, int]:
         """
         Attempt to continue shooting around known hits.
 
@@ -143,7 +143,7 @@ class HuntShootingStrategy(ShootingStrategy):
 
         return RandomShootingStrategy().get_next_shot(board)
 
-    def _determine_direction(self):
+    def _determine_direction(self) -> None:
         """Determine whether the ship is aligned horizontally or vertically."""
         if len(self.pending_hits) < 2:
             return
@@ -153,7 +153,7 @@ class HuntShootingStrategy(ShootingStrategy):
         elif y1 == y2:
             self.hunt_direction = "horizontal"
 
-    def _continue_horizontal(self, board):
+    def _continue_horizontal(self, board) -> tuple[int, int]:
         """
         Continue shooting left or right along a horizontal hit line.
 
@@ -168,7 +168,7 @@ class HuntShootingStrategy(ShootingStrategy):
         right = (hits[-1][0] + 1, hits[-1][1])
         return self._pick_valid(board, [left, right])
 
-    def _continue_vertical(self, board):
+    def _continue_vertical(self, board) -> tuple[int, int]:
         """
         Continue shooting up or down along a vertical hit line.
 
@@ -183,13 +183,14 @@ class HuntShootingStrategy(ShootingStrategy):
         down = (hits[-1][0], hits[-1][1] + 1)
         return self._pick_valid(board, [up, down])
 
-    def _pick_valid(self, board, candidates):
+    @staticmethod
+    def _pick_valid(board, candidates: list[tuple[int, int]]) -> tuple[int, int] | None:
         """
         Return the first valid shot from a list of candidates.
 
         Args:
             board: The player's board.
-            candidates: List of (x, y) positions to test.
+            candidates: list of (x, y) positions to test.
 
         Returns:
             A valid (x, y) shot or None if none are valid.
@@ -206,7 +207,7 @@ class HuntShootingStrategy(ShootingStrategy):
 class SmartShootingStrategy(HuntShootingStrategy):
     """Advanced shooting strategy combining hunt logic with checkerboard scanning."""
 
-    def get_next_shot(self, opponent_board):
+    def get_next_shot(self, opponent_board) -> tuple[int, int]:
         """
         Return the next shot using hunt mode or optimized checkerboard scanning.
 

@@ -1,23 +1,19 @@
 """Game module with factory pattern for different difficulty levels."""
 
 from __future__ import annotations
-
 import logging
 from abc import ABC, abstractmethod
-
 import pygame
-
 from battleship_game.board import Board
 from battleship_game.fleet_commander import FleetManager
+from battleship_game.ai_shooting import ShootingStrategy
 from battleship_game.config import (
     GRID_COLS,
     GRID_ROWS,
     BLOCK_SIZE,
     BOARD_SPACING,
     DEFAULT_ORIENTATION,
-    COLOR_BG,
-    COLOR_MESSAGE,
-    COLOR_MESSAGE_FIRING,
+    Color,
     DEBUG_SHOW_ENEMY_SHIPS,
     DURATION,
     DELAY,
@@ -36,7 +32,6 @@ from battleship_game.config import (
     SUNK_SOUND_VOL,
 )
 from battleship_game.computer_fleet import ComputerFleetManager
-
 from battleship_game.ai_shooting import (
     RandomShootingStrategy,
     HuntShootingStrategy,
@@ -59,8 +54,9 @@ class Game:
         self,
         screen: pygame.Surface,
         clock: pygame.time.Clock,
+        shooting_strategy: ShootingStrategy,
         difficulty_name: str = "",
-    ):
+    ) -> None:
         """
         Initialize the game environment, create boards, fleet manager,
         and prepare the placement phase.
@@ -89,10 +85,11 @@ class Game:
         self.fleet_manager = FleetManager(self.player_board)
 
         # Enemy fleet
-        self.enemy_fleet: ComputerFleetManager | None = None
+        self.enemy_fleet = ComputerFleetManager(self.enemy_board, shooting_strategy)
+        self.enemy_fleet.auto_place_fleet()
 
         # Index of the ship currently being placed
-        self.current_ship_index = 0
+        self.current_ship_index: int = 0
 
         self.current_orientation = DEFAULT_ORIENTATION
 
@@ -111,16 +108,16 @@ class Game:
         self.battle_message_start = None
         self.battle_message_duration = DURATION
         self.battle_message_surface = self.font.render(
-            "THE BATTLE STARTS!", True, COLOR_MESSAGE_FIRING
+            "THE BATTLE STARTS!", True, Color.MESSAGE_FIRING
         )
 
-        self.player_turn = True
+        self.player_turn: bool = True
         self.enemy_turn_pending = False
         self.enemy_turn_time = 0
         self.enemy_delay = DELAY
 
         # container for holding images
-        self.ship_images = {}
+        self.ship_images: dict[str, pygame.Surface] = {}
 
         # Load ships directly from config
         for name, (size, path) in SHIP_DATA.items():
@@ -129,13 +126,6 @@ class Game:
             # Scale the images to fit the grid
             scaled_img = pygame.transform.scale(img, (BLOCK_SIZE, BLOCK_SIZE * size))
             self.ship_images[name] = scaled_img
-
-        # Loading animations using frames
-        self.fire_animation = []
-        for i in range(1, 14):
-            frame_path = f"assets/images/tokens/fireloop/fire1_{i:02}.png"
-            img_fire = pygame.image.load(frame_path)
-            self.fire_animation.append(img_fire)
 
         self.hit_sound = pygame.mixer.Sound(HIT_SOUND)
         self.miss_sound = pygame.mixer.Sound(MISS_SOUND)
@@ -158,7 +148,7 @@ class Game:
             self.sunk_token, (BLOCK_SIZE, BLOCK_SIZE)
         )
 
-        self.tokens = {2: self.miss_token, 3: self.hit_token, 4: self.sunk_token}
+        self.tokens: dict[int, pygame.Surface] = {2: self.miss_token, 3: self.hit_token, 4: self.sunk_token}
 
     def run(self, events: list[pygame.event.Event]) -> bool:
         """
@@ -166,7 +156,7 @@ class Game:
         Handles events, updates the game state, and renders the Boards.
 
         Args:
-            events: List of pygame events to process
+            events: list of pygame events to process
 
         Returns:
             True if game is still running, False if game over
@@ -200,7 +190,7 @@ class Game:
 
         return not self.game_over
 
-    def handle_mouse_click(self, pos):
+    def handle_mouse_click(self, pos: tuple[int, int]) -> None:
         """
         Handle mouse click actions depending on the current game phase.
 
@@ -220,10 +210,7 @@ class Game:
             processes shots, and may set the game-over state.
         """
 
-        if not self.player_turn:
-            return
-
-        if self.game_over:
+        if not self.player_turn or self.game_over:
             return
 
         x_pixel, y_pixel = pos
@@ -243,7 +230,6 @@ class Game:
 
             if self.enemy_board.grid[y][x] in [2, 3, 4]:
                 # TODO: replace prints with logging
-                # print("You already shot here")
                 logging.debug("You already shot here")
                 return
 
@@ -259,27 +245,28 @@ class Game:
                 self.enemy_board.hit(x, y)
                 self.hit_sound.play()
                 # TODO: replace prints with logging
-                print("Hit!")
+                logging.debug(f"Hit!")
 
                 if ship_hit.is_sunk():
                     self.enemy_board.sunk(ship_hit)
                     self.sunk_sound.play()
                     # TODO: replace prints with logging
-                    print(f"You sunk the enemy {ship_hit.name}")
+                    logging.debug(f"You sunk the enemy {ship_hit.name}")
 
                     # TODO: unnecessary level of indentation? in enemy turn it does not
-                    if self.enemy_fleet.is_defeated():
+                if self.enemy_fleet.is_defeated():
                         # TODO: replace prints with logging
-                        print("You win!")
-                        self.game_over = True
-                        self.game_over_message = "You win!"
-                        self.placement_done = True
-                        return
+                    logging.debug(f"Player wins")
+                    self.game_over = True
+                    self.game_over_message = "You win!"
+                    self.placement_done = True
+                    return
+
             else:
                 self.enemy_board.miss(x, y)
                 self.miss_sound.play()
                 # TODO: replace prints with logging
-                print("Miss")
+                logging.debug(f"Miss")
 
             self.player_turn = False
             self.enemy_turn_pending = True
@@ -297,23 +284,23 @@ class Game:
             self.placement_done = True
             self.battle_message_start = pygame.time.get_ticks()
             # TODO: replace prints with logging
-            print("All ships placed. Shooting mode enabled.")
+            logging.debug(f"All ships placed. Shooting mode enabled")
             return
 
         ship = self.fleet_manager.ships[self.current_ship_index]
 
         if self.fleet_manager.place_ship(ship, x, y, self.current_orientation):
             # TODO: replace prints with logging
-            print(f"Placed {ship.name} at {x},{y}")
+            logging.debug(f"Placed {ship.name} at {x},{y}")
             self.current_ship_index += 1
 
             if self.current_ship_index >= len(self.fleet_manager.ships):
                 self.placement_done = True
                 self.battle_message_start = pygame.time.get_ticks()
                 # TODO: replace prints with logging
-                print("All ships placed! Shooting mode active.")
+                logging.debug(f"All ships places. Shooting mode activated")
 
-    def draw(self):
+    def draw(self) -> None:
         """
         Render the full game screen including both boards, placement previews,
         battle messages, and game‑over messages.
@@ -326,7 +313,7 @@ class Game:
             None. The method updates the visual output on the main screen
             by drawing player and enemy boards, ship previews, and messages.
         """
-        self.screen.fill(COLOR_BG)
+        self.screen.fill(Color.BG)
 
         preview = None
         if (
@@ -336,7 +323,6 @@ class Game:
         ):
             # TODO: why do you use getattr?
             mx, my = self.mouse_grid_pos
-            # mx, my = getattr(self, "mouse_grid_pos", (0, 0))
             if mx < GRID_COLS * BLOCK_SIZE:
                 gx = mx // BLOCK_SIZE
                 gy = my // BLOCK_SIZE
@@ -390,13 +376,13 @@ class Game:
 
         # Game over message
         if self.game_over and self.game_over_message:
-            text_surface = self.font.render(self.game_over_message, True, COLOR_MESSAGE)
+            text_surface = self.font.render(self.game_over_message, True, Color.MESSAGE)
             text_rect = text_surface.get_rect(
                 center=(self.screen_width // 2, self.screen_height // 4)
             )
             self.screen.blit(text_surface, text_rect)
 
-    def enemy_turn(self):
+    def enemy_turn(self) -> None:
         """
         Execute the enemy's turn by selecting a target, applying hit or miss logic,
         updating board state, and checking for defeat conditions.
@@ -418,20 +404,20 @@ class Game:
             self.player_board.hit(x, y)
             self.hit_sound.play()
             # TODO: replace prints with logging
-            print("Enemy hit!")
+            logging.debug(f"Enemy hit")
             sunk = ship_hit.is_sunk()
 
             if sunk:
                 self.player_board.sunk(ship_hit)
                 self.sunk_sound.play()
                 # TODO: replace prints with logging
-                print(f"Enemy sunk your {ship_hit.name}")
+                logging.debug(f"Enemy sunk you {ship_hit.name}")
 
             self.enemy_fleet.strategy.register_shot_result(x, y, hit=True, sunk=sunk)
 
             if self.fleet_manager.is_defeated():
                 # TODO: replace prints with logging
-                print("Computer wins!")
+                logging.debug(f"Enemy wins")
                 self.game_over = True
                 self.game_over_message = "You lost!"
                 return
@@ -439,7 +425,7 @@ class Game:
             self.player_board.miss(x, y)
             self.miss_sound.play()
             # TODO: replace prints with logging
-            print("Enemy miss")
+            logging.debug(f"Enemy Miss")
 
             self.enemy_fleet.strategy.register_shot_result(x, y, hit=False, sunk=False)
 
@@ -479,12 +465,7 @@ class BattleshipEasy(GameFactory):
             A fully initialized Game object with an enemy fleet that uses
             random shooting behavior and automatically placed ships.
         """
-        game = Game(self._screen, self._clock, "Easy")
-        game.enemy_fleet = ComputerFleetManager(
-            game.enemy_board, RandomShootingStrategy()
-        )
-        game.enemy_fleet.auto_place_fleet()
-        return game
+        return Game(self._screen, self._clock, RandomShootingStrategy(), "Easy")
 
 
 class BattleshipMedium(GameFactory):
@@ -504,12 +485,7 @@ class BattleshipMedium(GameFactory):
             A fully initialized Game object with an enemy fleet that uses
             a hunt-based shooting strategy and automatically placed ships.
         """
-        game = Game(self._screen, self._clock, "Medium")
-        game.enemy_fleet = ComputerFleetManager(
-            game.enemy_board, HuntShootingStrategy()
-        )
-        game.enemy_fleet.auto_place_fleet()
-        return game
+        return Game(self._screen, self._clock, HuntShootingStrategy(), difficulty_name="Medium")
 
 
 class BattleshipHard(GameFactory):
@@ -526,9 +502,4 @@ class BattleshipHard(GameFactory):
             A fully initialized Game object with an enemy fleet that uses
             an advanced smart shooting strategy and automatically placed ships.
         """
-        game = Game(self._screen, self._clock, "Hard")
-        game.enemy_fleet = ComputerFleetManager(
-            game.enemy_board, SmartShootingStrategy()
-        )
-        game.enemy_fleet.auto_place_fleet()
-        return game
+        return Game(self._screen, self._clock, SmartShootingStrategy(), difficulty_name="Hard")

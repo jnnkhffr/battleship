@@ -1,7 +1,8 @@
 """Main module to run the Battleship game."""
+import logging
 
 import pygame
-from battleship_game.game import BattleshipEasy, BattleshipMedium, BattleshipHard
+from battleship_game.game import BattleshipEasy, BattleshipMedium, BattleshipHard, GameFactory
 from battleship_game.screens import StartScreen, GameOverScreen
 from battleship_game.config import (
     WINDOW_WIDTH,
@@ -26,12 +27,12 @@ class GameHandler:
     """Handle the overall game flow including menus, game creation, and states transitions."""
 
     # TODO: add typing like: game_factories: list[GameFactory]
-    def __init__(self, game_factories):
+    def __init__(self, game_factories: list[type[GameFactory]]) -> None:
         """
         Initialize the game handler, set up pygame, and prepare screens.
 
         Args:
-            game_factories: List of factory classes for different difficulty modes.
+            game_factories: list of factory classes for different difficulty modes.
         """
         pygame.init()
         pygame.font.init()
@@ -86,8 +87,8 @@ class GameHandler:
             elif state == GameState.RUNNING:
                 # TODO: I like to name bool variable like: is_running,
                 #  than it is clear its a bool and selected not
-                still_running = current_game.run(events)
-                if not still_running:
+                is_running = current_game.run(events)
+                if not is_running:
                     state = (
                         GameState.WIN
                         if current_game.game_over_message == "You win!"
@@ -105,6 +106,7 @@ class GameHandler:
 
 def main():
     """Entry point for starting the Battleship game with all difficulty modes enabled."""
+    logging.basicConfig(level=logging.DEBUG)
     handler = GameHandler([BattleshipEasy, BattleshipMedium, BattleshipHard])
     handler.run()
 

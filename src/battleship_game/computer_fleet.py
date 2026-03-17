@@ -1,5 +1,5 @@
 """Initializes the computer fleet."""
-
+from battleship_game.ai_shooting import ShootingStrategy
 from battleship_game.config import GRID_COLS, GRID_ROWS
 from battleship_game.fleet_commander import FleetManager
 import random
@@ -11,7 +11,7 @@ class ComputerFleetManager(FleetManager):
     Takes logic from FleetManager and adds the enemy logic.
     """
 
-    def __init__(self, board, shooting_strategy):
+    def __init__(self, board, shooting_strategy: ShootingStrategy) -> None:
         """
         Initialize the computer fleet manager with a board and AI shooting strategy.
 
@@ -22,7 +22,7 @@ class ComputerFleetManager(FleetManager):
         super().__init__(board)
         self.strategy = shooting_strategy
 
-    def auto_place_fleet(self):
+    def auto_place_fleet(self) -> None:
         """
         Randomly place all enemy ships on the board until all are validly positioned.
 
@@ -44,7 +44,7 @@ class ComputerFleetManager(FleetManager):
                 if self.place_ship(ship, x, y, orientation):
                     placed = True
 
-    def get_next_shot(self, opponent_board):
+    def get_next_shot(self, opponent_board) -> tuple[int, int]:
         """
         Determine the next shot coordinates using the assigned shooting strategy.
 

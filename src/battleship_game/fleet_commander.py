@@ -1,6 +1,7 @@
 """Module for creating, managing, and evaluating a player's fleet in the Battleship game."""
-
+from __future__ import annotations
 from battleship_game.ship_builder import ShipBuilder
+from battleship_game.fleet import Ship
 from battleship_game.config import (
     NUM_SUBS,
     NUM_FRIGS,
@@ -19,7 +20,7 @@ class FleetManager:
     - Handle placement attempts on the board
     """
 
-    def __init__(self, board):
+    def __init__(self, board) -> None:
         """
         Initialize the fleet manager.
 
@@ -31,7 +32,7 @@ class FleetManager:
 
         self.create_fleet()
 
-    def create_fleet(self):
+    def create_fleet(self) -> None:
         """
         Create the player's fleet based on configuration values.
 
@@ -55,7 +56,7 @@ class FleetManager:
         for _ in range(NUM_SUBS):
             self.ships.append(ShipBuilder.create_ship("Submarine"))
 
-    def place_ship(self, ship, x, y, orientation):
+    def place_ship(self, ship, x, y, orientation) -> bool:
         """
         Attempt to place a ship on the board.
 
@@ -75,7 +76,7 @@ class FleetManager:
             return True
         return False
 
-    def all_ships_placed(self):
+    def all_ships_placed(self) -> bool:
         """
         Check whether all ships have been assigned a position.
 
@@ -84,13 +85,13 @@ class FleetManager:
         """
         return all(ship.position is not None for ship in self.ships)
 
-    def receive_shot(self, x, y):
+    def receive_shot(self, x: int, y: int) -> Ship | None:
         """
         Check if a shot at (x, y) hits any ship.
 
         Returns:
             - ship object if hit
-            - None if miss
+            - None if it misses
         """
         for ship in self.ships:
             if ship.position is None:
@@ -110,7 +111,7 @@ class FleetManager:
 
         return None
 
-    def is_defeated(self):
+    def is_defeated(self) -> bool:
         """
         Returns True if all ships in this fleet are sunk.
         """

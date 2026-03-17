@@ -1,4 +1,5 @@
 """Initializes the fleet."""
+
 from __future__ import annotations
 from battleship_game.config import SUB_SIZE, FRIG_SIZE, DEST_SIZE, ACC_SIZE
 
@@ -9,7 +10,7 @@ class Ship:
     Stores size, position and orientation and hit tracking.
     """
 
-    def __init__(self, size: int, position: tuple | None, orientation: str | None):
+    def __init__(self, size: int, position: tuple = None, orientation: str = None):
         """
         Initialize a ship with size, position, orientation, and hit counter.
 
@@ -22,12 +23,13 @@ class Ship:
         self.position = position
         self.orientation = orientation
         self.hits = 0
+        self.name = "Ship"
 
-    def register_hits(self):
+    def register_hits(self) -> None:
         """Increase hit counter when this ship is hit."""
         self.hits += 1
 
-    def is_sunk(self):
+    def is_sunk(self) -> bool:
         """
         Return true if the ship has been hit as many times as its size.
 
@@ -40,7 +42,7 @@ class Ship:
 class Submarine(Ship):
     """Submarine ship with predefined size."""
 
-    def __init__(self, position=None, orientation=None):
+    def __init__(self, position: tuple = None, orientation: str = None) -> None:
         """
         Initialize a submarine with optional position and orientation.
 
@@ -55,7 +57,7 @@ class Submarine(Ship):
 class Frigate(Ship):
     """Frigate ship with predefined size."""
 
-    def __init__(self, position=None, orientation=None):
+    def __init__(self, position: tuple = None, orientation: str = None) -> None:
         """Initialize a frigate with optional position and orientation."""
         super().__init__(FRIG_SIZE, position, orientation)
         self.name = "Frigate"
@@ -64,7 +66,7 @@ class Frigate(Ship):
 class Destroyer(Ship):
     """Destroyer ship with predefined size."""
 
-    def __init__(self, position=None, orientation=None):
+    def __init__(self, position: tuple = None, orientation: str = None) -> None:
         """Initialize a destroyer with optional position and orientation."""
         super().__init__(DEST_SIZE, position, orientation)
         self.name = "Destroyer"
@@ -73,7 +75,7 @@ class Destroyer(Ship):
 class AircraftCarrier(Ship):
     """Aircraft Carrier with predefined size."""
 
-    def __init__(self, position=None, orientation=None):
+    def __init__(self, position: tuple = None, orientation: str = None) -> None:
         """Initialize an Aircraft Carrier with optional position and orientation."""
         super().__init__(ACC_SIZE, position, orientation)
         self.name = "AircraftCarrier"

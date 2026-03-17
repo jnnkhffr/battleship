@@ -1,19 +1,18 @@
 """This file creates the game board."""
+
 # TODO: added this line to make the code compatible with python 3.12 (type sep. by |)
 from __future__ import annotations
-
 import pygame
 from itertools import product
-
 from battleship_game.config import (
     GRID_COLS,
     GRID_ROWS,
     BLOCK_SIZE,
-    COLOR_BG,
     SHIP_MARGIN,
     ALPHA_PREVIEW,
-    COLOR_FILL,
+    Color,
 )
+from battleship_game.fleet_commander import FleetManager
 
 
 class Board:
@@ -28,7 +27,7 @@ class Board:
         rows: int = GRID_ROWS,
         block_size: int = BLOCK_SIZE,
         grid_image_path: str | None = None,
-        bgcolor: tuple[int, int, int] = COLOR_BG,
+        bgcolor: tuple[int, int, int] = Color.BG,
     ) -> None:
         """
         Initializes a Battleship board with a 2D grid and visual settings.
@@ -38,7 +37,7 @@ class Board:
             rows: Number of rows in the grid.
             block_size: Pixel size of a single block.
             bgcolor: Background color as RGB tuple.
-            gridcolor: Grid line color as RGB tuple.
+            grid_image_path: Path to the png grid image.
         """
         self.cols = cols
         self.rows = rows
@@ -62,9 +61,9 @@ class Board:
         offset_x: int = 0,
         offset_y: int = 0,
         preview: dict | None = None,
-        token_images=None,
-        ship_images=None,
-        fleet=None,
+        token_images: dict[int, pygame.Surface] | None = None,
+        ship_images: dict[str, pygame.Surface] | None =None,
+        fleet: FleetManager | None =None,
         show_ships: bool = True,
     ) -> None:
         """
@@ -76,6 +75,10 @@ class Board:
             offset_y: Vertical drawing offset.
             preview: Optional preview data for ship placement containing:
                 x, y, size, orientation, alpha, valid.
+            token_images: Dictionary mapping grids to token images.
+            ship_images: Dictionary mapping ships to ship images.
+            fleet: Fleet Manager containing ship data
+            show_ships: Whether to show the ships onto the screen.
         """
         # Background
         rect = pygame.Rect(
@@ -145,7 +148,7 @@ class Board:
             # Change color in case of invalid spots
             if not valid:
                 # Fills the space with red
-                preview_img.fill(COLOR_FILL, special_flags=pygame.BLEND_RGBA_MULT)
+                preview_img.fill(Color.FILL, special_flags=pygame.BLEND_RGBA_MULT)
             else:
                 preview_img.set_alpha(alpha)
 
@@ -171,7 +174,7 @@ class Board:
         dx = 1 if orientation == "hor" else 0
         dy = 1 if orientation == "ver" else 0
 
-        # Ship hast to be within the gamefield
+        # Ship hast to be within the game field
         for i in range(size):
             nx = x + dx * i
             ny = y + dy * i
@@ -187,7 +190,6 @@ class Board:
 
         # Check 1-cell margin around the whole ship
         # Define bounding box for ship + 1-cell margin
-
         max_x = x + dx * (size - 1) + SHIP_MARGIN
         max_y = y + dy * (size - 1) + SHIP_MARGIN
 
