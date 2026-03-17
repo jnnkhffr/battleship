@@ -456,7 +456,8 @@ class GameFactory(ABC):
 
 # TODO: check line length (88 chars)
 class BattleshipEasy(GameFactory):
-    """Factory for creating a Battleship game configured with easy difficulty and random enemy shooting."""
+    """Factory for creating a Battleship game configured with easy difficulty
+     and random enemy shooting."""
 
     def create(self) -> Game:
         """
