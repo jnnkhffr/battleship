@@ -6,7 +6,7 @@ There are essentially two playing fields next to each other. Both are 10 x 10 gr
 computer sea area where the computer places its ships automatically. The left playing field is the 
 player's sea area, where the player can place their seven ships.  
 Four of these ships are submarines that are only one box in size. Then there is a frigate 
-that is two boxes in size. A destroyer is three squares in size, and aircraft carriers are four squares in size. 
+that is tcondwo boxes in size. A destroyer is three squares in size, and aircraft carriers are four squares in size. 
 
 
  __How to play the game__:\
@@ -56,6 +56,8 @@ Clone this repository:
 
 ### Install dependencies:
 pip install -r requirements.txt
+# In case you have problem building wheel 
+pip install pygame-ce (currently for python3.14)
 
 
 ## Execution
